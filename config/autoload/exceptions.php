@@ -13,7 +13,7 @@ declare(strict_types=1);
 return [
     'handler' => [
         'http' => [
-            \HyperfPlus\Exception\Handler\AppExceptionHandler::class,
+            \App\Util\AppExceptionHandler::class,
         ],
     ],
 ];

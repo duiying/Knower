@@ -17,15 +17,25 @@ use Hyperf\Constants\Annotation\Constants;
  */
 class AppErrorCode extends AbstractConstants
 {
-    /******************** 公共错误码 begin 10001 ~ 10200 ****************************************************************/
+    /******************** 基础错误 begin 1001 ~ 1200 ********************************************************************/
     /**
-     * @Message("请求参数错误")
+     * @Message("参数错误！")
      */
-    const REQUEST_PARAMS_INVALID = 10001;
+    const PARAMS_INVALID                                = 1001;
 
     /**
-     * @Message("请先登录！")
+     * @Message("服务异常！")
      */
-    const ACCESS_TOKEN_EMPTY_ERROR = 10002;
-    /******************** 公共错误码 end ********************************************************************************/
+    const TRIGGER_EXCEPTION                             = 1002;
+
+    /**
+     * @Message("请勿重复操作！")
+     */
+    const REPEAT_EXCEPTION                              = 1003;
+
+    /**
+     * @Message("字段不能为空！")
+     */
+    const FIELD_EMPTY_EXCEPTION                         = 1004;
+    /******************** 基础错误 end **********************************************************************************/
 }

@@ -2,15 +2,14 @@
 
 namespace App\Middleware;
 
-use App\RPC\HttpRPC\PassportServiceRpc;
+use App\Module\AdminPassport\User\Logic\UserLogic;
+use App\Util\HttpUtil;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Utils\Context;
-use HyperfPlus\Http\Response;
-use HyperfPlus\Log\Log;
-use HyperfPlus\Util\Util;
+use Hyperf\HttpServer\Contract\ResponseInterface;
+use App\Util\Log\Log;
+use App\Util\Util;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -18,9 +17,9 @@ class PassportMiddleware
 {
     /**
      * @Inject()
-     * @var PassportServiceRpc
+     * @var UserLogic
      */
-    private $passportServiceRpc;
+    private $userLogic;
 
     /**
      * @var ContainerInterface
@@ -33,7 +32,7 @@ class PassportMiddleware
     protected $request;
 
     /**
-     * @var Response
+     * @var ResponseInterface
      */
     protected $response;
 
@@ -47,14 +46,14 @@ class PassportMiddleware
         '/view/user/login',
     ];
 
-    public function __construct(ContainerInterface $container, Response $response, RequestInterface $request)
+    public function __construct(ContainerInterface $container, ResponseInterface $response, RequestInterface $request)
     {
         $this->container    = $container;
         $this->response     = $response;
         $this->request      = $request;
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): \Psr\Http\Message\ResponseInterface
     {
         // 路由
         $requestPath = $this->request->getUri()->getPath();
@@ -72,12 +71,12 @@ class PassportMiddleware
         if (empty($accessToken)) $accessToken = $this->request->cookie('access_token');
         if (empty($accessToken)) {
             // 如果是视图渲染，重定向到登录页；如果是接口，返回接口响应数据
-            return $fromApi ? $this->response->error(403, '请先登录！') : $this->response->redirect('/view/user/login');
+            return $fromApi ? HttpUtil::error($this->response, 403, '请先登录！') : $this->response->redirect('/view/user/login');
         }
 
         try {
             // 检查用户 access_token 以及权限
-            $userId = $this->passportServiceRpc->checkUserPermission(['access_token' => $accessToken, 'url' => $requestPath]);
+            $userId = $this->userLogic->checkPermission(['access_token' => $accessToken, 'url' => $requestPath]);
         } catch (\Exception $exception) {
             Log::error('权限校验失败！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
             return $this->response->error($exception->getCode(), $exception->getMessage());
