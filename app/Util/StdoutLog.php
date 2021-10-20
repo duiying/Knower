@@ -2,7 +2,7 @@
 
 namespace App\Util;
 
-class StoutLog
+class StdoutLog
 {
     public static function print($data, $message = '')
     {

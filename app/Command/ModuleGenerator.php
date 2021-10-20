@@ -3,7 +3,8 @@
 namespace App\Command;
 
 use App\Util\Log;
-use HyperfPlus\Log\StdoutLog;
+use App\Util\StdoutLog;
+use App\Util\Util;
 use Hyperf\Command\Command as HyperfCommand;
 use Hyperf\Command\Annotation\Command;
 use Hyperf\DbConnection\Db;
