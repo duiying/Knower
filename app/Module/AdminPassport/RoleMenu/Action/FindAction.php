@@ -2,8 +2,9 @@
 
 namespace App\Module\AdminPassport\RoleMenu\Action;
 
-use App\Util\HttpUtil;use App\Util\HttpUtil;
-use App\Util\Util;use App\Module\AdminPassport\RoleMenu\Logic\RoleMenuLogic;
+use App\Util\HttpUtil;
+use App\Util\Util;
+use App\Module\AdminPassport\RoleMenu\Logic\RoleMenuLogic;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
