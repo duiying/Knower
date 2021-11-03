@@ -22,15 +22,15 @@ Router::get('/favicon.ico', function () {
  * 视图渲染相关路由（统一由 /view 开头）
  */
 Router::addGroup('/view/',function () {
-    Router::get('user/login','App\View\AdminPassport\User\Action\LoginAction@handle');                    // 登录页
+    Router::get('user/login','App\View\AdminPassport\User\Action\LoginAction@handle');                     // 登录页
 
-    Router::get('user/search','App\View\AdminPassport\User\Action\SearchAction@handle');                  // 管理员列表
-    Router::get('user/create','App\View\AdminPassport\User\Action\CreateAction@handle');                  // 管理员创建
-    Router::get('user/update','App\View\AdminPassport\User\Action\UpdateAction@handle');                  // 管理员更新
+    Router::get('user/search','App\View\AdminPassport\User\Action\SearchAction@handle');                   // 管理员列表
+    Router::get('user/create','App\View\AdminPassport\User\Action\CreateAction@handle');                   // 管理员创建
+    Router::get('user/update','App\View\AdminPassport\User\Action\UpdateAction@handle');                   // 管理员更新
 
-    Router::get('menu/search','App\View\AdminPassport\Menu\Action\SearchAction@handle');                  // 菜单列表
-    Router::get('menu/create', 'App\View\AdminPassport\Menu\Action\CreateAction@handle');                 // 菜单创建
-    Router::get('menu/update','App\View\AdminPassport\Menu\Action\UpdateAction@handle');                  // 菜单更新
+    Router::get('menu/search','App\View\AdminPassport\Menu\Action\SearchAction@handle');                   // 菜单列表
+    Router::get('menu/create', 'App\View\AdminPassport\Menu\Action\CreateAction@handle');                  // 菜单创建
+    Router::get('menu/update','App\View\AdminPassport\Menu\Action\UpdateAction@handle');                   // 菜单更新
 
     Router::get('permission/search','App\View\AdminPassport\Permission\Action\SearchAction@handle');       // 权限列表
     Router::get('permission/create', 'App\View\AdminPassport\Permission\Action\CreateAction@handle');      // 权限创建
@@ -40,9 +40,9 @@ Router::addGroup('/view/',function () {
     Router::get('role/create', 'App\View\AdminPassport\Role\Action\CreateAction@handle');                  // 角色创建
     Router::get('role/update','App\View\AdminPassport\Role\Action\UpdateAction@handle');                   // 角色更新
 
-    Router::get('article/search','App\View\AdminPassport\Article\Action\SearchAction@handle');             // 文章列表
-    Router::get('article/create', 'App\View\AdminPassport\Article\Action\CreateAction@handle');            // 文章创建
-    Router::get('article/update','App\View\AdminPassport\Article\Action\UpdateAction@handle');             // 文章更新
+    Router::get('article/search','App\View\Article\Action\SearchAction@handle');                           // 文章列表
+    Router::get('article/create', 'App\View\Article\Action\CreateAction@handle');                          // 文章创建
+    Router::get('article/update','App\View\Article\Action\UpdateAction@handle');                           // 文章更新
 }, ['middleware' => [PassportMiddleware::class, PjaxMiddleware::class]]);
 
 /**
@@ -78,6 +78,12 @@ Router::addGroup('/v1/',function () {
     Router::post('role/update', Route::decoration('AdminPassport\Role\Action\UpdateAction'));                         // 角色更新
     Router::get('role/find', Route::decoration('AdminPassport\Role\Action\FindAction'));                              // 角色详情
     Router::post('role/update_field', Route::decoration('AdminPassport\Role\Action\UpdateFieldAction'));              // 角色更新字段
+
+    Router::get('article/search', Route::decoration('Article\Action\SearchAction'));                                  // 文章列表
+    Router::post('article/create', Route::decoration('Article\Action\CreateAction'));                                 // 文章创建
+    Router::post('article/update', Route::decoration('Article\Action\UpdateAction'));                                 // 文章更新
+    Router::get('article/find', Route::decoration('Article\Action\FindAction'));                                      // 文章详情
+    Router::post('article/update_field', Route::decoration('Article\Action\UpdateFieldAction'));                      // 文章更新字段
 }, ['middleware' => [CorsMiddleware::class, PassportMiddleware::class, ValidationMiddleware::class]]);
 
 Router::addRoute(['POST'], '/v1/user/logout', Route::decoration('AdminPassport\User\Action\LogoutAction'), ['middleware' => [CorsMiddleware::class, ValidationMiddleware::class]]);

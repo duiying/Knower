@@ -10,7 +10,7 @@ services:
       - knower-redis
       - knower-elasticsearch
     links:
-      - knowere-mysql:knower-mysql
+      - knower-mysql:knower-mysql
       - knower-redis:knower-redis
       - knower-elasticsearch:knower-elasticsearch
     volumes:

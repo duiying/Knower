@@ -2,7 +2,7 @@
 
 namespace App\Module\%s\Logic;
 
-use HyperfPlus\Util\Util;
+use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\%s\Service\%sService;
 

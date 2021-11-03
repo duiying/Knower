@@ -17,6 +17,7 @@ class HttpUtil
      */
     public static function success(ResponseInterface $response, $data = null, $msg = ''): \Psr\Http\Message\ResponseInterface
     {
+        $response->withHeader('Content-Type', 'text/html; charset=utf-8');
         return $response->json([CommonConstant::API_CODE => 0, CommonConstant::API_MESSAGE => $msg, CommonConstant::API_DATA => $data]);
     }
 
@@ -31,6 +32,7 @@ class HttpUtil
      */
     public static function error(ResponseInterface $response, $code = 0, $msg = '', $data = null): \Psr\Http\Message\ResponseInterface
     {
+        $response->withHeader('Content-Type', 'text/html; charset=utf-8');
         return $response->json([CommonConstant::API_CODE => $code, CommonConstant::API_MESSAGE => $msg, CommonConstant::API_DATA => $data]);
     }
 

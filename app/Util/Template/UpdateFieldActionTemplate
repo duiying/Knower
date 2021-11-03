@@ -2,12 +2,11 @@
 
 namespace App\Module\%s\Action;
 
-use HyperfPlus\Util\Util;
-
+use App\Util\Util;
 use App\Module\%s\Logic\%sLogic;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use HyperfPlus\Http\Response;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
 class UpdateFieldAction
@@ -28,7 +27,7 @@ class UpdateFieldAction
         %s
     ];
 
-    public function handle(RequestInterface $request, Response $response)
+    public function handle(RequestInterface $request, ResponseInterface $response)
     {
         // 参数校验
         $requestData = $request->all();

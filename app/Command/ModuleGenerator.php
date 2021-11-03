@@ -8,6 +8,7 @@ use App\Util\Util;
 use Hyperf\Command\Command as HyperfCommand;
 use Hyperf\Command\Annotation\Command;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
 
 /**
  * @Command

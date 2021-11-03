@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Module\AdminPassport\User\Action;
+namespace App\Module\Article\Action;
 
-use App\Module\AdminPassport\User\Logic\UserLogic;
 use App\Util\HttpUtil;
 use App\Util\Util;
+use App\Module\Article\Logic\ArticleLogic;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
-class CheckPermissionAction
+class UpdateFieldAction
 {
     /**
      * @Inject()
-     * @var UserLogic
+     * @var ArticleLogic
      */
     private $logic;
 
@@ -25,8 +25,8 @@ class CheckPermissionAction
     public $validationFactory;
 
     private $rules = [
-        'access_token'  => 'required|string',
-        'url'           => 'required|string',
+        'id'        => 'required|integer',
+        'status'    => 'integer',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)
@@ -36,7 +36,9 @@ class CheckPermissionAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        $res = $this->logic->checkPermission($requestData);
+        $requestData['mtime'] = Util::now();
+
+        $res = $this->logic->updateField($requestData);
         return HttpUtil::success($response, $res);
     }
 }

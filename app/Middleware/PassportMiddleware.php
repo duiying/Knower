@@ -7,7 +7,7 @@ use App\Util\HttpUtil;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
-use App\Util\Log\Log;
+use App\Util\Log;
 use App\Util\Util;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -76,10 +76,10 @@ class PassportMiddleware
 
         try {
             // 检查用户 access_token 以及权限
-            $userId = $this->userLogic->checkPermission(['access_token' => $accessToken, 'url' => $requestPath]);
+            $userId = $this->userLogic->checkPermission($accessToken, $requestPath);
         } catch (\Exception $exception) {
             Log::error('权限校验失败！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
-            return $this->response->error($exception->getCode(), $exception->getMessage());
+            return HttpUtil::error($this->response, $exception->getCode(), $exception->getMessage());
         }
 
         // 在控制器中可以通过 $request->getAttribute('user_id') 获取当前登录的用户 ID

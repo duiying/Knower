@@ -25,7 +25,6 @@ class MenuAction
     public $validationFactory;
 
     private $rules = [
-        'user_id' => 'required|integer'
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)
@@ -34,6 +33,7 @@ class MenuAction
         $requestData = $request->all();
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
+        $requestData['user_id'] = $request->getAttribute('user_id');
 
         $res = $this->logic->getUserMenuList($requestData);
         return HttpUtil::success($response, $res);

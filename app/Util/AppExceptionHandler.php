@@ -14,7 +14,7 @@ use Throwable;
  * 全局异常处理器
  *
  * @author duiying <wangyaxiandev@gmail.com>
- * @package HyperfPlus\Exception\Handler
+ * @package App\Util
  */
 class AppExceptionHandler extends ExceptionHandler
 {
@@ -32,7 +32,7 @@ class AppExceptionHandler extends ExceptionHandler
             // 阻止异常冒泡
             $this->stopPropagation();
 
-            return $response->withStatus(200)->withBody(new SwooleStream($data));
+            return $response->withHeader('Content-Type', 'text/html; charset=utf-8')->withStatus(200)->withBody(new SwooleStream($data));
         }
 
         // 应用异常
@@ -49,7 +49,7 @@ class AppExceptionHandler extends ExceptionHandler
 
             Log::error('业务抛出异常！', ['code' => $throwable->getCode(), 'msg' => $throwable->getMessage(), 'trace' => $throwable->getTrace()]);
 
-            return $response->withStatus(200)->withBody(new SwooleStream($data));
+            return $response->withHeader('Content-Type', 'text/html; charset=utf-8')->withStatus(200)->withBody(new SwooleStream($data));
         }
 
 
@@ -66,7 +66,7 @@ class AppExceptionHandler extends ExceptionHandler
 
         Log::error('服务产生错误！', ['code' => $throwable->getCode(), 'msg' => $throwable->getMessage(), 'trace' => $throwable->getTrace()]);
 
-        return $response->withStatus(200)->withBody(new SwooleStream($data));
+        return $response->withHeader('Content-Type', 'text/html; charset=utf-8')->withStatus(200)->withBody(new SwooleStream($data));
     }
 
     /**

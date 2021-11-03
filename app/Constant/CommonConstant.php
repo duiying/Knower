@@ -19,4 +19,7 @@ class CommonConstant
 
     const METHOD_GET                        = 'GET';                        // GET 请求
     const METHOD_POST                       = 'POST';                       // POST 请求
+
+    // 管理员 token 有效时长（8 小时）
+    const TOKEN_EXPIRE_SECONDS = 3600 * 8;
 }

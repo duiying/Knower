@@ -15,7 +15,7 @@ use App\Module\AdminPassport\User\Constant\UserConstant;
 use App\Module\AdminPassport\UserRole\Constant\UserRoleConstant;
 use App\Module\AdminPassport\UserRole\Service\UserRoleService;
 use App\Util\Exception\AppException;
-use App\Util\Log\Log;
+use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\AdminPassport\User\Service\UserService;
@@ -108,7 +108,7 @@ class UserLogic
     public function checkUserStatus($status)
     {
         if (!in_array($status, UserConstant::ALLOWED_USER_STATUS_LIST)) {
-            throw new AppException(AppErrorCode::REQUEST_PARAMS_INVALID, 'status 参数错误！');
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'status 参数错误！');
         }
     }
 
@@ -387,18 +387,18 @@ class UserLogic
     /**
      * 检查用户权限
      *
-     * @param $requestData
-     * @return bool|mixed|string
+     * @param $token
+     * @param $url
+     * @return int
      */
-    public function checkPermission($requestData)
+    public function checkPermission($token, $url)
     {
-        $token          = $requestData['access_token'];
         // 根据 access_token 获取用户 ID，如果从缓存中没有获取到用户 ID，抛出异常
         $userId         = $this->service->getUserIdByToken($token);
         $userId         = intval($userId);
 
         // 部分路由直接返回，不需要校验权限
-        if (in_array($requestData['url'], [
+        if (in_array($url, [
             '/',                            // 后台首页
             '/v1/user/menu',                // 左侧菜单接口
             '/v1/user/get_info',            // 用户基本信息
@@ -437,7 +437,7 @@ class UserLogic
         $urlList = array_values(array_unique($urlList));
 
         // 请求的路由不在该用户拥有的权限列表中，则表示该用户无该路由的权限
-        if (empty($urlList) || !in_array($requestData['url'], $urlList)) throw new AppException(AppErrorCode::USER_PERMISSION_ERROR);
+        if (empty($urlList) || !in_array($url, $urlList)) throw new AppException(AppErrorCode::USER_PERMISSION_ERROR);
 
         return $userId;
     }

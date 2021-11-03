@@ -29,4 +29,6 @@ class RedisKeyConst
 {
     // 示例key
     const EXAMPLE_KEY = 's:服务简称:业务名称';
+
+    const USER_TOKEN = 's:ps:token_user_id:';
 }

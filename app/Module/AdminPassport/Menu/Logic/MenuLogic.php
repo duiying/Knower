@@ -60,7 +60,7 @@ class MenuLogic
     public function checkStatus($status)
     {
         if (!in_array($status, MenuConstant::ALLOWED_MENU_STATUS_LIST)) {
-            throw new AppException(AppErrorCode::REQUEST_PARAMS_INVALID, 'status 参数错误！');
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'status 参数错误！');
         }
     }
 

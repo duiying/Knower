@@ -2,15 +2,15 @@
 
 namespace App\Util;
 
-use HyperfPlus\Constant\ErrorCode;
-use HyperfPlus\Exception\CommonException;
+use App\Constant\AppErrorCode;
+use App\Util\Exception\AppException;
 use App\Util\Redis;
 
 /**
  * 常用工具类
  *
  * @author duiying <wangyaxiandev@gmail.com>
- * @package HyperfPlus\Util
+ * @package App\Util
  */
 class Util
 {
@@ -167,7 +167,7 @@ class Util
                 // 对字符串类型的字段进行 trim 操作
                 if (self::contain($rules[$k], 'required') && self::contain($rules[$k], 'string')) {
                     $v = trim($v);
-                    if (empty($v)) throw new CommonException(ErrorCode::FIELD_EMPTY_EXCEPTION);
+                    if (empty($v)) throw new AppException(AppErrorCode::FIELD_EMPTY_EXCEPTION);
                 }
                 $sanitizedData[$k] = $v;
             }

@@ -16,8 +16,7 @@ use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Str;
-use HyperfPlus\Log\Log;
-use HyperfPlus\Log\StdoutLog;
+use App\Util\Log;
 
 /**
  * @Listener
@@ -45,7 +44,6 @@ class DbQueryExecutedListener implements ListenerInterface
             }
 
             Log::debug(sprintf('[%s] %s', $event->time, $sql));
-            env('DEBUG') && StdoutLog::print(sprintf('[time:%s] [SQL:%s]', $event->time, $sql));
         }
     }
 }

@@ -4,11 +4,10 @@ namespace App\View\AdminPassport\Menu\Action;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Hyperf\View\RenderInterface;
-
-use HyperfPlus\Http\Response;
-use HyperfPlus\Util\Util;
+use App\Util\Util;
 
 class UpdateAction
 {
@@ -28,7 +27,7 @@ class UpdateAction
         'id' => 'required|integer',
     ];
 
-    public function handle(RequestInterface $request, Response $response)
+    public function handle(RequestInterface $request, ResponseInterface $response)
     {
         // 参数校验
         $requestData = $request->all();

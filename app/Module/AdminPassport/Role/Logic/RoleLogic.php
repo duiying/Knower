@@ -11,7 +11,7 @@ use App\Module\AdminPassport\RoleMenu\Service\RoleMenuService;
 use App\Module\AdminPassport\RolePermission\Constant\RolePermissionConstant;
 use App\Module\AdminPassport\RolePermission\Service\RolePermissionService;
 use App\Util\Exception\AppException;
-use App\Util\Log\Log;
+use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\AdminPassport\Role\Service\RoleService;
@@ -92,7 +92,7 @@ class RoleLogic
     public function checkStatus($status)
     {
         if (!in_array($status, RoleConstant::ALLOWED_ROLE_STATUS_LIST)) {
-            throw new AppException(AppErrorCode::REQUEST_PARAMS_INVALID, 'status 参数错误！');
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'status 参数错误！');
         }
     }
 
