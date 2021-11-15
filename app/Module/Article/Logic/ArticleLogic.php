@@ -123,6 +123,11 @@ class ArticleLogic
      */
     public function searchByEs($requestData, $p, $size)
     {
+        // 如果索引不存在，返回空列表
+        if (!$this->service->existsEsArticleIndex()) {
+            return Util::formatSearchRes($p, $size, 0, []);
+        }
+
         $params = [
             'index' => ElasticSearchConst::INDEX_ARTICLE,
             'body'  => [
