@@ -11,3 +11,8 @@ vendor/
 .DS_Store
 .phpunit*
 *.cache
+docker/elasticsearch/data/
+docker/elasticsearch/logs/
+docker/mysql/
+docker/redis/
+
