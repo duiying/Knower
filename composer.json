@@ -29,7 +29,6 @@
         "duncan3dc/blade": "^4.10",
         "hyperf/view": "~2.2.0",
         "hyperf/task": "~2.2.0",
-        "hyperf/tracer": "~2.2.0",
         "hyperf/filesystem": "~2.2.0",
         "hyperf/utils": "~2.2.0",
         "hyperf/validation": "~2.2.0",
