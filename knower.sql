@@ -164,3 +164,17 @@ CREATE TABLE `t_content_article` (
                                      `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章表';
+
+DROP TABLE IF EXISTS `t_content_tag`;
+CREATE TABLE `t_content_tag` (
+                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                 `name` varchar(255) NOT NULL DEFAULT '' COMMENT '标签名称',
+                                 `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '类型 {1：文章；}',
+                                 `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：删除；1：正常；}',
+                                 `sort` int(10) NOT NULL DEFAULT '99' COMMENT '排序（正序）',
+                                 `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                 `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 PRIMARY KEY (`id`),
+                                 KEY `idx_name` (`name`),
+                                 KEY `idx_type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='标签表';

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Index\Action;
+namespace App\View\Frontend;
 
 use Hyperf\View\RenderInterface;
 
@@ -10,10 +10,10 @@ use Hyperf\View\RenderInterface;
  * @author duiying <wangyaxiandev@gmail.com>
  * @package App\View\Index\Action
  */
-class IndexAction
+class FrontendAction
 {
     public function index(RenderInterface $render)
     {
-        return $render->render('index/index', ['name' => 'Hyperf']);
+        return $render->render('frontend/layouts/app');
     }
 }

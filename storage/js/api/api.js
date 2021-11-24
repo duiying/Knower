@@ -145,3 +145,31 @@ function updateArticleField(data = {}) {
 }
 
 /******************** 文章 API end *************************************************************************************/
+
+/******************** 标签 API begin ***********************************************************************************/
+
+function searchTag(data = {}) {
+    return request.get('v1/tag/search', data);
+}
+
+function listTag(data = {}) {
+    return request.get('tags', data);
+}
+
+function createTag(data = {}) {
+    return request.post('v1/tag/create', data);
+}
+
+function updateTag(data = {}) {
+    return request.post('v1/tag/update', data);
+}
+
+function findTag(data = {}) {
+    return request.get('v1/tag/find', data);
+}
+
+function updateTagField(data = {}) {
+    return request.post('v1/tag/update_field', data);
+}
+
+/******************** 标签 API end *************************************************************************************/

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Article\Action;
+namespace App\View\Backend\Article\Action;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;

@@ -85,7 +85,7 @@
 
             // 500 毫秒后跳转到首页
             setTimeout(function () {
-                location.href = '/';
+                location.href = '/admin';
             }, 500)
         }
     }

@@ -63,7 +63,7 @@ class PassportMiddleware
 
         // 请求是否来自于 API
         $fromApi = true;
-        if ($requestPath === '/' || (Util::contain($requestPath, '/view/'))) $fromApi = false;
+        if ($requestPath === '/admin' || (Util::contain($requestPath, '/view/'))) $fromApi = false;
 
         // 根据 access_token 检查用户权限
         $accessToken = $this->request->input('access_token');

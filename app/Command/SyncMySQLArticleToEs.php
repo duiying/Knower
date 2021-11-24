@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\Constant\ElasticSearchConst;
-use App\Module\Article\Logic\ArticleLogic;
-use App\Module\Article\Service\ArticleService;
+use App\Module\Backend\Article\Logic\ArticleLogic;
+use App\Module\Backend\Article\Service\ArticleService;
 use App\Util\ElasticSearch;
 use Hyperf\Di\Annotation\Inject;
 use App\Util\Log;
