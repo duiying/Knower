@@ -25,6 +25,7 @@ class ElasticSearchConst
     const INDEX_ARTICLE_MAPPINGS = [
         'id'        => ['type' => 'integer'],
         'title'     => ['type' => 'text', 'analyzer' => 'ik_smart'],
+        'desc'      => ['type' => 'text', 'analyzer' => 'ik_smart'],
         'content'   => ['type' => 'text', 'analyzer' => 'ik_smart'],
         'status'    => ['type' => 'byte'],
         'sort'      => ['type' => 'integer'],

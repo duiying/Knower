@@ -8,14 +8,14 @@
 
     <div class="card">
         <div class="card-header">
-            <form id="user-search" onsubmit="return false;">
+            <form id="article-search" onsubmit="return false;">
                 <div class="row">
 
                     <div class="input-group-append mr-1">
-                        <a href="/view/user/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fas fa-plus"></i></button></a>
+                        <a href="/view/article/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fas fa-plus"></i></button></a>
                     </div>
                     <div class="col-3">
-                        <input type="text" name="keywords" class="form-control" placeholder="名称">
+                        <input type="text" name="keywords" class="form-control" placeholder="搜索内容">
                     </div>
                     <div class="input-group-append ml-1">
                         <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i></button>
@@ -31,6 +31,7 @@
                     <th style="width: 50px">ID</th>
                     <th style="width: 50px">排序</th>
                     <th style="width: 200px">标题</th>
+                    <th style="width: 200px">描述</th>
                     <th style="width: 200px">内容</th>
                     <th style="width: 150px">创建时间</th>
                     <th style="width: 150px">更新时间</th>
@@ -75,6 +76,11 @@
                         listHtml += '<td>' + cutString(list[i].title, 500) + '</td>';
                     } else {
                         listHtml += '<td>' + cutString(list[i].highlight_title, 500) + '</td>';
+                    }
+                    if (list[i].highlight_desc == '') {
+                        listHtml += '<td>' + cutString(list[i].desc, 500) + '</td>';
+                    } else {
+                        listHtml += '<td>' + cutString(list[i].highlight_desc, 500) + '</td>';
                     }
                     if (list[i].highlight_content == '') {
                         listHtml += '<td>' + cutString(list[i].content, 500) + '<div></td>';

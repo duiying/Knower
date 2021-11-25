@@ -109,8 +109,32 @@ class ArticleLogic
      */
     public function search($requestData, $p, $size)
     {
-        // 通过 ElasticSearch 查询
-        return $this->searchByEs($requestData, $p, $size);
+        if (isset($requestData['keywords'])) {
+            // 通过 ElasticSearch 查询
+            return $this->searchByEs($requestData, $p, $size);
+        }
+        // 走 MySQL 查询
+        return $this->searchByMySQL($requestData, $p, $size);
+    }
+
+    /**
+     * 通过 MySQL 查询
+     *
+     * @param $requestData
+     * @param $p
+     * @param $size
+     * @return array
+     */
+    public function searchByMySQL($requestData, $p, $size)
+    {
+        $list  = $this->service->search($requestData, $p, $size, ['*'], ['sort' => 'asc', 'ctime' => 'desc']);
+        $total = $this->service->count($requestData);
+        foreach ($list as $k => $v) {
+            $list[$k]['highlight_title'] = '';
+            $list[$k]['highlight_desc'] = '';
+            $list[$k]['highlight_content'] = '';
+        }
+        return Util::formatSearchRes($p, $size, $total, $list);
     }
 
     /**
@@ -139,7 +163,7 @@ class ArticleLogic
                 ],
                 'highlight' => [
                     'require_field_match'   => false,
-                    'fields'                => ['title' => new \stdClass(), 'content' => new \stdClass()],
+                    'fields'                => ['title' => new \stdClass(), 'desc' => new \stdClass(), 'content' => new \stdClass()],
                     'pre_tags'              => ["<code>"],
                     'post_tags'             => ["</code>"],
                 ],
@@ -156,7 +180,7 @@ class ArticleLogic
                 $params['body']['query']['bool']['must'][] = [
                     'multi_match' => [
                         'query'     => $v,
-                        'fields'    => ['title', 'content'],
+                        'fields'    => ['title', 'desc', 'content'],
                     ]
                 ];
             }
@@ -175,16 +199,21 @@ class ArticleLogic
             foreach ($elasticSearchRes['hits']['hits'] as $k => $v) {
                 $tmpArticle                         = $v['_source'];
                 $tmpArticle['title']                = strip_tags($tmpArticle['title']);
+                $tmpArticle['desc']                 = strip_tags($tmpArticle['desc']);
                 $tmpArticle['content']              = strip_tags($tmpArticle['content']);
 
                 // 高亮逻辑
                 $tmpArticle['highlight_content']    = '';
                 $tmpArticle['highlight_title']      = '';
+                $tmpArticle['highlight_desc']       = '';
                 if (isset($v['highlight']['content']) && !empty($v['highlight']['content'])) {
                     $tmpArticle['highlight_content'] = strip_tags($v['highlight']['content'][0], '<code>');
                 }
                 if (isset($v['highlight']['title']) && !empty($v['highlight']['title'])) {
                     $tmpArticle['highlight_title'] = strip_tags($v['highlight']['title'][0], '<code>');
+                }
+                if (isset($v['highlight']['desc']) && !empty($v['highlight']['desc'])) {
+                    $tmpArticle['highlight_desc'] = strip_tags($v['highlight']['desc'][0], '<code>');
                 }
 
                 $list[] = $tmpArticle;

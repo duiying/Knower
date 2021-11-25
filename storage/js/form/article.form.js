@@ -6,10 +6,12 @@
 function assembleArticleFormParam(fromUpdate = false)
 {
     var title       = $('input[name=title]').val();
+    var desc        = $('input[name=desc]').val();
     var sort        = $('input[name=sort]').val();
 
     var retFormParam = {
         title   : title,
+        desc    : desc,
         sort    : sort,
         content : simplemde.value()
     }

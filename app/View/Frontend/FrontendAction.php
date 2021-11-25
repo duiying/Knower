@@ -14,6 +14,6 @@ class FrontendAction
 {
     public function index(RenderInterface $render)
     {
-        return $render->render('frontend/layouts/app');
+        return $render->render('frontend/index/index');
     }
 }

@@ -6,15 +6,23 @@ function validateArticleParam(id)
                 required: true,
                 maxlength: 255,
             },
+            desc: {
+                required: true,
+                maxlength: 255,
+            },
             sort: {
                 range: [1, 999],
                 digits: true,
             },
         },
         messages: {
-            name: {
+            title: {
                 required: '请输入标题！',
                 maxlength: '标题输入过长！',
+            },
+            desc: {
+                required: '请输入描述！',
+                maxlength: '描述输入过长！',
             },
             sort: {
                 range: '请输入 1-999 之间的整数！',

@@ -156,6 +156,10 @@ function listTag(data = {}) {
     return request.get('tags', data);
 }
 
+function listArticle(data = {}) {
+    return request.get('articles', data);
+}
+
 function createTag(data = {}) {
     return request.post('v1/tag/create', data);
 }

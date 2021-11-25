@@ -157,8 +157,11 @@ DROP TABLE IF EXISTS `t_content_article`;
 CREATE TABLE `t_content_article` (
                                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
                                      `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
+                                     `desc` varchar(1000) NOT NULL DEFAULT '' COMMENT '文章描述',
+                                     `cover_pic_url` varchar(1000) NOT NULL DEFAULT '' COMMENT '文章封面图',
                                      `content` text NOT NULL default '' comment '文章内容',
                                      `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：删除；1：正常；}',
+                                     `read_count` int(10) NOT NULL DEFAULT '0' COMMENT '阅读数',
                                      `sort` int(10) NOT NULL DEFAULT '99' COMMENT '排序（正序）',
                                      `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                                      `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

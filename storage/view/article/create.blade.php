@@ -23,6 +23,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">描述<span class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" name="desc" class="form-control" placeholder="描述">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">内容<span class="text-danger">*</span></label>
                             <div class="col-sm-10">
                                 <textarea name="content" class="form-control" id="article-markdown" rows="10"></textarea>
