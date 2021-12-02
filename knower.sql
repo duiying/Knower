@@ -181,3 +181,17 @@ CREATE TABLE `t_content_tag` (
                                  KEY `idx_name` (`name`),
                                  KEY `idx_type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='标签表';
+
+DROP TABLE IF EXISTS `t_content_comment`;
+CREATE TABLE `t_content_comment` (
+                                     `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                     `uid` int(10) NOT NULL DEFAULT '0' COMMENT 'UID',
+                                     `reply_id` int(10) NOT NULL DEFAULT '0' COMMENT '回复的评论ID',
+                                     `comment_id` int(10) NOT NULL DEFAULT '0' COMMENT '原评论ID（当 type = 2 时，该 ID = reply_id，也就是原评论的 ID；当 type = 3 时，该 ID = 原评论的 ID）',
+                                     `content` text NOT NULL default '' comment '评论内容',
+                                     `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：删除；1：正常；}',
+                                     `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '类型 {1：普通评论；2：回复；3：艾特回复；}',
+                                     `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                     `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                     PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评论表';

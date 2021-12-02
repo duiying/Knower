@@ -18,7 +18,9 @@
     <!-- 顶部导航 begin -->
     @include('frontend.layouts.top')
     <!-- 顶部导航 end -->
+    <main>
     @yield('content')
+    </main>
     <!-- 底部导航 begin -->
     @include('frontend.layouts.footer')
     <!-- 底部导航 end -->

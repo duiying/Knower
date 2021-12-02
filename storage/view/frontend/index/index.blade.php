@@ -1,33 +1,31 @@
 @extends('frontend.layouts.app')
 @section('content')
-<main>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8" style="padding-right: 0;">
-                <div class="card" style="margin-top:20px;">
-                    <div class="card-body" id="frontend-articles">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8" style="padding-right: 0;">
+            <div class="card" style="margin-top:20px;">
+                <div class="card-body" id="frontend-articles">
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" style="padding-left:20px;">
-                <div class="card" style="margin-top:20px;">
-                    <div class="card-body">
-                        <h5>关注</h5>
-                        <hr>
-
-                    </div>
-                </div>
-
-                <div style="margin-top:20px;">
-                    <!-- 标签 begin -->
-                @include('frontend.layouts.tag')
-                <!-- 标签 end -->
                 </div>
             </div>
         </div>
+        <div class="col-md-4" style="padding-left:20px;">
+            <div class="card" style="margin-top:20px;">
+                <div class="card-body">
+                    <h5>关注</h5>
+                    <hr>
+
+                </div>
+            </div>
+
+            <div style="margin-top:20px;">
+                <!-- 标签 begin -->
+            @include('frontend.layouts.tag')
+            <!-- 标签 end -->
+            </div>
+        </div>
     </div>
-</main>
+</div>
 <script>
     // 渲染列表
     renderArticleList();
