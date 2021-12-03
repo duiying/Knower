@@ -2,6 +2,7 @@
 
 namespace App\View\Frontend;
 
+use App\Util\Util;
 use Hyperf\View\RenderInterface;
 
 /**
@@ -10,7 +11,7 @@ use Hyperf\View\RenderInterface;
  * @author duiying <wangyaxiandev@gmail.com>
  * @package App\View\Index\Action
  */
-class FrontendAction
+class IndexAction
 {
     public function index(RenderInterface $render)
     {
