@@ -20,8 +20,8 @@
 
             <div style="margin-top:20px;">
                 <!-- 标签 begin -->
-            @include('frontend.layouts.tag')
-            <!-- 标签 end -->
+                @include('frontend.layouts.tag')
+                <!-- 标签 end -->
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             var listHtml = '';
             var list = data.list;
             for (var i = 0; i < list.length; i++) {
-                listHtml += '<h5 style="padding-top:10px;padding-bottom:5px;"><strong><a href="/">';
+                listHtml += '<h5 style="padding-top:10px;padding-bottom:5px;"><strong><a href="/article/detail?id=' + list[i].id + '">';
                 listHtml +=  list[i].title;
                 listHtml += '</a></strong></h5>';
                 listHtml += '<div class="row"><div class="col-md-12"><div style="margin-bottom: 5px;"><a href="">';

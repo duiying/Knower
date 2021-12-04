@@ -1,18 +1,19 @@
 @extends('frontend.layouts.app')
 @section('content')
+    <input name="id" type="hidden" value="{{ $id }}">
     <div class="container" style="margin-top:20px;">
         <div class="row justify-content-center">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-body">
                         <div style="margin:10px 20px;">
-                            <h2>
-                                标题
+                            <h2 id="article-title">
+
                             </h2>
                         </div>
 
                         <p id="doc-content">
-                            <textarea style="display:none;"> 内容 </textarea>
+                            <textarea style="display:none;" id="article-content">  </textarea>
                         </p>
                         <p class="text-center" style="margin-top:20px;">
                             如果这篇文章帮助到了您，可以赞助下主机费~~<br>
@@ -20,8 +21,7 @@
                         <p class="text-center">
                             <button class="btn btn-success" id="zanshang">赞赏</button>
                             <br>
-                            <img id="zanshangImg" style="display: none;text-align: center;" width="300px;"
-                                 src="{{ asset('img/wechat_zanshang.jpg') }}">
+                            <img id="zanshangImg" style="display: none;text-align: center;" width="300px;" src="/storage/frontend/img/wechat_zanshang.jpeg">
                         </p>
                     </div>
                 </div>
@@ -56,47 +56,13 @@
                             @endforeach
                         </table>
                         <form id="commentForm" onsubmit="return false;">
-                            @csrf
-                            <input type="hidden" name="aid" value="{{ $article->id }}">
-                            <div class="form-group">
-                                <label for="username"
-                                       class="form-label"><span
-                                            class="text-danger">*</span>姓名</label>
-                                <input id="username" type="text" class="form-control" name="username"
-                                       value="{{ $comment_cache->username??'' }}"
-                                       required autofocus placeholder="您的名称"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="email"
-                                       class="form-label"><span
-                                            class="text-danger">*</span>邮箱</label>
-                                <input id="email" type="email" class="form-control" name="email"
-                                       value="{{ $comment_cache->email??'' }}" placeholder="邮箱不会公开"
-                                       required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="website"
-                                       class="form-label">个人网站</label>
-                                <input id="website" type="text" class="form-control" name="website"
-                                       value="{{ $comment_cache->website??'' }}" placeholder="可选，填写后点击头像可以直接进入"/>
-                            </div>
                             <div class="form-group">
                                 <label for="content"
-                                       class="form-label"><span
-                                            class="text-danger" style="font-size:20px;">*</span>评论内容，支持<a
-                                            href="https://daringfireball.net/projects/markdown/syntax">Markdown</a></label>
-                                <textarea id="content" rows="6" class="form-control"
-                                          name="content" required>{{ old('content') }}</textarea>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-1 text-md-right">
-                                    <a href="javascript:void(0)"><img id="captchaImg"
-                                                                      src="{{ captcha_src('mini') }}"></a>
-                                </div>
-                                <div class="col-md-2">
-                                    <input id="captcha" type="text" class="form-control" name="captcha" value=""
-                                           placeholder="验证码"/>
-                                </div>
+                                       class="form-label"><span class="text-danger" style="font-size:20px;">*
+                                    </span>评论内容，支持
+                                    <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
+                                </label>
+                                <textarea id="content" rows="6" class="form-control" name="content" required>内容</textarea>
                             </div>
                             <div class="form-group">
                                 <button id="commentSubmit" class="btn btn-primary">
@@ -124,12 +90,17 @@
             </div>
         </div>
     </div>
-@endsection
-@section('script')
-    <script src="{{asset('vendor/markdown/js/editormd.min.js')}}"></script>
-    <script src="{{asset('vendor/markdown/lib/marked.min.js')}}"></script>
-    <script src="{{asset('vendor/markdown/lib/prettify.min.js')}}"></script>
+
+    <script src="/storage/frontend/editormd/editormd.min.js"></script>
+    <script src="/storage/frontend/markdown/marked.min.js"></script>
+    <script src="/storage/frontend/markdown/prettify.min.js"></script>
     <script type="text/javascript">
+        var data = findArticle({id : $('input[name=id]').val()});
+        if (data !== false) {
+            $('#article-title').html(data.title);
+            $('#article-content').html(data.content);
+        }
+
         var tit = document.getElementById('menu');
         var titleTop = tit.offsetTop;
         //滚动事件
@@ -155,9 +126,6 @@
             $('#zanshang').click(function () {
                 $("#zanshangImg").toggle(500);
             });
-            $('#captchaImg').click(function () {
-                $(this).attr('src', $(this).attr('src') + Math.random());
-            });
             editormd.markdownToHTML("doc-content", {
                 htmlDecode: "style,script,iframe",
                 emoji: true,
@@ -167,8 +135,8 @@
                 sequenceDiagram: false,
                 codeFold: true,
             });
-            @foreach($article->comments as $comment)
-            editormd.markdownToHTML("comment-content-{{ $comment->id }}", {
+
+            editormd.markdownToHTML("comment-content-1", {
                 htmlDecode: "style,script,iframe",
                 emoji: true,
                 taskList: true,
@@ -177,7 +145,7 @@
                 sequenceDiagram: false,
                 codeFold: true,
             });
-            @endforeach
+
 
             $("#doc-content").find("h2,h3,h4,h5,h6").each(function(i,item){
                 var tag = $(item).get(0).localName;
@@ -195,25 +163,17 @@
             });
 
             $('#commentSubmit').click(function () {
-                $('#username').removeClass('is-invalid');
-                $('#username').next('.invalid-feedback').remove();
-                $('#email').removeClass('is-invalid');
-                $('#email').next('.invalid-feedback').remove();
-                $('#website').removeClass('is-invalid');
-                $('#website').next('.invalid-feedback').remove();
                 $('#content').removeClass('is-invalid');
                 $('#content').next('.invalid-feedback').remove();
-                $('#captcha').removeClass('is-invalid');
-                $('#captcha').next('.invalid-feedback').remove();
 
                 $.ajax({
-                    url: "{{ route('blog.comment.store') }}",
+                    url: "/",
                     type: 'post',
                     data: $('#commentForm').serializeArray(),
                     success: function (data) {
                         $('#captchaImg').attr('src', $('#captchaImg').attr('src') + Math.random());
                         $('#captcha').val('');
-                        var avatar=data.email=="{{ $admin->email }}"?"{{ $admin->avatar }}":"{{ asset('img/default_avatar.png') }}";
+                        var avatar='/storage/frontend/img/default_avatar.png'
 
                         $('#commentList').append('<tr>' +
                             '                                    <td style="padding: 0 10px;">' +

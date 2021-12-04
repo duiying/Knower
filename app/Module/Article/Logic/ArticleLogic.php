@@ -234,6 +234,11 @@ class ArticleLogic
         return $this->service->getLineByWhere($requestData);
     }
 
+    public function detail($requestData)
+    {
+        $id = $requestData['id'];
+    }
+
     /**
      * 获取需要同步到 ElasticSearch 中的文章数据
      *
