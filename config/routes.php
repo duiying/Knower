@@ -107,7 +107,6 @@ Router::addRoute(['POST'], '/v1/user/logout', Route::decoration('AdminPassport\U
 
 Router::get('/','App\View\Frontend\IndexAction@index');
 Router::get('/article/detail','App\View\Frontend\ArticleDetailAction@handle');
-
 Router::get('/tags',Route::decoration('Tag\Action\ListAction'));
 Router::get('/articles',Route::decoration('Article\Action\ListAction'));
 
