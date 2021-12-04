@@ -95,7 +95,7 @@
     <script src="/storage/frontend/markdown/marked.min.js"></script>
     <script src="/storage/frontend/markdown/prettify.min.js"></script>
     <script type="text/javascript">
-        var data = findArticle({id : $('input[name=id]').val()});
+        var data = findArticle({id : $('input[name=id]').val()}, false);
         if (data !== false) {
             $('#article-title').html(data.title);
             $('#article-content').html(data.content);

@@ -136,8 +136,8 @@ function updateArticle(data = {}) {
     return request.post('v1/article/update', data);
 }
 
-function findArticle(data = {}) {
-    return request.get('v1/article/find', data);
+function findArticle(data = {}, checkToken = true) {
+    return request.get('v1/article/find', data, checkToken);
 }
 
 function updateArticleField(data = {}) {
@@ -152,12 +152,12 @@ function searchTag(data = {}) {
     return request.get('v1/tag/search', data);
 }
 
-function listTag(data = {}) {
-    return request.get('tags', data);
+function listTag(data = {}, checkToken = true) {
+    return request.get('tags', data, checkToken);
 }
 
 function listArticle(data = {}) {
-    return request.get('articles', data);
+    return request.get('articles', data, false);
 }
 
 function createTag(data = {}) {

@@ -1,11 +1,14 @@
 const BASE_API_URL = 'http://127.0.0.1:9501/';
 
 request = {
-    post : function (url, data = {}) {
+    post : function (url, data = {}, isCheckToken = true) {
         var res = false;
 
-        var token = checkToken(url);
-        if (token !== '') data.access_token = token;
+        // 后台调用 API 需要验证 token
+        if (isCheckToken) {
+            var token = checkToken(url);
+            if (token !== '') data.access_token = token;
+        }
 
         $.ajax({
             type 		: 'POST',
@@ -34,11 +37,14 @@ request = {
 
         return res;
     },
-    get : function (url, data = {}) {
+    get : function (url, data = {}, isCheckToken = true) {
         var res = false;
 
-        var token = checkToken(url);
-        if (token !== '') data.access_token = token;
+        // 后台调用 API 需要验证 token
+        if (isCheckToken) {
+            var token = checkToken(url);
+            if (token !== '') data.access_token = token;
+        }
 
         $.ajax({
             type 		: 'GET',

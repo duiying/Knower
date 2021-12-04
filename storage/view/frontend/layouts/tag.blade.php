@@ -16,7 +16,7 @@
      */
     function renderTagList()
     {
-        var data = listTag();
+        var data = listTag(false);
         if (data !== false) {
             $('#frontend-tags').html('');
             var listHtml = '';
