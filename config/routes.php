@@ -87,6 +87,7 @@ Router::addGroup('/v1/',function () {
     Router::post('article/update', Route::decoration('Article\Action\UpdateAction'));
     Router::get('article/find', Route::decoration('Article\Action\FindAction'));
     Router::post('article/update_field', Route::decoration('Article\Action\UpdateFieldAction'));
+    Router::get('article/async_es', Route::decoration('Article\Action\AsyncEsAction'));
 
     // 标签相关
     Router::get('tag/search', Route::decoration('Tag\Action\SearchAction'));

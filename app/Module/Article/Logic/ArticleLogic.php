@@ -10,6 +10,9 @@ use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Article\Service\ArticleService;
+use Hyperf\Task\Task;
+use Hyperf\Task\TaskExecutor;
+use Hyperf\Utils\ApplicationContext;
 
 class ArticleLogic
 {
@@ -72,6 +75,27 @@ class ArticleLogic
         }
 
         return $updateRes;
+    }
+
+    /**
+     * 全量同步 ElasticSearch
+     *
+     * @param $requestData
+     * @return bool
+     * @throws \Throwable
+     */
+    public function asyncEs($requestData)
+    {
+        $container = ApplicationContext::getContainer();
+        $exec = $container->get(TaskExecutor::class);
+        // 投递 Task（全量同步 ElasticSearch 是耗时任务，使用 Task 进程来防止接口超时）
+        try {
+            $result = $exec->execute(new Task([ArticleService::class, 'asyncEs']));
+        } catch (\Exception $exception) {
+            Log::error('全量同步 ElasticSearch 异常', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+
+        return true;
     }
 
     /**
@@ -239,18 +263,5 @@ class ArticleLogic
         $id = $requestData['id'];
     }
 
-    /**
-     * 获取需要同步到 ElasticSearch 中的文章数据
-     *
-     * @param int $lastId
-     * @param int $count
-     * @return array
-     */
-    public function getSyncToEsArticleData($lastId = 0, $count = 100)
-    {
-        return $this->service->search([
-            'status'    => ArticleConstant::ARTICLE_STATUS_NORMAL,
-            'id'        => ['>', $lastId]
-        ], 0, $count);
-    }
+
 }

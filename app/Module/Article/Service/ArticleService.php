@@ -5,6 +5,7 @@ namespace App\Module\Article\Service;
 use App\Constant\ElasticSearchConst;
 use App\Module\Article\Constant\ArticleConstant;
 use App\Util\ElasticSearch;
+use App\Util\Log;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Article\Dao\ArticleDao;
 
@@ -238,5 +239,69 @@ class ArticleService
     public function deleteEsArticleIndex()
     {
         return $this->es->esClient->indices()->delete(['index' => ElasticSearchConst::INDEX_ARTICLE]);
+    }
+
+    /**
+     * 全量同步 ElasticSearch
+     *
+     * @return bool
+     */
+    public function asyncEs()
+    {
+        Log::info('MySQL 中的文章数据全量同步到 ElasticSearch begin');
+
+        // 分页同步，防止一次性数据量过大
+        $lastId = 0;
+        $count  = 100;
+
+        $index  = ElasticSearchConst::INDEX_ARTICLE;
+
+        // 删除索引
+        if ($this->existsEsArticleIndex()) {
+            $this->deleteEsArticleIndex();
+        }
+        // 创建索引
+        $this->createEsArticleIndex();
+
+        $articleList = $this->getSyncToEsArticleData($lastId, $count);
+
+        while (!empty($articleList)) {
+            $params = ['body' => []];
+
+            foreach ($articleList as $k => $v) {
+                $params['body'][] = [
+                    'index' => [
+                        '_index'    => $index,
+                        '_id'       => $v['id'],
+                    ],
+                ];
+                $params['body'][] = $v;
+            }
+
+            $this->es->esClient->bulk($params);
+
+            // 下一页数据
+            $lastId         = end($articleList)['id'];
+            $articleList    = $this->getSyncToEsArticleData($lastId, $count);
+        }
+
+        Log::info('MySQL 中的文章数据全量同步到 ElasticSearch end');
+
+        return true;
+    }
+
+    /**
+     * 获取需要同步到 ElasticSearch 中的文章数据
+     *
+     * @param int $lastId
+     * @param int $count
+     * @return array
+     */
+    public function getSyncToEsArticleData($lastId = 0, $count = 100)
+    {
+        return $this->search([
+            'status'    => ArticleConstant::ARTICLE_STATUS_NORMAL,
+            'id'        => ['>', $lastId]
+        ], 0, $count);
     }
 }
