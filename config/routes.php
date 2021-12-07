@@ -112,5 +112,5 @@ Router::get('/tags', Route::decoration('Tag\Action\ListAction'));
 Router::get('/articles', Route::decoration('Article\Action\ListAction'));
 
 // 第三方登录相关
-Router::get('/oauth/github/callback', 'App\Module\User\OAuthAction@githubCallback');
+Router::get('/oauth/github/callback', 'App\Module\User\Action\OAuthAction@githubCallback');
 /********************************************************* 前台路由 end *************************************************/
