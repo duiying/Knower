@@ -12,6 +12,14 @@ use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
 class OAuthAction
 {
+    public function github(RequestInterface $request, ResponseInterface $response)
+    {
+        $clientId = env('GITHUB_CLIENT_ID');
+        $redirectUri = env('GITHUB_REDIRECT_URL');
+        $redirectStr = sprintf('https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=&state=111', $clientId, $redirectUri);
+        return $response->redirect($redirectStr);
+    }
+
     /**
      * @param RequestInterface $request
      * @param ResponseInterface $response

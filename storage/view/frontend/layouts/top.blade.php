@@ -22,7 +22,7 @@
 
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
-                <li><a class="nav-link" href="">登录</a></li>
+                <li><a class="nav-link" href="/oauth/github">登录</a></li>
                 <li><a class="nav-link" href="">注册</a></li>
             </ul>
         </div>
