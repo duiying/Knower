@@ -16,7 +16,7 @@ class OAuthAction
     {
         $clientId = env('GITHUB_CLIENT_ID');
         $redirectUri = env('GITHUB_REDIRECT_URL');
-        $redirectStr = sprintf('https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=&state=111', $clientId, $redirectUri);
+        $redirectStr = sprintf('https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&state=111', $clientId, $redirectUri);
         return $response->redirect($redirectStr);
     }
 
