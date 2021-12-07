@@ -86,15 +86,16 @@ class ArticleLogic
      */
     public function asyncEs($requestData)
     {
+        // 投递 Task（全量同步 ElasticSearch 是耗时任务，使用 Task 进程来防止接口超时）
         $container = ApplicationContext::getContainer();
         $exec = $container->get(TaskExecutor::class);
-        // 投递 Task（全量同步 ElasticSearch 是耗时任务，使用 Task 进程来防止接口超时）
         try {
             $result = $exec->execute(new Task([ArticleService::class, 'asyncEs']));
         } catch (\Exception $exception) {
             Log::error('全量同步 ElasticSearch 异常', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
 
+        // 投递 Task 之后，直接返回 true
         return true;
     }
 

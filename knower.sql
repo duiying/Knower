@@ -204,3 +204,46 @@ CREATE TABLE `t_content_comment` (
                                      KEY `idx_comment_id` (`comment_id`),
                                      KEY `idx_ctime` (`ctime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评论表';
+
+# user 数据库
+
+CREATE DATABASE user DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+
+use user;
+
+DROP TABLE IF EXISTS `t_user_account`;
+CREATE TABLE `t_user_account` (
+                                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
+                                  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
+                                  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
+                                  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像地址',
+                                  `password` varchar(50) NOT NULL DEFAULT '' COMMENT '密码',
+                                  `access_token` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token',
+                                  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：禁用；1：正常；}',
+                                  `last_active_time` datetime COMMENT '最近活跃时间',
+                                  `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                  `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                  PRIMARY KEY (`id`),
+                                  KEY `idx_nickname` (`nickname`),
+                                  KEY `idx_email` (`email`),
+                                  KEY `idx_mobile` (`mobile`),
+                                  KEY `idx_access_token` (`access_token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+DROP TABLE IF EXISTS `t_user_oauth`;
+CREATE TABLE `t_user_oauth` (
+                                `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                `account_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户ID',
+                                `oauth_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '第三方登录类型 {1：GitHub；2：微信扫码登录；}',
+                                `oauth_id` varchar(255) NOT NULL DEFAULT '' COMMENT '第三方登录ID',
+                                `token` varchar(255) NOT NULL DEFAULT '' COMMENT '密码凭证',
+                                `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像地址',
+                                `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                PRIMARY KEY (`id`),
+                                KEY `idx_account_id` (`account_id`),
+                                KEY `idx_oauth_type` (`oauth_type`),
+                                KEY `idx_oauth_id` (`oauth_id`),
+                                KEY `idx_token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='第三方登录表';
