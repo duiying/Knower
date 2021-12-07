@@ -29,7 +29,10 @@ class OAuthAction
     {
         // 参数校验
         $requestData = $request->all();
-        Log::info('回调信息', ['data' => $requestData]);
+        if (!isset($requestData['code']) && !isset($requestData['state'])) {
+            return HttpUtil::error($response);
+        }
+        Log::info('GitHub 回调信息', $requestData);
         return $response->redirect('/');
     }
 }
