@@ -15,7 +15,7 @@ class OAuthAction
     public function github(RequestInterface $request, ResponseInterface $response)
     {
         $clientId = env('GITHUB_CLIENT_ID');
-        $redirectUri = env('GITHUB_REDIRECT_URL');
+        $redirectUri = env('GITHUB_REDIRECT_HOST') . '/oauth/github/callback';
         $redirectStr = sprintf('https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&state=111', $clientId, $redirectUri);
         return $response->redirect($redirectStr);
     }
@@ -30,6 +30,6 @@ class OAuthAction
         // 参数校验
         $requestData = $request->all();
         Log::info('回调信息', ['data' => $requestData]);
-        return HttpUtil::success($response);
+        return $response->redirect('/');
     }
 }
