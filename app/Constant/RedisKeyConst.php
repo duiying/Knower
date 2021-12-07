@@ -20,7 +20,8 @@ namespace App\Constant;
  *
  * 服务简称
  *      ContentService -> cs
- *      AccountService -> as
+ *      PassportService -> ps
+ *      UserService -> us
  *
  * @author duiying <wangyaxiandev@gmail.com>
  * @package App\Constant
@@ -31,4 +32,6 @@ class RedisKeyConst
     const EXAMPLE_KEY = 's:服务简称:业务名称';
 
     const USER_TOKEN = 's:ps:token_user_id:';
+
+    const GITHUB_STATE = 's:us:github:state:';
 }

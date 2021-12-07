@@ -88,6 +88,16 @@ class Util
     }
 
     /**
+     * 生成 Token
+     *
+     * @return string
+     */
+    public static function generateToken()
+    {
+        return md5(uniqid() . time() . mt_rand(10000, 99999));
+    }
+
+    /**
      * 获取 redis 分布式锁
      *
      * @param $key
