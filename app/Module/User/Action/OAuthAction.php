@@ -130,7 +130,7 @@ class OAuthAction
             return HttpUtil::error($response);
         }
 
-        $getGitHubUserInfoStr = $getAccessTokenResponse->getBody()->getContents();
+        $getGitHubUserInfoStr = $getGitHubUserInfoResponse->getBody()->getContents();
         Log::info('获取 GitHub 用户信息返回信息：' . $getGitHubUserInfoStr);
         $getGitHubUserInfoArr = json_decode($getGitHubUserInfoStr, true);
 
