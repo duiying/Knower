@@ -94,6 +94,7 @@ class OAuthAction
         $client = $this->client->getClient([
             'connect_timeout'   => 5,
             'timeout'           => 5,
+            'headers'           => ['Accept' => 'application/json'],
         ]);
 
         try {
