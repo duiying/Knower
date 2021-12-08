@@ -144,4 +144,38 @@ class AppErrorCode extends AbstractConstants
     const TAG_NOT_EXIST_ERROR = 3000401;
 
     /******************** 标签模块错误码 end *****************************************************************************/
+
+    /******************** 用户模块错误码 begin 3000501 ~ 3000600 *********************************************************/
+
+    /**
+     * @Message("获取 GitHub access_token 异常！")
+     */
+    const GITHUB_ACCESS_TOKEN_FAIL = 3000501;
+
+    /**
+     * @Message("GitHub 返回 access_token 信息异常！")
+     */
+    const GITHUB_TOKEN_INFO_ERROR = 3000502;
+
+    /**
+     * @Message("获取 GitHub 用户信息失败！")
+     */
+    const GITHUB_GET_USER_INFO_FAIL = 3000503;
+
+    /**
+     * @Message("GitHub 返回用户信息异常！")
+     */
+    const GITHUB_USER_INFO_ERROR = 3000504;
+
+    /**
+     * @Message("用户注册失败！")
+     */
+    const USER_REGISTER_FAIL = 3000505;
+
+    /**
+     * @Message("用户登录信息不存在！")
+     */
+    const USER_REGISTER_INFO_NOT_EXIST = 3000506;
+
+    /******************** 用户模块错误码 end *****************************************************************************/
 }

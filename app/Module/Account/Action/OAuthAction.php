@@ -51,8 +51,7 @@ class OAuthAction
             return HttpUtil::error($response);
         }
 
-        $callbackRes = $this->logic->githubCallback($requestData['code'], $requestData['state']);
-        if (!$callbackRes) return HttpUtil::error($response);
+        $this->logic->githubCallback($requestData['code'], $requestData['state']);
 
         return $response->redirect('/');
     }
