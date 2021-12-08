@@ -1,26 +1,36 @@
 <?php
 
-namespace App\Module\User\Action;
+namespace App\Module\Account\Logic;
 
 use App\Constant\RedisKeyConst;
+use App\Module\Account\Constant\OAuthConstant;
+use App\Module\Account\Service\AccountService;
+use App\Module\Account\Service\OAuthService;
 use App\Util\HTTPClient;
-use App\Util\HttpUtil;
 use App\Util\Log;
 use App\Util\Redis;
 use App\Util\Util;
-use GuzzleHttp\Exception\GuzzleException;
 use Hyperf\Di\Annotation\Inject;
-use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Contract\ResponseInterface;
-use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
-class OAuthAction
+class AccountLogic
 {
     /**
      * @Inject()
      * @var HTTPClient
      */
     public $client;
+
+    /**
+     * @Inject()
+     * @var AccountService
+     */
+    public $accountService;
+
+    /**
+     * @Inject()
+     * @var OAuthService
+     */
+    public $oAuthService;
 
     /**
      * GitHub state 写入缓存
@@ -50,42 +60,22 @@ class OAuthAction
     }
 
     /**
-     * 组装 GitHub 登录 URL 信息，并重定向到该 URL
+     * GitHub 回调
      *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param $code
+     * @param $state
+     * @return bool
      */
-    public function github(RequestInterface $request, ResponseInterface $response)
+    public function githubCallback($code, $state)
     {
-        $state = Util::generateToken();
-
-        $this->setGitHubStateCache($state);
-
-        $clientId = env('GITHUB_CLIENT_ID');
-        $redirectUri = env('GITHUB_REDIRECT_HOST') . '/oauth/github/callback';
-        $redirectStr = sprintf('https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&state=%s', $clientId, $redirectUri, $state);
-        return $response->redirect($redirectStr);
-    }
-
-    /**
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function githubCallback(RequestInterface $request, ResponseInterface $response)
-    {
-        $requestData = $request->all();
-        Log::info('GitHub 回调信息', $requestData);
-        if (!isset($requestData['code']) && !isset($requestData['state']) || !$this->checkGitHubStateCache($requestData['state'])) {
-            return HttpUtil::error($response);
+        if (!$this->checkGitHubStateCache($state)) {
+            return false;
         }
 
         // 1、根据 GitHub 回调信息中的 code 信息去获取 GitHub 的 access_token
         $getAccessTokenUrl          = 'https://github.com/login/oauth/access_token';
         $clientId                   = env('GITHUB_CLIENT_ID');
         $secret                     = env('GITHUB_SECRET');
-        $code                       = $requestData['code'];
 
         $getAccessTokenParams = [
             'client_id'     => $clientId,
@@ -101,9 +91,9 @@ class OAuthAction
 
         try {
             $getAccessTokenResponse = $client->request('POST', $getAccessTokenUrl, ['json' => $getAccessTokenParams]);
-        } catch (\Exception $exception) {
+        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
             Log::error('获取 GitHub access_token 异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
-            return HttpUtil::error($response);
+            return false;
         }
 
         $getAccessTokenJsonStr = $getAccessTokenResponse->getBody()->getContents();
@@ -111,7 +101,7 @@ class OAuthAction
         $getAccessTokenArr = json_decode($getAccessTokenJsonStr, true);
 
         if (!is_array($getAccessTokenArr) || !isset($getAccessTokenArr['access_token'])) {
-            return HttpUtil::error($response);
+            return false;
         }
 
         // 2、根据 GitHub 返回的 access_token 获取用户信息
@@ -125,9 +115,9 @@ class OAuthAction
 
         try {
             $getGitHubUserInfoResponse = $client->request('GET', $getGitHubUserInfoUrl);
-        } catch (\Exception $exception) {
+        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
             Log::error('获取 GitHub 用户信息异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
-            return HttpUtil::error($response);
+            return false;
         }
 
         $getGitHubUserInfoStr = $getGitHubUserInfoResponse->getBody()->getContents();
@@ -135,7 +125,7 @@ class OAuthAction
         $getGitHubUserInfoArr = json_decode($getGitHubUserInfoStr, true);
 
         if (!is_array($getGitHubUserInfoArr) || !isset($getGitHubUserInfoArr['id'])) {
-            return HttpUtil::error($response);
+            return false;
         }
 
         $gitHubId = $getGitHubUserInfoArr['id'];
@@ -143,6 +133,63 @@ class OAuthAction
         $gitHubEmail = $getGitHubUserInfoArr['email'];
         $gitHubAvatar = $getGitHubUserInfoArr['avatar_url'];
 
-        return $response->redirect('/');
+        // 检查是否已经注册
+        $oAuthId = $this->checkIfRegisterByOAuth(OAuthConstant::OAUTH_TYPE_GITHUB, $gitHubId);
+        if ($oAuthId === 0) {
+            $this->register(OAuthConstant::OAUTH_TYPE_GITHUB, $gitHubId, $accessToken, $gitHubAvatar, $gitHubName, $gitHubEmail);
+        } else {
+            $this->refreshLoginInfo($oAuthId, $accessToken, $gitHubAvatar, $gitHubName, $gitHubEmail);
+        }
+
+        return true;
+    }
+
+    public function refreshLoginInfo($oAuthId, $token, $avatar = '', $nickname = '', $email = '', $mobile = '')
+    {
+
+    }
+
+    public function register($oAuthType, $oAuthId, $token, $avatar = '', $nickname = '', $email = '', $mobile = '')
+    {
+        Log::info(sprintf('开始注册了，oAuthType：%d，oAuthId：%s，token：%s avatar：%s，nickname：%s，email：%s，mobile：%s',
+            $oAuthType, $oAuthId, $token, $avatar, $nickname, $email, $mobile));
+
+        $accessToken = Util::generateToken();
+
+        $createAccountParams = [
+            'nickname'              => $nickname,
+            'email'                 => $email,
+            'mobile'                => $mobile,
+            'avatar'                => $avatar,
+            'password'              => '',
+            'access_token'          => $accessToken,
+            'last_active_time'      => Util::now()
+        ];
+        $accountId = $this->accountService->create($createAccountParams);
+
+        $createOAuthParams = [
+            'account_id'    => $accountId,
+            'oauth_type'    => $oAuthType,
+            'oauth_id'      => $oAuthId,
+            'token'         => $token,
+            'avatar'        => $avatar
+        ];
+        $this->oAuthService->create($createOAuthParams);
+    }
+
+    /**
+     * 根据第三方登录信息检查是否登录
+     *
+     * @param $oAuthType
+     * @param $oAuthId
+     * @return int
+     */
+    public function checkIfRegisterByOAuth($oAuthType, $oAuthId)
+    {
+        $oAuthInfo = $this->oAuthService->getLineByWhere([
+            'oauth_type' => $oAuthType,
+            'oauth_id' => $oAuthId
+        ], ['id']);
+        return isset($oAuthInfo['id']) ? intval($oAuthInfo['id']) : 0;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\User\Dao;
+namespace App\Module\Account\Dao;
 
 use App\Util\MySQLDao;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Module\User\Dao;
+namespace App\Module\Account\Dao;
 
 use App\Util\MySQLDao;
 
-class UserDao extends MySQLDao
+class AccountDao extends MySQLDao
 {
     public $connection = 'user';
     public $table = 't_user_account';
