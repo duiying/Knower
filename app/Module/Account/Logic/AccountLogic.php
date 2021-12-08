@@ -125,6 +125,7 @@ class AccountLogic
         $getGitHubUserInfoArr = json_decode($getGitHubUserInfoStr, true);
 
         if (!is_array($getGitHubUserInfoArr) || !isset($getGitHubUserInfoArr['id'])) {
+            Log::error('获取 GitHub 用户信息返回异常：' . $getGitHubUserInfoStr);
             return false;
         }
 
