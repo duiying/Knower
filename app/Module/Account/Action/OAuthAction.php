@@ -7,6 +7,7 @@ use App\Util\HttpUtil;
 use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpMessage\Cookie\Cookie;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
@@ -51,8 +52,9 @@ class OAuthAction
             return HttpUtil::error($response);
         }
 
-        $this->logic->githubCallback($requestData['code'], $requestData['state']);
-
-        return $response->redirect('/');
+        $accessToken = $this->logic->githubCallback($requestData['code'], $requestData['state']);
+        $expire = time() + 86400 * 365;
+        $cookie = new Cookie('knower_access_token', $accessToken, $expire);
+        return $response->withCookie($cookie)->redirect('/');
     }
 }

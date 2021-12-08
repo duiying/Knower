@@ -67,6 +67,7 @@ class AccountLogic
      *
      * @param $code
      * @param $state
+     * @return string
      */
     public function githubCallback($code, $state)
     {
@@ -86,19 +87,19 @@ class AccountLogic
         ];
 
         $client = $this->client->getClient([
-            'connect_timeout'   => 5,
-            'timeout'           => 5,
+            'connect_timeout'   => 3,
+            'timeout'           => 3,
             'headers'           => ['Accept' => 'application/json'],
         ]);
 
         // GitHub 经常访问失败，增加重试
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             try {
                 $getAccessTokenResponse = $client->request('POST', $getAccessTokenUrl, ['json' => $getAccessTokenParams]);
             } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
                 Log::error('获取 GitHub access_token 异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
                 // 重试多次，依然失败，则抛出异常
-                if ($i === 2) throw new AppException(AppErrorCode::GITHUB_ACCESS_TOKEN_FAIL);
+                if ($i === 1) throw new AppException(AppErrorCode::GITHUB_ACCESS_TOKEN_FAIL);
             }
         }
 
@@ -114,19 +115,19 @@ class AccountLogic
         $accessToken = $getAccessTokenArr['access_token'];
         $getGitHubUserInfoUrl = 'https://api.github.com/user';
         $client = $this->client->getClient([
-            'connect_timeout'   => 5,
-            'timeout'           => 5,
+            'connect_timeout'   => 3,
+            'timeout'           => 3,
             'headers'           => ['Accept' => 'application/json', 'Authorization' => 'token ' . $accessToken],
         ]);
 
         // GitHub 经常访问失败，增加重试
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             try {
                 $getGitHubUserInfoResponse = $client->request('GET', $getGitHubUserInfoUrl);
             } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
                 Log::error('获取 GitHub 用户信息异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
                 // 重试多次，依然失败，则抛出异常
-                if ($i === 2) throw new AppException(AppErrorCode::GITHUB_GET_USER_INFO_FAIL);
+                if ($i === 1) throw new AppException(AppErrorCode::GITHUB_GET_USER_INFO_FAIL);
             }
         }
 
@@ -147,10 +148,12 @@ class AccountLogic
         // 检查是否已经注册
         $oAuthId = $this->checkIfRegisterByOAuth(OAuthConstant::OAUTH_TYPE_GITHUB, $gitHubId);
         if ($oAuthId === 0) {
-            $this->register(OAuthConstant::OAUTH_TYPE_GITHUB, $gitHubId, $accessToken, $gitHubAvatar, $gitHubName, $gitHubEmail);
+            $accountToken = $this->register(OAuthConstant::OAUTH_TYPE_GITHUB, $gitHubId, $accessToken, $gitHubAvatar, $gitHubName, $gitHubEmail);
         } else {
-            $this->refreshLoginInfo($oAuthId, $accessToken, $gitHubAvatar, $gitHubName, $gitHubEmail);
+            $accountToken = $this->refreshLoginInfo($oAuthId, $accessToken, $gitHubAvatar, $gitHubName, $gitHubEmail);
         }
+
+        return $accountToken;
     }
 
     /**
@@ -162,6 +165,7 @@ class AccountLogic
      * @param string $nickname
      * @param string $email
      * @param string $mobile
+     * @return string
      */
     public function refreshLoginInfo($id, $token, $avatar = '', $nickname = '', $email = '', $mobile = '')
     {
@@ -179,15 +183,18 @@ class AccountLogic
         if (empty($oAuthInfo)) {
             throw new AppException(AppErrorCode::USER_REGISTER_INFO_NOT_EXIST);
         }
+        $accessToken = Util::generateToken();
         $accountId = $oAuthInfo['account_id'];
         $updateAccountData = [
-            'access_token'  => Util::generateToken(),
+            'access_token'  => $accessToken,
             'avatar'        => $avatar,
             'nickname'      => $nickname,
             'email'         => $email,
             'mobile'        => $mobile
         ];
         $this->accountService->update(['id' => $accountId], $updateAccountData);
+
+        return $accessToken;
     }
 
     /**
@@ -200,6 +207,7 @@ class AccountLogic
      * @param string $nickname
      * @param string $email
      * @param string $mobile
+     * @return string
      */
     public function register($oAuthType, $oAuthId, $token, $avatar = '', $nickname = '', $email = '', $mobile = '')
     {
@@ -239,6 +247,8 @@ class AccountLogic
         }
 
         $this->accountService->commit();
+
+        return $accessToken;
     }
 
     /**
@@ -250,7 +260,8 @@ class AccountLogic
      */
     public function checkIfRegisterByOAuth($oAuthType, $oAuthId)
     {
-        Log::info(sprintf('根据第三方登录信息检查是否登录，oAuthType：%d，oAuthId：%s', $oAuthType, $oAuthId));
+        Log::info('根据第三方登录信息检查是否登录', ['oAuthType' => $oAuthType, 'oAuthId' => $oAuthId]);
+
         $oAuthInfo = $this->oAuthService->getLineByWhere([
             'oauth_type' => $oAuthType,
             'oauth_id' => $oAuthId
