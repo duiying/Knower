@@ -2,6 +2,7 @@
 
 namespace App\Module\Account\Service;
 
+use Hyperf\Di\Annotation\Inject;
 use App\Module\Account\Dao\OAuthDao;
 
 class OAuthService
