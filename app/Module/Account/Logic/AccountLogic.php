@@ -186,10 +186,12 @@ class AccountLogic
      */
     public function checkIfRegisterByOAuth($oAuthType, $oAuthId)
     {
+        Log::info(sprintf('根据第三方登录信息检查是否登录，oAuthType：%d，oAuthId：%s', $oAuthType, $oAuthId));
         $oAuthInfo = $this->oAuthService->getLineByWhere([
             'oauth_type' => $oAuthType,
             'oauth_id' => $oAuthId
         ], ['id']);
+        Log::info($oAuthInfo);
         return isset($oAuthInfo['id']) ? intval($oAuthInfo['id']) : 0;
     }
 }
