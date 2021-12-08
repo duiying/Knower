@@ -129,10 +129,16 @@ class AccountLogic
             return false;
         }
 
+        Log::info('111');
+        Log::info($getGitHubUserInfoArr);
+
         $gitHubId = $getGitHubUserInfoArr['id'];
         $gitHubName = $getGitHubUserInfoArr['login'];
         $gitHubEmail = $getGitHubUserInfoArr['email'];
         $gitHubAvatar = $getGitHubUserInfoArr['avatar_url'];
+
+        Log::info('222');
+        Log::info($getGitHubUserInfoArr);
 
         // 检查是否已经注册
         $oAuthId = $this->checkIfRegisterByOAuth(OAuthConstant::OAUTH_TYPE_GITHUB, $gitHubId);
