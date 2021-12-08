@@ -86,19 +86,19 @@ class AccountLogic
         ];
 
         $client = $this->client->getClient([
-            'connect_timeout'   => 3,
-            'timeout'           => 3,
+            'connect_timeout'   => 5,
+            'timeout'           => 5,
             'headers'           => ['Accept' => 'application/json'],
         ]);
 
         // GitHub 经常访问失败，增加重试
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             try {
                 $getAccessTokenResponse = $client->request('POST', $getAccessTokenUrl, ['json' => $getAccessTokenParams]);
             } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
                 Log::error('获取 GitHub access_token 异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
                 // 重试多次，依然失败，则抛出异常
-                if ($i === 4) throw new AppException(AppErrorCode::GITHUB_ACCESS_TOKEN_FAIL);
+                if ($i === 2) throw new AppException(AppErrorCode::GITHUB_ACCESS_TOKEN_FAIL);
             }
         }
 
@@ -114,8 +114,8 @@ class AccountLogic
         $accessToken = $getAccessTokenArr['access_token'];
         $getGitHubUserInfoUrl = 'https://api.github.com/user';
         $client = $this->client->getClient([
-            'connect_timeout'   => 3,
-            'timeout'           => 3,
+            'connect_timeout'   => 5,
+            'timeout'           => 5,
             'headers'           => ['Accept' => 'application/json', 'Authorization' => 'token ' . $accessToken],
         ]);
 
