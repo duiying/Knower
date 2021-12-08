@@ -5,7 +5,6 @@ namespace App\Module\Account\Action;
 use App\Module\Account\Logic\AccountLogic;
 use App\Util\HttpUtil;
 use App\Util\Log;
-use App\Util\Redis;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
