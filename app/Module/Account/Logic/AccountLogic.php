@@ -86,16 +86,20 @@ class AccountLogic
         ];
 
         $client = $this->client->getClient([
-            'connect_timeout'   => 10,
-            'timeout'           => 10,
+            'connect_timeout'   => 3,
+            'timeout'           => 3,
             'headers'           => ['Accept' => 'application/json'],
         ]);
 
-        try {
-            $getAccessTokenResponse = $client->request('POST', $getAccessTokenUrl, ['json' => $getAccessTokenParams]);
-        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
-            Log::error('获取 GitHub access_token 异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
-            throw new AppException(AppErrorCode::GITHUB_ACCESS_TOKEN_FAIL);
+        // GitHub 经常访问失败，增加重试
+        for ($i = 0; $i < 5; $i++) {
+            try {
+                $getAccessTokenResponse = $client->request('POST', $getAccessTokenUrl, ['json' => $getAccessTokenParams]);
+            } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
+                Log::error('获取 GitHub access_token 异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+                // 重试多次，依然失败，则抛出异常
+                if ($i === 4) throw new AppException(AppErrorCode::GITHUB_ACCESS_TOKEN_FAIL);
+            }
         }
 
         $getAccessTokenJsonStr = $getAccessTokenResponse->getBody()->getContents();
@@ -110,16 +114,20 @@ class AccountLogic
         $accessToken = $getAccessTokenArr['access_token'];
         $getGitHubUserInfoUrl = 'https://api.github.com/user';
         $client = $this->client->getClient([
-            'connect_timeout'   => 10,
-            'timeout'           => 10,
+            'connect_timeout'   => 3,
+            'timeout'           => 3,
             'headers'           => ['Accept' => 'application/json', 'Authorization' => 'token ' . $accessToken],
         ]);
 
-        try {
-            $getGitHubUserInfoResponse = $client->request('GET', $getGitHubUserInfoUrl);
-        } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
-            Log::error('获取 GitHub 用户信息异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
-            throw new AppException(AppErrorCode::GITHUB_GET_USER_INFO_FAIL);
+        // GitHub 经常访问失败，增加重试
+        for ($i = 0; $i < 3; $i++) {
+            try {
+                $getGitHubUserInfoResponse = $client->request('GET', $getGitHubUserInfoUrl);
+            } catch (\GuzzleHttp\Exception\GuzzleException $exception) {
+                Log::error('获取 GitHub 用户信息异常！', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+                // 重试多次，依然失败，则抛出异常
+                if ($i === 2) throw new AppException(AppErrorCode::GITHUB_GET_USER_INFO_FAIL);
+            }
         }
 
         $getGitHubUserInfoStr = $getGitHubUserInfoResponse->getBody()->getContents();
