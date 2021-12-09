@@ -22,4 +22,7 @@ class CommonConstant
 
     // 管理员 token 有效时长（8 小时）
     const TOKEN_EXPIRE_SECONDS = 3600 * 8;
+
+    // 前台登录 token
+    const FRONTEND_TOKEN_COOKIE_NAME = 'knower_access_token';
 }

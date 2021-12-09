@@ -2,6 +2,7 @@
 
 namespace App\Module\Account\Action;
 
+use App\Constant\CommonConstant;
 use App\Module\Account\Logic\AccountLogic;
 use App\Util\HttpUtil;
 use App\Util\Log;
@@ -54,7 +55,7 @@ class OAuthAction
 
         $accessToken = $this->logic->githubCallback($requestData['code'], $requestData['state']);
         $expire = time() + 86400 * 365;
-        $cookie = new Cookie('knower_access_token', $accessToken, $expire);
+        $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, $expire);
         return $response->withCookie($cookie)->redirect('/');
     }
 }

@@ -41,6 +41,8 @@
 </nav>
 <script type="text/javascript">
     // 开始检查 token
+    // 从接口中获取用户信息
+
     token = $.cookie('knower_access_token');
     if (!token) {
         $('#account-login').css('display', 'inline-block');

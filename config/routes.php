@@ -114,4 +114,5 @@ Router::get('/articles', Route::decoration('Article\Action\ListAction'));
 // 第三方登录相关
 Router::get('/oauth/github', 'App\Module\Account\Action\OAuthAction@github');
 Router::get('/oauth/github/callback', 'App\Module\Account\Action\OAuthAction@githubCallback');
+Router::get('/account/get_info_by_token', Route::decoration('Account\Action\GetAccountInfoByTokenAction'));
 /********************************************************* 前台路由 end *************************************************/
