@@ -20,11 +20,33 @@
                 <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">搜索</button>
             </form>
 
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" id="account-login">
                 <!-- Authentication Links -->
                 <li><a class="nav-link" href="/oauth/github">登录</a></li>
-                <li><a class="nav-link" href="">注册</a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto" id="account-logout" style="display: none;">
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img style="height:25px;border-radius: 50%;" src=""> duiying <span class="caret"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/">
+                            退出登录
+                        </a>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
+<script type="text/javascript">
+    // 开始检查 token
+    token = $.cookie('knower_access_token');
+    if (!token) {
+        $('#account-login').css('display', 'inline-block');
+        $('#account-logout').css('display', 'none');
+    } else {
+        $('#account-logout').css('display', 'inline-block');
+        $('#account-login').css('display', 'none');
+    }
+</script>
