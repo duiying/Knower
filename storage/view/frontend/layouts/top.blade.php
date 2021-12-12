@@ -40,15 +40,18 @@
     </div>
 </nav>
 <script type="text/javascript">
-    // 开始检查 token
-    // 从接口中获取用户信息
-
-    token = $.cookie('knower_access_token');
-    if (!token) {
-        $('#account-login').css('display', 'inline-block');
-        $('#account-logout').css('display', 'none');
-    } else {
-        $('#account-logout').css('display', 'inline-block');
-        $('#account-login').css('display', 'none');
+    function renderLogin()
+    {
+        var data = getInfoByToken();
+        console.log(data);
+        if (data === false) {
+            $('#account-login').css('display', 'inline-block');
+            $('#account-logout').css('display', 'none');
+        } else {
+            $('#account-logout').css('display', 'inline-block');
+            $('#account-login').css('display', 'none');
+        }
     }
+
+    renderLogin();
 </script>
