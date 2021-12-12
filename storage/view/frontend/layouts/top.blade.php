@@ -43,13 +43,12 @@
     function renderLogin()
     {
         var data = getInfoByToken();
-        console.log(data);
-        if (data === false) {
-            $('#account-login').css('display', 'inline-block');
-            $('#account-logout').css('display', 'none');
-        } else {
+        if (data !== false && data.id !== undefined) {
             $('#account-logout').css('display', 'inline-block');
             $('#account-login').css('display', 'none');
+        } else {
+            $('#account-login').css('display', 'inline-block');
+            $('#account-logout').css('display', 'none');
         }
     }
 
