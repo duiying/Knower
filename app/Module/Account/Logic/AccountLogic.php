@@ -278,6 +278,6 @@ class AccountLogic
     public function getAccountInfoByToken($accessToken)
     {
         if (empty($accessToken)) return new \stdClass();
-        return $this->accountService->getLineByWhere(['access_token' => $accessToken]);
+        return $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar', 'last_active_time']);
     }
 }
