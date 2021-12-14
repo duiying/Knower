@@ -13,6 +13,12 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * 后台权限校验中间件
+ *
+ * @author duiying <wangyaxiandev@gmail.com>
+ * @package App\Middleware
+ */
 class PassportMiddleware
 {
     /**

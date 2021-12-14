@@ -8,6 +8,8 @@ use App\Middleware\CorsMiddleware;
 use Hyperf\Validation\Middleware\ValidationMiddleware;
 use App\Middleware\PassportMiddleware;
 use App\Middleware\PjaxMiddleware;
+use App\Middleware\FrontendTokenMiddleware;
+use App\Middleware\PreventRepeatMiddleware;
 
 Router::get('/favicon.ico', function () {
     return '';
@@ -106,13 +108,25 @@ Router::addRoute(['POST'], '/v1/user/logout', Route::decoration('AdminPassport\U
 
 /********************************************************* 前台路由 begin ***********************************************/
 
+// 首页
 Router::get('/','App\View\Frontend\IndexAction@index');
+// 文章详情页
 Router::get('/article/detail','App\View\Frontend\ArticleDetailAction@handle');
+// 文章详情接口
+Router::get('/article/info', Route::decoration('Article\Action\InfoAction'));
+// 标签列表接口
 Router::get('/tags', Route::decoration('Tag\Action\ListAction'));
+// 首页文章列表接口
 Router::get('/articles', Route::decoration('Article\Action\ListAction'));
 
 // 第三方登录相关
 Router::get('/oauth/github', 'App\Module\Account\Action\OAuthAction@github');
 Router::get('/oauth/github/callback', 'App\Module\Account\Action\OAuthAction@githubCallback');
+
+// 根据前台 token 获取用户登录信息接口
 Router::get('/account/get_info_by_token', Route::decoration('Account\Action\GetAccountInfoByTokenAction'));
+
+// 创建评论接口
+Router::post('/comment/create', Route::decoration('Comment\Action\CreateAction'),  ['middleware' => [PreventRepeatMiddleware::class, FrontendTokenMiddleware::class]]);
+
 /********************************************************* 前台路由 end *************************************************/

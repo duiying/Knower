@@ -136,8 +136,12 @@ function updateArticle(data = {}) {
     return request.post('v1/article/update', data);
 }
 
-function findArticle(data = {}, checkToken = true) {
-    return request.get('v1/article/find', data, checkToken);
+function findArticle(data = {}) {
+    return request.get('v1/article/find', data);
+}
+
+function detailArticle(data = {}) {
+    return request.get('article/info', data, false);
 }
 
 function updateArticleField(data = {}) {

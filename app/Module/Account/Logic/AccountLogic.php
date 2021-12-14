@@ -272,12 +272,12 @@ class AccountLogic
     /**
      * 根据 token 获取用户信息（前台使用）
      *
-     * @param $accessToken
-     * @return array|\stdClass
+     * @param string $accessToken
+     * @return array
      */
-    public function getAccountInfoByToken($accessToken)
+    public function getAccountInfoByToken($accessToken = '')
     {
-        if (empty($accessToken)) return new \stdClass();
+        if (empty($accessToken)) return [];
         return $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar', 'last_active_time']);
     }
 }

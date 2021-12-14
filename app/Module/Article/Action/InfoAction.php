@@ -2,17 +2,15 @@
 
 namespace App\Module\Article\Action;
 
-use App\Module\Article\Constant\ArticleConstant;
+use App\Module\Article\Logic\ArticleLogic;
 use App\Util\HttpUtil;
 use App\Util\Util;
-use App\Constant\CommonConstant;
-use App\Module\Article\Logic\ArticleLogic;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
-class DetailAction
+class InfoAction
 {
     /**
      * @Inject()
@@ -37,9 +35,7 @@ class DetailAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        $requestData['status'] = ArticleConstant::ARTICLE_STATUS_NORMAL;
-
-        $res = $this->logic->detail($requestData);
+        $res = $this->logic->find($requestData);
         return HttpUtil::success($response, $res);
     }
 }

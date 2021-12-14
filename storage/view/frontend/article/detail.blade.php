@@ -60,7 +60,7 @@
                                 <label for="content"
                                        class="form-label"><span class="text-danger" style="font-size:20px;">*
                                     </span>评论内容，支持
-                                    <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
+                                    <a href="https://markdown.com.cn/basic-syntax/" target="_blank">Markdown</a>
                                 </label>
                                 <textarea id="content" rows="6" class="form-control" name="content" required>内容</textarea>
                             </div>
@@ -95,7 +95,7 @@
     <script src="/storage/frontend/markdown/marked.min.js"></script>
     <script src="/storage/frontend/markdown/prettify.min.js"></script>
     <script type="text/javascript">
-        var data = findArticle({id : $('input[name=id]').val()}, false);
+        var data = detailArticle({id : $('input[name=id]').val()});
         if (data !== false) {
             $('#article-title').html(data.title);
             $('#article-content').html(data.content);
@@ -103,11 +103,11 @@
 
         var tit = document.getElementById('menu');
         var titleTop = tit.offsetTop;
-        //滚动事件
+        // 滚动事件
         document.onscroll = function () {
-            //获取当前滚动的距离
+            // 获取当前滚动的距离
             var btop = document.body.scrollTop || document.documentElement.scrollTop;
-            //如果滚动距离大于导航条据顶部的距离
+            // 如果滚动距离大于导航条据顶部的距离
             if (btop >= titleTop) {
                 tit.style.top = "0px";
             } else {
@@ -145,7 +145,6 @@
                 sequenceDiagram: false,
                 codeFold: true,
             });
-
 
             $("#doc-content").find("h2,h3,h4,h5,h6").each(function(i,item){
                 var tag = $(item).get(0).localName;

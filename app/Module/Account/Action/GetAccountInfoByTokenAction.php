@@ -27,6 +27,7 @@ class GetAccountInfoByTokenAction
     {
         $accessToken = $request->cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, '');
         $accountInfo = $this->logic->getAccountInfoByToken($accessToken);
+        empty($accountInfo) && $accountInfo = new \stdClass();
         return HttpUtil::success($response, $accountInfo);
     }
 }

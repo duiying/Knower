@@ -37,6 +37,21 @@ class ArticleLogic
     }
 
     /**
+     * 检查文章是否存在
+     *
+     * @param $id
+     * @return bool
+     */
+    public function checkArticleExist($id)
+    {
+        $article = $this->service->getLineByWhere(['id' => $id, 'status' => ArticleConstant::ARTICLE_STATUS_NORMAL]);
+        if (empty($article)) {
+            throw new AppException(AppErrorCode::ARTICLE_NOT_EXIST_ERROR);
+        }
+        return true;
+    }
+
+    /**
      * 创建
      *
      * @param $requestData
@@ -66,8 +81,13 @@ class ArticleLogic
         $id = $requestData['id'];
         unset($requestData['id']);
 
+        // 1、先检查文章是否存在
+        $this->checkArticleExist($id);
+
+        // 2、更新 MySQL
         $updateRes = $this->service->update(['id' => $id], $requestData);
 
+        // 3、更新 ElasticSearch
         try {
             $this->service->updateEsArticle($id);
         } catch (\Exception $exception) {
@@ -258,11 +278,4 @@ class ArticleLogic
     {
         return $this->service->getLineByWhere($requestData);
     }
-
-    public function detail($requestData)
-    {
-        $id = $requestData['id'];
-    }
-
-
 }

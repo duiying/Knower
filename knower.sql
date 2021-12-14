@@ -186,7 +186,7 @@ CREATE TABLE `t_content_tag` (
 DROP TABLE IF EXISTS `t_content_comment`;
 CREATE TABLE `t_content_comment` (
                                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-                                     `uid` int(10) NOT NULL DEFAULT '0' COMMENT 'UID',
+                                     `account_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户ID',
                                      `third_id` int(10) NOT NULL DEFAULT '0' COMMENT '第三方ID（比如文章ID）',
                                      `third_type` int(10) NOT NULL DEFAULT '0' COMMENT '第三方类型 {1：文章；}',
                                      `reply_id` int(10) NOT NULL DEFAULT '0' COMMENT '回复的评论ID',
@@ -198,7 +198,7 @@ CREATE TABLE `t_content_comment` (
                                      `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                                      `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                      PRIMARY KEY (`id`),
-                                     KEY `idx_uid` (`uid`),
+                                     KEY `idx_account_id` (`account_id`),
                                      KEY `idx_third_id` (`third_id`),
                                      KEY `idx_reply_id` (`reply_id`),
                                      KEY `idx_comment_id` (`comment_id`),
