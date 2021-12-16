@@ -21,7 +21,7 @@
                         <p class="text-center">
                             <button class="btn btn-success" id="zanshang">赞赏</button>
                             <br>
-                            <img id="zanshangImg" style="display: none;text-align: center;" width="300px;" src="/storage/frontend/img/wechat_zanshang.jpeg">
+                            <img id="zanshangImg" style="display: none;text-align: center;" width="300px;" src="/storage/frontend/img/wechat_zanshang.png">
                         </p>
                     </div>
                 </div>
@@ -30,30 +30,7 @@
                         <h3 id="commentHead">评论</h3>
                         <hr>
                         <table id="commentList" style="margin:10px 0 20px 0;">
-                            @foreach($article->comments as $comment)
-                                <tr>
-                                    <td style="padding: 0 10px;">
-                                        <a name="{{ $comment->username }}" href="{{ $comment->website }}"
-                                           target="_blank">
-                                            <img style="height:35px;border-radius:50%;"
-                                                 src="{{ ($comment->email==$admin->email)? $admin->avatar:Identicon::getImageDataUri($comment->username) }}">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ $comment->website }}"
-                                           target="_blank">{{ $comment->username }}</a>
-                                        <br>
-                                        <span style="color:#ddd;">{{ $comment->created_at->format('Y-m-d H:i:s') }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        <p style="padding: 0 0 15px 0;" id="comment-content-{{ $comment->id }}">
-                                            <textarea style="display:none;"> {!! $comment->content !!} </textarea>
-                                        </p>
-                                </tr>
-                            @endforeach
+
                         </table>
                         <form id="commentForm" onsubmit="return false;">
                             <div class="form-group">
@@ -65,7 +42,7 @@
                                 <textarea id="content" rows="6" class="form-control" name="content" required>内容</textarea>
                             </div>
                             <div class="form-group">
-                                <button id="commentSubmit" class="btn btn-primary">
+                                <button id="comment-submit" class="btn btn-primary">
                                     提交
                                 </button>
                             </div>
@@ -78,12 +55,12 @@
                     <div class="card-body">
                         <h3>目录</h3>
                         <hr>
-                        <div id="menuContent"></div>
+                        <div id="menu-content"></div>
                         <div>
                             <br>
-                            <a id="topComment" style="color:#505050;"  href="javascript:void(0);"><i class="fa fa-bookmark-o"></i>&nbsp;·&nbsp;跳到评论</a>
+                            <a id="jumpToComment" style="color:#505050;"  href="javascript:void(0);"><i class="fa fa-bookmark-o"></i>&nbsp;·&nbsp;跳到评论</a>
                             <br>
-                            <a id="topMao" style="color:#505050;"  href="javascript:void(0);"><i class="fa fa-bookmark-o"></i>&nbsp;·&nbsp;跳到顶部</a>
+                            <a id="jumpToTop" style="color:#505050;"  href="javascript:void(0);"><i class="fa fa-bookmark-o"></i>&nbsp;·&nbsp;跳到顶部</a>
                         </div>
                     </div>
                 </div>
@@ -95,11 +72,48 @@
     <script src="/storage/frontend/markdown/marked.min.js"></script>
     <script src="/storage/frontend/markdown/prettify.min.js"></script>
     <script type="text/javascript">
-        var data = detailArticle({id : $('input[name=id]').val()});
-        if (data !== false) {
-            $('#article-title').html(data.title);
-            $('#article-content').html(data.content);
+        articleId = $('input[name=id]').val();
+
+        // 渲染文章数据
+        function renderArticleData()
+        {
+            var data = detailArticle({id : articleId});
+            if (data !== false) {
+                $('#article-title').html(data.title);
+                $('#article-content').html(data.content);
+            }
         }
+
+        commentList = comments({third_id : articleId});
+        // 渲染评论数据
+        function renderCommentData()
+        {
+            var listHtml = '';
+            if (commentList !== false) {
+                var list = commentList.list;
+                for (var i = 0; i < list.length; i++) {
+                    listHtml += '<tr>';
+                    listHtml += '<td style="padding: 0 10px;">';
+                    listHtml += '<a href="javascript:;">';
+                    listHtml += '<img style="height:35px;border-radius:50%;" src="' + list[i].account_info.avatar + '">';
+                    listHtml += '</a>';
+                    listHtml += '</td>';
+                    listHtml += '<td>';
+                    listHtml += '<a href="javascript:;">' + list[i].account_info.nickname + '</a><br>'
+                    listHtml += '<span style="color:#ddd;">' + list[i].ctime + '</span>'
+                    listHtml += '</td></tr>';
+                    listHtml += '<tr><td></td>';
+                    listHtml += '<td>';
+                    listHtml += '<p style="padding: 0 0 15px 0;" id="comment-content-' + list[i].id + '">';
+                    listHtml += '<textarea style="display:none;">' + list[i].content + '</textarea>';
+                    listHtml += '</p></td></tr>';
+                }
+            }
+            $('#commentList').html(listHtml);
+        }
+
+        renderArticleData();
+        renderCommentData();
 
         var tit = document.getElementById('menu');
         var titleTop = tit.offsetTop;
@@ -116,16 +130,17 @@
         }
 
         $(function () {
-            $('#topMao').click(function () {
+            $('#jumpToTop').click(function () {
                 $("html,body").animate({scrollTop: $("#app").offset().top}, 500);
             });
-            $('#topComment').click(function () {
+            $('#jumpToComment').click(function () {
                 $("html,body").animate({scrollTop: $("#commentHead").offset().top}, 500);
             });
 
             $('#zanshang').click(function () {
                 $("#zanshangImg").toggle(500);
             });
+
             editormd.markdownToHTML("doc-content", {
                 htmlDecode: "style,script,iframe",
                 emoji: true,
@@ -136,94 +151,39 @@
                 codeFold: true,
             });
 
-            editormd.markdownToHTML("comment-content-1", {
-                htmlDecode: "style,script,iframe",
-                emoji: true,
-                taskList: true,
-                tex: true,
-                flowChart: false,
-                sequenceDiagram: false,
-                codeFold: true,
-            });
+            if (commentList !== false) {
+                var list = commentList.list;
+                for (var i = 0; i < list.length; i++) {
+                    editormd.markdownToHTML("comment-content-" + list[i].id, {
+                        htmlDecode: "style,script,iframe",
+                        emoji: true,
+                        taskList: true,
+                        tex: true,
+                        flowChart: false,
+                        sequenceDiagram: false,
+                        codeFold: true,
+                    });
+                }
+            }
 
-            $("#doc-content").find("h2,h3,h4,h5,h6").each(function(i,item){
+            $("#doc-content").find("h2,h3,h4,h5,h6").each(function(i, item) {
                 var tag = $(item).get(0).localName;
-                $(item).attr("id","wow"+i);
-                $("#menuContent").append('<div><a style="color:#505050;" class="new'+tag+' anchor-link" onclick="return false;" href="#" link="#wow'+i+'">'+(i+1)+" · "+$(this).text()+'</a></div>');
-                $(".newh2").css("margin-left",0);
-                $(".newh3").css("margin-left",20);
-                $(".newh4").css("margin-left",40);
-                $(".newh5").css("margin-left",60);
-                $(".newh6").css("margin-left",80);
+                $(item).attr("id", "wow" + i);
+                $("#menu-content").append('<div><a style="color:#505050;" class="new' + tag + ' anchor-link" onclick="return false;" href="#" link="#wow' + i + '">' + (i + 1) + " · " + $(this).text() + '</a></div>');
+                $(".newh2").css("margin-left", 0);
+                $(".newh3").css("margin-left", 20);
+                $(".newh4").css("margin-left", 40);
+                $(".newh5").css("margin-left", 60);
+                $(".newh6").css("margin-left", 80);
             });
 
-            $(".anchor-link").click(function(){
+            $(".anchor-link").click(function() {
                 $("html,body").animate({scrollTop: $($(this).attr("link")).offset().top}, 1000);
             });
 
-            $('#commentSubmit').click(function () {
-                $('#content').removeClass('is-invalid');
-                $('#content').next('.invalid-feedback').remove();
-
-                $.ajax({
-                    url: "/",
-                    type: 'post',
-                    data: $('#commentForm').serializeArray(),
-                    success: function (data) {
-                        $('#captchaImg').attr('src', $('#captchaImg').attr('src') + Math.random());
-                        $('#captcha').val('');
-                        var avatar='/storage/frontend/img/default_avatar.png'
-
-                        $('#commentList').append('<tr>' +
-                            '                                    <td style="padding: 0 10px;">' +
-                            '                                        <a  href="'+data.website+'"' +
-                            '                                           target="_blank">' +
-                            '                                            <img style="border-radius:50%;"' +
-                            '                                                 src="'+avatar+'">' +
-                            '                                        </a>' +
-                            '                                    </td>' +
-                            '                                    <td>' +
-                            '                                        <a href="'+data.website+'"' +
-                            '                                           target="_blank">'+data.username+'</a>' +
-                            '                                        <br>' +
-                            '                                        <span style="color:#ddd;">'+data.created_at+'</span>' +
-                            '                                    </td>' +
-                            '                                </tr>' +
-                            '                                <tr>' +
-                            '                                    <td></td>' +
-                            '                                    <td>' +
-                            '                                        <p style="padding: 0 0 15px 0;" id="comment-content-'+data.id+'">' +
-                            '                                            <textarea style="display:none;"> '+data.content+' </textarea>' +
-                            '                                        </p>' +
-                            '                                </tr>');
-                        editormd.markdownToHTML("comment-content-"+data.id, {
-                            htmlDecode: "style,script,iframe",
-                            emoji: true,
-                            taskList: true,
-                            tex: true,
-                            flowChart: false,
-                            sequenceDiagram: false,
-                            codeFold: true,
-                        });
-                        alert('评论成功');
-                        $("html,body").animate({scrollTop: $("#comment-content-"+data.id).offset().top-80}, 300);
-
-                    },
-                    error: function (xhr, status, error) {
-                        $('#captchaImg').attr('src', $('#captchaImg').attr('src') + Math.random());
-                        var errors = xhr.responseJSON.errors;
-                        for (var key in errors) {
-                            $('#' + key).addClass('is-invalid');
-                            $('#' + key).after('<span class="invalid-feedback" style="display: block;">' +
-                                ' <strong>' + errors[key][0] +
-                                '</strong>' +
-                                ' </span>');
-                        }
-                    }
-                });
-
+            $('#comment-submit').click(function () {
+                
             });
-
         });
     </script>
 @endsection

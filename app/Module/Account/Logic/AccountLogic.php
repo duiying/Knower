@@ -280,4 +280,17 @@ class AccountLogic
         if (empty($accessToken)) return [];
         return $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar', 'last_active_time']);
     }
+
+    /**
+     * 根据用户 ID 获取用户基础信息（Map 结构）
+     *
+     * @param array $idList
+     * @return array
+     */
+    public function getAccountInfoMapByIdList($idList = [])
+    {
+        if (empty($idList)) return [];
+        $accountInfoList = $this->accountService->search(['id' => $idList], 0, 0, ['id', 'nickname', 'avatar', 'last_active_time']);
+        return array_column($accountInfoList, null, 'id');
+    }
 }

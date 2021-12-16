@@ -27,7 +27,7 @@
             <ul class="navbar-nav ml-auto" id="account-logout" style="display: none;">
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img style="height:25px;border-radius: 50%;" src=""> duiying <span class="caret"></span>
+                        <img style="height:25px;border-radius: 50%;" src="" id="user-avatar"> <span id="user-nickname">duiying123</span> <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/">
@@ -43,10 +43,15 @@
     function renderLogin()
     {
         var data = getInfoByToken();
+        // 已登录
         if (data !== false && data.id !== undefined) {
             $('#account-logout').css('display', 'inline-block');
             $('#account-login').css('display', 'none');
-        } else {
+            $('#user-nickname').html(data.nickname);
+            $('#user-avatar').attr('src', data.avatar);
+        }
+        // 未登录
+        else {
             $('#account-login').css('display', 'inline-block');
             $('#account-logout').css('display', 'none');
         }
