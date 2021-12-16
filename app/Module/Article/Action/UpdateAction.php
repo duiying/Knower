@@ -29,7 +29,7 @@ class UpdateAction
         'title'         => 'required|string|max:255',
         'desc'          => 'required|string|max:255',
         'content'       => 'required|string',
-        'sort'          => 'integer|min:1|max:999'
+        'sort'          => 'integer|min:1|max:999',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)

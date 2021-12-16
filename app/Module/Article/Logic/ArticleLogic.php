@@ -61,6 +61,7 @@ class ArticleLogic
     {
         $id = $this->service->create($requestData);
 
+        // 写入 ElasticSearch
         try {
             $this->service->createEsArticle($id);
         } catch (\Exception $exception) {
@@ -87,7 +88,7 @@ class ArticleLogic
         // 2、更新 MySQL
         $updateRes = $this->service->update(['id' => $id], $requestData);
 
-        // 3、更新 ElasticSearch
+        // 更新 ElasticSearch
         try {
             $this->service->updateEsArticle($id);
         } catch (\Exception $exception) {

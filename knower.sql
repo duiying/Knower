@@ -112,6 +112,7 @@ INSERT INTO `t_passport_menu` VALUES (5, 1, '菜单', 'fa fa-bars', '/view/menu/
 INSERT INTO `t_passport_menu` VALUES (6, 0, '内容管理', 'fa fa-book', '', 1, 99, '2020-08-31 21:12:15', '2020-08-31 21:11:51');
 INSERT INTO `t_passport_menu` VALUES (7, 6, '文章', 'fa fa-file', '/view/article/search', 1, 99, '2020-09-08 10:20:42', '2020-08-31 21:21:10');
 INSERT INTO `t_passport_menu` VALUES (8, 6, '标签', 'fa fa-tags', '/view/tag/search', 1, 99, '2021-11-24 12:36:34', '2021-11-24 12:36:34');
+INSERT INTO `t_passport_menu` VALUES (9, 6, '评论', 'fa fa-comments', '/view/comment/search', 1, 99, '2021-11-24 12:36:34', '2021-11-24 12:36:34');
 
 -- 角色基础数据
 INSERT INTO `t_passport_role` VALUES (1, '超级管理员', 1, 1, 1, '2020-09-04 14:26:32', '2020-09-02 19:45:21');
@@ -168,6 +169,20 @@ CREATE TABLE `t_content_article` (
                                      `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章表';
+
+CREATE TABLE `t_content_special` (
+                                     `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                     `title` varchar(255) NOT NULL DEFAULT '' COMMENT '专栏标题',
+                                     `desc` varchar(1000) NOT NULL DEFAULT '' COMMENT '专栏描述',
+                                     `cover_pic_url` varchar(1000) NOT NULL DEFAULT '' COMMENT '专栏封面图',
+                                     `content` text NOT NULL default '' comment '专栏内容',
+                                     `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：删除；1：正常；}',
+                                     `read_count` int(10) NOT NULL DEFAULT '0' COMMENT '阅读数',
+                                     `sort` int(10) NOT NULL DEFAULT '99' COMMENT '排序（正序）',
+                                     `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                     `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                     PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专栏表';
 
 DROP TABLE IF EXISTS `t_content_tag`;
 CREATE TABLE `t_content_tag` (

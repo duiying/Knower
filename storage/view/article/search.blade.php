@@ -29,7 +29,7 @@
                 <thead>
                 <tr>
                     <th style="width: 50px">ID</th>
-                    <th style="width: 50px">排序</th>
+                    <th style="width: 60px">排序</th>
                     <th style="width: 200px">标题</th>
                     <th style="width: 200px">描述</th>
                     <th style="width: 200px">内容</th>

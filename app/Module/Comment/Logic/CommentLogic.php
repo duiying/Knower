@@ -58,6 +58,12 @@ class CommentLogic
             'content'       => $content,
         ];
 
+        // 白名单用户，评论无需经过后台审核
+        $whiteAccountIdList = [1];
+        if (in_array($accountId, $whiteAccountIdList)) {
+            $createData['audit'] = CommentConstant::AUDIT_AUDITED;
+        }
+
         return $this->service->create($createData);
     }
 

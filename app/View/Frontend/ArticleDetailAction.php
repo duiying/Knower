@@ -24,7 +24,8 @@ class ArticleDetailAction
     public $validationFactory;
 
     private $rules = [
-        'id' => 'required|integer',
+        'id'            => 'required|integer',
+        'comment_id'    => 'integer',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)
@@ -33,6 +34,9 @@ class ArticleDetailAction
         $requestData = $request->all();
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
-        return $this->render->render('frontend/article/detail', ['id' => $requestData['id']]);
+
+        $requestData['comment_id'] = $requestData['comment_id'] ?? 0;
+
+        return $this->render->render('frontend/article/detail', ['id' => $requestData['id'], 'comment_id' => $requestData['comment_id']]);
     }
 }

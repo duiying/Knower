@@ -196,4 +196,8 @@ function comments(data = {}) {
     return request.get('comments', data, false);
 }
 
+function createComment(data = {}) {
+    return request.post('comment/create', data, false);
+}
+
 /******************** 评论 API end *************************************************************************************/

@@ -1,6 +1,7 @@
 @extends('frontend.layouts.app')
 @section('content')
     <input name="id" type="hidden" value="{{ $id }}">
+    <input name="comment_id" type="hidden" value="{{ $comment_id }}">
     <div class="container" style="margin-top:20px;">
         <div class="row justify-content-center">
             <div class="col-md-9">
@@ -39,7 +40,7 @@
                                     </span>评论内容，支持
                                     <a href="https://markdown.com.cn/basic-syntax/" target="_blank">Markdown</a>
                                 </label>
-                                <textarea id="content" rows="6" class="form-control" name="content" required>内容</textarea>
+                                <textarea id="comment-content" rows="6" class="form-control" name="content" required></textarea>
                             </div>
                             <div class="form-group">
                                 <button id="comment-submit" class="btn btn-primary">
@@ -72,7 +73,8 @@
     <script src="/storage/frontend/markdown/marked.min.js"></script>
     <script src="/storage/frontend/markdown/prettify.min.js"></script>
     <script type="text/javascript">
-        articleId = $('input[name=id]').val();
+        articleId = parseInt($('input[name=id]').val());
+        commentId = parseInt($('input[name=comment_id]').val());
 
         // 渲染文章数据
         function renderArticleData()
@@ -181,8 +183,22 @@
                 $("html,body").animate({scrollTop: $($(this).attr("link")).offset().top}, 1000);
             });
 
+            if (commentId !== 0) {
+                $("html,body").animate({scrollTop: $("#comment-content-" + commentId).offset().top - 80}, 300);
+            }
+
             $('#comment-submit').click(function () {
-                
+                var createCommentParams = {
+                    third_id : articleId,
+                    content : $('#comment-content').val()
+                };
+                var data = createComment(createCommentParams);
+                if (data !== false) {
+                    alert('评论成功！');
+                    location.href = '/article/detail?id=' + articleId + '&comment_id=' + data;
+                } else {
+                    alert('评论失败！');
+                }
             });
         });
     </script>

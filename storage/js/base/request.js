@@ -1,11 +1,11 @@
 const BASE_API_URL = 'http://127.0.0.1:9501/';
 
 request = {
-    post : function (url, data = {}, isCheckToken = true) {
+    post : function (url, data = {}, fromBackend = true) {
         var res = false;
 
         // 后台调用 API 需要验证 token
-        if (isCheckToken) {
+        if (fromBackend) {
             var token = checkToken(url);
             if (token !== '') data.access_token = token;
         }
@@ -17,31 +17,36 @@ request = {
             dataType    : 'json',
             async       : false,
             success     : function(resp) {
-                if (resp.code !== 0) {
-                    if (resp.msg !== '') {
-                        alert.error(resp.msg);
-                    } else {
-                        alert.error('操作失败，请稍后重试，如果失败多次请联系技术解决！');
-                    }
-                    console.log(resp);
-                } else {
-                    if (resp.msg !== '') {
-                        alert.success(resp.msg);
-                    } else {
-                        alert.success('操作成功！');
-                    }
+                if (resp.code === 0) {
                     res = resp.data;
+                }
+
+                if (fromBackend) {
+                    if (resp.code !== 0) {
+                        if (resp.msg !== '') {
+                            alert.error(resp.msg);
+                        } else {
+                            alert.error('操作失败，请稍后重试，如果失败多次请联系技术解决！');
+                        }
+                        console.log(resp);
+                    } else {
+                        if (resp.msg !== '') {
+                            alert.success(resp.msg);
+                        } else {
+                            alert.success('操作成功！');
+                        }
+                    }
                 }
             }
         });
 
         return res;
     },
-    get : function (url, data = {}, isCheckToken = true) {
+    get : function (url, data = {}, fromBackend = true) {
         var res = false;
 
         // 后台调用 API 需要验证 token
-        if (isCheckToken) {
+        if (fromBackend) {
             var token = checkToken(url);
             if (token !== '') data.access_token = token;
         }
@@ -53,15 +58,21 @@ request = {
             dataType    : 'json',
             async       : false,
             success     : function(resp) {
-                if (resp.code !== 0) {
-                    if (resp.msg !== '') {
-                        alert.error(resp.msg);
-                    } else {
-                        alert.error('操作失败，请稍后重试，如果失败多次请联系技术解决！');
-                    }
-                    console.log(resp);
-                } else {
+                if (resp.code === 0) {
                     res = resp.data;
+                }
+
+                if (fromBackend) {
+                    if (resp.code !== 0) {
+                        if (resp.msg !== '') {
+                            alert.error(resp.msg);
+                        } else {
+                            alert.error('操作失败，请稍后重试，如果失败多次请联系技术解决！');
+                        }
+                        console.log(resp);
+                    } else {
+                        res = resp.data;
+                    }
                 }
             }
         });

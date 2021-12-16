@@ -41,6 +41,7 @@ class ListAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
+        // 前台只展示正常状态的文章
         $requestData['status'] = ArticleConstant::ARTICLE_STATUS_NORMAL;
 
         $p      = isset($requestData['p']) ? $requestData['p'] : CommonConstant::DEFAULT_PAGE;
