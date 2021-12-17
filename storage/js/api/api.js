@@ -200,4 +200,12 @@ function createComment(data = {}) {
     return request.post('comment/create', data, false);
 }
 
+function searchComment(data = {}) {
+    return request.get('v1/comment/search', data);
+}
+
+function updateCommentField(data = {}) {
+    return request.post('v1/comment/update_field', data);
+}
+
 /******************** 评论 API end *************************************************************************************/

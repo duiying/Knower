@@ -49,7 +49,8 @@
         border-radius: .25em;
     }
     .label-success {background-color: #5cb85c;}
-    .label-primary {background-color:#007bff}
+    .label-primary {background-color:#007bff;}
+    .label-warning {background-color:#dc3545;}
 
     /* 修复 markdown */
     .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {

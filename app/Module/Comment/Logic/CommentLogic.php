@@ -33,6 +33,18 @@ class CommentLogic
     public $accountLogic;
 
     /**
+     * 检查 status 字段
+     *
+     * @param $status
+     */
+    public function checkStatus($status)
+    {
+        if (!in_array($status, CommentConstant::ALLOWED_STATUS_LIST)) {
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'status 参数错误！');
+        }
+    }
+
+    /**
      * 创建
      *
      * @param $requestData
@@ -102,5 +114,52 @@ class CommentLogic
 
         $total = $this->service->count($requestData);
         return Util::formatSearchRes($p, $size, $total, $list);
+    }
+
+    /**
+     * 查找
+     *
+     * @param $requestData
+     * @param $p
+     * @param $size
+     * @return array
+     */
+    public function search($requestData, $p, $size)
+    {
+        $list  = $this->service->search($requestData, $p, $size,
+            ['*'],
+            ['ctime' => 'desc']
+        );
+
+        $accountIdList = empty($list) ? [] : array_column($list, 'account_id');
+        $accountInfoMap = $this->accountLogic->getAccountInfoMapByIdList($accountIdList);
+
+        foreach ($list as $k => $v) {
+            $accountId = $v['account_id'];
+            $list[$k]['audit_text']     = CommentConstant::AUDIT_TEXT_MAP[$v['audit']];
+            $list[$k]['status_text']    = CommentConstant::COMMENT_STATUS_TEXT_MAP[$v['status']];
+            $list[$k]['type_text']      = CommentConstant::TYPE_TEXT_MAP[$v['type']];
+            $list[$k]['account_info']   = $accountInfoMap[$accountId];
+        }
+
+        $total = $this->service->count($requestData);
+        return Util::formatSearchRes($p, $size, $total, $list);
+    }
+
+    /**
+     * 更新字段
+     *
+     * @param $requestData
+     * @return int
+     */
+    public function updateField($requestData)
+    {
+        $id = $requestData['id'];
+        unset($requestData['id']);
+
+        // 检查 status 字段
+        if (isset($requestData['status'])) $this->checkStatus($requestData['status']);
+
+        return $this->service->update(['id' => $id], $requestData);
     }
 }
