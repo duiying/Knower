@@ -45,6 +45,18 @@ class CommentLogic
     }
 
     /**
+     * 检查 audit 字段
+     *
+     * @param $audit
+     */
+    public function checkAudit($audit)
+    {
+        if (!in_array($audit, CommentConstant::ALLOWED_AUDIT_LIST)) {
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'audit 参数错误！');
+        }
+    }
+
+    /**
      * 创建
      *
      * @param $requestData
@@ -159,6 +171,7 @@ class CommentLogic
 
         // 检查 status 字段
         if (isset($requestData['status'])) $this->checkStatus($requestData['status']);
+        if (isset($requestData['audit'])) $this->checkAudit($requestData['audit']);
 
         return $this->service->update(['id' => $id], $requestData);
     }

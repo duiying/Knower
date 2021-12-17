@@ -23,6 +23,7 @@ class CommentConstant
     const COMMENT_STATUS_DELETE = -1;
     const COMMENT_STATUS_NORMAL = 1;
 
+    // 允许的 status 字段
     const ALLOWED_STATUS_LIST = [
         self::COMMENT_STATUS_DELETE,
         self::COMMENT_STATUS_NORMAL,
@@ -38,6 +39,13 @@ class CommentConstant
     const AUDIT_ILLEGAL     = -1;
     const AUDIT_WAIT_AUDIT  = 0;
     const AUDIT_AUDITED     = 1;
+
+    // 允许的 audit 字段
+    const ALLOWED_AUDIT_LIST = [
+        self::AUDIT_ILLEGAL,
+        self::AUDIT_WAIT_AUDIT,
+        self::AUDIT_AUDITED,
+    ];
 
     // 审核状态文案
     const AUDIT_TEXT_MAP = [

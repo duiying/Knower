@@ -27,6 +27,7 @@ class UpdateFieldAction
     private $rules = [
         'id'        => 'required|integer',
         'status'    => 'integer',
+        'audit'     => 'integer',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)
@@ -36,7 +37,7 @@ class UpdateFieldAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        // $requestData['mtime'] = Util::now();
+        $requestData['mtime'] = Util::now();
 
         $res = $this->logic->updateField($requestData);
         return HttpUtil::success($response, $res);

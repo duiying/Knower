@@ -100,7 +100,7 @@
                     } else if (list[i].audit === 1) {
                         listHtml += '<span class="label label-success">' + list[i].audit_text + '</span>';
                     } else {
-                        listHtml += '<span class="label label-waning">' + list[i].audit_text + '</span>';
+                        listHtml += '<span class="label label-warning">' + list[i].audit_text + '</span>';
                     }
                     listHtml += '</td>';
                     listHtml += '<td>';
@@ -114,6 +114,10 @@
                     listHtml += '<td>';
                     if (list[i].status === 1) {
                         listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
+                    }
+                    if (list[i].audit === 0) {
+                        listHtml += '<a href="javascript:;" class="ml-2" style="color:#5cb85c;" onclick="handlePass(' + list[i].id + ')">通过</a>';
+                        listHtml += '<a href="javascript:;" class="ml-2" style="color:#dc3545;" onclick="handleIllegal(' + list[i].id + ')">违规</a>';
                     }
                     listHtml += '</td>';
                     listHtml += '</tr>';
@@ -145,6 +149,24 @@
                     renderCommentList();
                 }
             });
+        }
+
+        function handlePass(id)
+        {
+            var param   = {id : id, audit : 1}
+            var data    = updateCommentField(param)
+            if (data !== false) {
+                renderCommentList();
+            }
+        }
+
+        function handleIllegal(id)
+        {
+            var param   = {id : id, audit : -1}
+            var data    = updateCommentField(param)
+            if (data !== false) {
+                renderCommentList();
+            }
         }
     </script>
 @endsection

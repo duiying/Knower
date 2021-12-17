@@ -113,6 +113,9 @@ INSERT INTO `t_passport_menu` VALUES (6, 0, '内容管理', 'fa fa-book', '', 1,
 INSERT INTO `t_passport_menu` VALUES (7, 6, '文章', 'fa fa-file', '/view/article/search', 1, 99, '2020-09-08 10:20:42', '2020-08-31 21:21:10');
 INSERT INTO `t_passport_menu` VALUES (8, 6, '标签', 'fa fa-tags', '/view/tag/search', 1, 99, '2021-11-24 12:36:34', '2021-11-24 12:36:34');
 INSERT INTO `t_passport_menu` VALUES (9, 6, '评论', 'fa fa-comments', '/view/comment/search', 1, 99, '2021-11-24 12:36:34', '2021-11-24 12:36:34');
+INSERT INTO `t_passport_menu` VALUES (10, 0, '用户管理', 'fa fa-user', '', 1, 99, '2020-08-31 21:12:15', '2020-08-31 21:11:51');
+INSERT INTO `t_passport_menu` VALUES (11, 10, '用户', 'fa fa-user-circle', '/view/account/search', 1, 99, '2021-11-24 12:36:34', '2021-11-24 12:36:34');
+
 
 -- 角色基础数据
 INSERT INTO `t_passport_role` VALUES (1, '超级管理员', 1, 1, 1, '2020-09-04 14:26:32', '2020-09-02 19:45:21');

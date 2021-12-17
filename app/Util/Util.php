@@ -179,7 +179,10 @@ class Util
                     $v = trim($v);
                     if (empty($v)) throw new AppException(AppErrorCode::FIELD_EMPTY_EXCEPTION);
                 }
-                $sanitizedData[$k] = $v;
+
+                // 字段类型转换
+                if (self::contain($rules[$k], 'string')) $sanitizedData[$k] = (string)$v;
+                if (self::contain($rules[$k], 'integer')) $sanitizedData[$k] = (int)$v;
             }
         }
 
