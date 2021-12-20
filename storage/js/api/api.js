@@ -188,6 +188,14 @@ function getInfoByToken(data = {}) {
     return request.get('account/get_info_by_token', data, false);
 }
 
+function searchAccount(data = {}) {
+    return request.get('v1/account/search', data);
+}
+
+function updateAccountField(data = {}) {
+    return request.post('v1/account/update_field', data);
+}
+
 /******************** 用户 API end *************************************************************************************/
 
 /******************** 评论 API begin ***********************************************************************************/

@@ -4,16 +4,17 @@ namespace App\Module\Account\Logic;
 
 use App\Constant\AppErrorCode;
 use App\Constant\RedisKeyConst;
+use App\Module\Account\Constant\AccountConstant;
 use App\Module\Account\Constant\OAuthConstant;
 use App\Module\Account\Service\AccountService;
 use App\Module\Account\Service\OAuthService;
+use App\Module\Img\Logic\ImgLogic;
 use App\Util\AppException;
 use App\Util\HTTPClient;
 use App\Util\Log;
 use App\Util\Redis;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
-use function GuzzleHttp\Promise\queue;
 
 class AccountLogic
 {
@@ -31,9 +32,27 @@ class AccountLogic
 
     /**
      * @Inject()
+     * @var ImgLogic
+     */
+    public $imgLogic;
+
+    /**
+     * @Inject()
      * @var OAuthService
      */
     public $oAuthService;
+
+    /**
+     * 检查 status 字段
+     *
+     * @param $status
+     */
+    public function checkStatus($status)
+    {
+        if (!in_array($status, AccountConstant::ALLOWED_STATUS_LIST)) {
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'status 参数错误！');
+        }
+    }
 
     /**
      * GitHub state 写入缓存
@@ -171,10 +190,12 @@ class AccountLogic
     {
         Log::info('开始刷新用户登录信息', ['id' => $id, 'token' => $token, 'avatar' => $avatar, 'nickname' => $nickname, 'email' => $email, 'mobile' => $mobile]);
 
+        $avatarImgId = $this->imgLogic->findOrCreateImgByOriginUrl($avatar);
+
         // 1、先更新第三方登录表
         $updateOAuthData = [
-            'token'     => $token,
-            'avatar'    => $avatar
+            'token'         => $token,
+            'avatar_img_id' => $avatarImgId
         ];
         $this->oAuthService->update(['id' => $id], $updateOAuthData);
 
@@ -187,7 +208,7 @@ class AccountLogic
         $accountId = $oAuthInfo['account_id'];
         $updateAccountData = [
             'access_token'  => $accessToken,
-            'avatar'        => $avatar,
+            'avatar_img_id' => $avatarImgId,
             'nickname'      => $nickname,
             'email'         => $email,
             'mobile'        => $mobile
@@ -215,6 +236,7 @@ class AccountLogic
             'token' => $token, 'avatar' => $avatar, 'nickname' => $nickname, 'email' => $email, 'mobile' => $mobile]);
 
         $accessToken = Util::generateToken();
+        $avatarImgId = $this->imgLogic->findOrCreateImgByOriginUrl($avatar);
 
         $this->accountService->beginTransaction();
 
@@ -223,7 +245,7 @@ class AccountLogic
             'nickname'              => $nickname,
             'email'                 => $email,
             'mobile'                => $mobile,
-            'avatar'                => $avatar,
+            'avatar_img_id'         => $avatarImgId,
             'password'              => '',
             'access_token'          => $accessToken,
             'last_active_time'      => Util::now()
@@ -236,7 +258,7 @@ class AccountLogic
             'oauth_type'    => $oAuthType,
             'oauth_id'      => $oAuthId,
             'token'         => $token,
-            'avatar'        => $avatar
+            'avatar_img_id' => $avatarImgId
         ];
         $oAuthInsertId = $this->oAuthService->create($createOAuthParams);
 
@@ -278,7 +300,12 @@ class AccountLogic
     public function getAccountInfoByToken($accessToken = '')
     {
         if (empty($accessToken)) return [];
-        return $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar', 'last_active_time']);
+        $accountInfo = $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar_img_id', 'last_active_time']);
+        $avatarImgId = $accountInfo['avatar_img_id'];
+        $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList([$avatarImgId]);
+        $accountInfo['avatar'] = isset($imgInfoMap[$avatarImgId]) ? $imgInfoMap[$avatarImgId] : '';
+        unset($accountInfo['avatar_img_id']);
+        return $accountInfo;
     }
 
     /**
@@ -292,7 +319,67 @@ class AccountLogic
         if (empty($idList)) return [];
         // 用户 ID 去重
         $idList = array_unique($idList);
-        $accountInfoList = $this->accountService->search(['id' => $idList], 0, 0, ['id', 'nickname', 'avatar', 'last_active_time']);
+        $accountInfoList = $this->accountService->search(['id' => $idList], 0, 0, ['id', 'nickname', 'avatar_img_id', 'last_active_time']);
+
+        // 组装用户信息
+        if (!empty($accountInfoList)) {
+            $avatarImgIdList = array_column($accountInfoList, 'avatar_img_id');
+            $imgUrlMap = $this->imgLogic->getImgUrlMapByIdList($avatarImgIdList);
+
+            foreach ($accountInfoList as $k => $v) {
+                $accountInfoList[$k]['avatar'] = isset($imgUrlMap[$v['avatar_img_id']]) ? $imgUrlMap[$v['avatar_img_id']] : '';
+                unset($accountInfoList[$k]['avatar_img_id']);
+            }
+        }
+
         return array_column($accountInfoList, null, 'id');
+    }
+
+    /**
+     * 用户列表
+     *
+     * @param $requestData
+     * @param $p
+     * @param $size
+     * @return array
+     */
+    public function search($requestData, $p, $size)
+    {
+        $list  = $this->accountService->search($requestData, $p, $size,
+            ['id', 'nickname', 'email', 'mobile', 'avatar_img_id', 'status', 'last_active_time', 'ctime'],
+            ['ctime' => 'desc']
+        );
+
+        // 组装用户信息
+        if (!empty($list)) {
+            $avatarImgIdList = array_column($list, 'avatar_img_id');
+            $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList($avatarImgIdList);
+
+            foreach ($list as $k => $v) {
+                $list[$k]['avatar'] = isset($imgInfoMap[$v['avatar_img_id']]) ? $imgInfoMap[$v['avatar_img_id']] : '';
+                $list[$k]['status_text'] = AccountConstant::ACCOUNT_STATUS_TEXT_MAP[$v['status']];
+                unset($list[$k]['avatar_img_id']);
+            }
+        }
+
+        $total = $this->accountService->count($requestData);
+        return Util::formatSearchRes($p, $size, $total, $list);
+    }
+
+    /**
+     * 更新字段
+     *
+     * @param $requestData
+     * @return int
+     */
+    public function updateField($requestData)
+    {
+        $id = $requestData['id'];
+        unset($requestData['id']);
+
+        // 检查 status 字段
+        if (isset($requestData['status'])) $this->checkStatus($requestData['status']);
+
+        return $this->accountService->update(['id' => $id], $requestData);
     }
 }

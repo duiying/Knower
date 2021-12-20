@@ -52,6 +52,9 @@ Router::addGroup('/view/',function () {
 
     // 评论相关
     Router::get('comment/search','App\View\Backend\Comment\Action\SearchAction@handle');
+
+    // 用户相关
+    Router::get('account/search','App\View\Backend\Account\Action\SearchAction@handle');
 }, ['middleware' => [PassportMiddleware::class, PjaxMiddleware::class]]);
 
 // 后台接口相关路由（统一由 /v1 开头）
@@ -104,6 +107,10 @@ Router::addGroup('/v1/',function () {
     // 评论相关
     Router::get('comment/search', Route::decoration('Comment\Action\SearchAction'));
     Router::post('comment/update_field', Route::decoration('Comment\Action\UpdateFieldAction'));
+
+    // 用户相关
+    Router::get('account/search', Route::decoration('Account\Action\SearchAction'));
+    Router::post('account/update_field', Route::decoration('Account\Action\UpdateFieldAction'));
 }, ['middleware' => [CorsMiddleware::class, PassportMiddleware::class, ValidationMiddleware::class]]);
 
 // 退出登录

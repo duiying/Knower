@@ -187,6 +187,19 @@ CREATE TABLE `t_content_special` (
                                      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专栏表';
 
+DROP TABLE IF EXISTS `t_content_img`;
+CREATE TABLE `t_content_img` (
+                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                 `origin_url` varchar(1000) NOT NULL DEFAULT '' COMMENT '图片原地址',
+                                 `local_url` varchar(1000) NOT NULL DEFAULT '' COMMENT '图片本地地址（图片缓存到本地，加速用）',
+                                 `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：删除；1：正常；}',
+                                 `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                 `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 PRIMARY KEY (`id`),
+                                 KEY `idx_origin_url` (`origin_url`),
+                                 KEY `idx_local_url` (`local_url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='图片表';
+
 DROP TABLE IF EXISTS `t_content_tag`;
 CREATE TABLE `t_content_tag` (
                                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -235,7 +248,7 @@ CREATE TABLE `t_user_account` (
                                   `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
                                   `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
                                   `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
-                                  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像地址',
+                                  `avatar_img_id` int(10) NOT NULL DEFAULT '0' COMMENT '头像图片ID',
                                   `password` varchar(50) NOT NULL DEFAULT '' COMMENT '密码',
                                   `access_token` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token',
                                   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：禁用；1：正常；}',
@@ -256,7 +269,7 @@ CREATE TABLE `t_user_oauth` (
                                 `oauth_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '第三方登录类型 {1：GitHub；2：微信扫码登录；}',
                                 `oauth_id` varchar(255) NOT NULL DEFAULT '' COMMENT '第三方登录ID',
                                 `token` varchar(255) NOT NULL DEFAULT '' COMMENT '密码凭证',
-                                `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像地址',
+                                `avatar_img_id`int(10) NOT NULL DEFAULT '0' COMMENT '头像图片ID',
                                 `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                                 `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 PRIMARY KEY (`id`),

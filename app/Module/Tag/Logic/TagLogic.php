@@ -9,7 +9,6 @@ use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Tag\Service\TagService;
-use phpDocumentor\Reflection\DocBlock\Tag;
 
 class TagLogic
 {
