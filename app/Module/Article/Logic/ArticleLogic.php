@@ -326,6 +326,15 @@ class ArticleLogic
     {
         $id = $requestData['id'];
         $this->checkArticleExist($id);
-        return $this->service->getLineByWhere($requestData);
+        $article = $this->service->getLineByWhere($requestData);
+
+        // 查出文章的封面图片信息
+        $coverImgId = $article['cover_img_id'];
+        if ($coverImgId) {
+            $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList([$coverImgId]);
+        }
+        $article['cover_img_url'] = $coverImgId && isset($imgInfoMap[$coverImgId]) ? $imgInfoMap[$coverImgId] : '';
+        $article['filename'] = empty($article['cover_img_url']) ? '' : basename($article['cover_img_url']);
+        return $article;
     }
 }

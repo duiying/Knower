@@ -30,6 +30,29 @@
                                 <input type="text" name="desc" class="form-control" placeholder="描述">
                             </div>
                         </div>
+                        <div class="form-group row" id="upload-file-block">
+                            <label class="col-sm-2 col-form-label">封面图</label>
+                            <div class="input-group col-sm-10">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="inputFile">
+                                    <label class="custom-file-label" for="inputFile">请上传封面图</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="font-size: 0.85rem;hover" id="upload-file">Upload</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row display-none">
+                            <div class="col-sm-12">
+                                <input type="text" id="cover_img_id" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group row display-none" id="cover-img">
+                            <label class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <img src="/public/1.png" style="max-height: 200px;" id="cover-img-url">
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">内容<span class="text-danger">*</span></label>
                             <div class="col-sm-10">
@@ -65,7 +88,20 @@
             if (data !== false) {
                 simplemde.value(data.content);
             }
+            if (data.cover_img_id !== 0) {
+                $('#cover_img_id').attr('value', data.id);
+            }
+            if (data.cover_img_url !== '') {
+                $('#cover-img').removeClass('display-none');
+                $('#cover-img-url').attr('src', data.cover_img_url);
+                $('.custom-file-label').html(data.filename);
+            }
         }
+
+        $('input[type="file"]').change(function(e) {
+            var fileName = e.target.files[0].name;
+            $('.custom-file-label').html(fileName);
+        });
 
         function handleSubmit()
         {
