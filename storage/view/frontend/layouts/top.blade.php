@@ -13,12 +13,6 @@
                 <li><a class="nav-link active" href="">首页</a></li>
                 <li><a class="nav-link" href="">专栏</a></li>
             </ul>
-
-            <form action="/" class="form-inline my-2 my-lg-0" method="get">
-                <input class="form-control mr-sm-2" type="text" name="q" placeholder="搜索" value="">
-                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">搜索</button>
-            </form>
-
             <ul class="navbar-nav ml-auto" id="account-login">
                 <!-- Authentication Links -->
                 <li><a class="nav-link" href="/oauth/github">登录</a></li>
@@ -39,24 +33,22 @@
     </div>
 </nav>
 <script type="text/javascript">
-    $(function () {
-        function renderLogin()
-        {
-            var data = getInfoByToken();
-            // 已登录
-            if (data !== false && data.id !== undefined) {
-                $('#account-logout').css('display', 'inline-block');
-                $('#account-login').css('display', 'none');
-                $('#user-nickname').html(data.nickname);
-                $('#user-avatar').attr('src', data.avatar);
-            }
-            // 未登录
-            else {
-                $('#account-login').css('display', 'inline-block');
-                $('#account-logout').css('display', 'none');
-            }
+    function renderLogin()
+    {
+        var data = getInfoByToken();
+        // 已登录
+        if (data !== false && data.id !== undefined) {
+            $('#account-logout').css('display', 'inline-block');
+            $('#account-login').css('display', 'none');
+            $('#user-nickname').html(data.nickname);
+            $('#user-avatar').attr('src', data.avatar);
         }
+        // 未登录
+        else {
+            $('#account-login').css('display', 'inline-block');
+            $('#account-logout').css('display', 'none');
+        }
+    }
 
-        renderLogin();
-    });
+    renderLogin();
 </script>

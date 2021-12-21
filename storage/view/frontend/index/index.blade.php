@@ -2,6 +2,13 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
+        <div class="col-md-12" style="margin-top:20px;">
+            <form action="/" class="form-inline" id="article-search" onsubmit="return false;">
+                <input class="form-control col-md-4" type="text" id="keywords" placeholder="请输入搜索内容" value="">
+                <button class="btn btn-outline-secondary ml-2" type="submit" onclick="handleSearch();"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+        </div>
+
         <div class="col-md-8" style="padding-right: 0;">
             <div class="card" style="margin-top:20px;">
                 <div class="card-body" id="frontend-articles">
@@ -27,15 +34,12 @@
     </div>
 </div>
 <script>
-    // 渲染列表
-    renderArticleList();
-
     /**
      * 渲染列表
      */
-    function renderArticleList()
+    function renderArticleList(searchParam = {})
     {
-        var data = listArticle();
+        var data = listArticle(searchParam);
         if (data !== false) {
             $('#frontend-articles').html('');
             var listHtml = '';
@@ -68,8 +72,28 @@
                 }
                 listHtml += '</div><hr>';
             }
+            if (listHtml === '') {
+                listHtml += '<h6 class="text-center">暂无数据~</h6>';
+            }
             $('#frontend-articles').html(listHtml);
         }
     }
+
+    // 渲染列表
+    renderArticleList();
+
+    /**
+     * 搜索处理
+     *
+     * @param p 页码
+     */
+    function handleSearch(p = 1)
+    {
+        handleSearchCallback(function () {
+            var searchParam = {p : p, keywords : $('#keywords').val()};
+            renderArticleList(searchParam);
+        });
+    }
+
 </script>
 @endsection
