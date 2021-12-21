@@ -128,8 +128,6 @@ class ArticleLogic
         // 限流
         $redis = Redis::instance();
         $noRepeat = $redis->set(RedisKeyConst::ASYNC_ES, 1, ['nx', 'ex' => 10]);
-
-        // 可能重放了，或者重复提交了，在这里防一手
         if (!$noRepeat) {
             throw new AppException(AppErrorCode::ACTION_TOO_FAST);
         }
