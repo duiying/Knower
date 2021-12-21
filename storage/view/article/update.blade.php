@@ -59,10 +59,12 @@
 
         var data = findArticle({id : $('input[name=id]').val()});
 
-        // 渲染表单数据
-        renderUpdateForm(data, ['title', 'desc', 'sort']);
         if (data !== false) {
-            simplemde.value(data.content);
+            // 渲染表单数据
+            renderUpdateForm(data, ['title', 'desc', 'sort']);
+            if (data !== false) {
+                simplemde.value(data.content);
+            }
         }
 
         function handleSubmit()

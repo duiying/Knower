@@ -54,7 +54,7 @@ class ArticleLogic
      */
     public function checkArticleExist($id)
     {
-        $article = $this->service->getLineByWhere(['id' => $id, 'status' => ArticleConstant::ARTICLE_STATUS_NORMAL]);
+        $article = $this->service->getLineByWhere(['id' => $id, 'status' => ArticleConstant::ARTICLE_STATUS_NORMAL], ['id']);
         if (empty($article)) {
             throw new AppException(AppErrorCode::ARTICLE_NOT_EXIST_ERROR);
         }
@@ -324,6 +324,8 @@ class ArticleLogic
      */
     public function find($requestData)
     {
+        $id = $requestData['id'];
+        $this->checkArticleExist($id);
         return $this->service->getLineByWhere($requestData);
     }
 }
