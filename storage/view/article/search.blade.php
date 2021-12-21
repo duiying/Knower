@@ -34,6 +34,7 @@
                     <th style="width: 200px">封面图</th>
                     <th style="width: 200px">描述</th>
                     <th style="width: 200px">内容</th>
+                    <th style="width: 100px">浏览数</th>
                     <th style="width: 100px">状态</th>
                     <th style="width: 150px">创建时间</th>
                     <th style="width: 150px">更新时间</th>
@@ -94,6 +95,7 @@
                     } else {
                         listHtml += '<td><p>' + cutString(list[i].highlight_content, 500) + '</p></td>';
                     }
+                    listHtml += '<td>' + list[i].read_count + '</td>';
                     listHtml += '<td>';
                     if (list[i].status === 1) {
                         listHtml += '<span class="label label-success">' + list[i].status_text + '</span>';

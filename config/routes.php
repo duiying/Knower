@@ -10,6 +10,7 @@ use App\Middleware\PassportMiddleware;
 use App\Middleware\PjaxMiddleware;
 use App\Middleware\FrontendTokenMiddleware;
 use App\Middleware\PreventRepeatMiddleware;
+use App\Middleware\FrontendPjaxMiddleware;
 
 Router::get('/favicon.ico', function () {
     return '';
@@ -125,12 +126,16 @@ Router::addRoute(['POST'], '/v1/user/logout', Route::decoration('AdminPassport\U
 
 /********************************************************* 前台路由 begin ***********************************************/
 
-// 首页
-Router::get('/','App\View\Frontend\IndexAction@index');
-// 文章详情页
-Router::get('/article/detail','App\View\Frontend\ArticleDetailAction@handle');
+Router::addGroup('',function () {
+    // 首页
+    Router::get('/','App\View\Frontend\IndexAction@index');
+    // 文章详情页
+    Router::get('/article/detail','App\View\Frontend\ArticleDetailAction@handle');
+}, ['middleware' => [FrontendPjaxMiddleware::class]]);
+
 // 文章详情接口
 Router::get('/article/info', Route::decoration('Article\Action\InfoAction'));
+
 // 标签列表接口
 Router::get('/tags', Route::decoration('Tag\Action\ListAction'));
 // 首页文章列表接口

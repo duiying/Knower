@@ -44,7 +44,13 @@
                 listHtml += '<h5 style="padding-top:10px;padding-bottom:5px;"><strong><a href="/article/detail?id=' + list[i].id + '">';
                 listHtml +=  list[i].title;
                 listHtml += '</a></strong></h5>';
-                listHtml += '<div class="row"><div class="col-md-12"><div style="margin-bottom: 5px;"><a href="">';
+                listHtml += '<div class="row">';
+                if (list[i].cover_img_url === '') {
+                    listHtml += '<div class="col-md-12">';
+                } else {
+                    listHtml += '<div class="col-md-8">';
+                }
+                listHtml += '<div style="margin-bottom: 5px;"><a href="">';
                 listHtml += list[i].desc;
                 listHtml += '</a></div><div><i class="fa fa-clock-o"></i>&nbsp;';
                 listHtml += list[i].mtime;
@@ -52,7 +58,15 @@
                 listHtml += list[i].read_count;;
                 listHtml += ' &nbsp;&nbsp; <i class="fa fa-comments-o"></i>&nbsp;';
                 listHtml += '30';
-                listHtml += '</div></div></div><hr>';
+                listHtml += '</div></div>';
+                if (list[i].cover_img_url !== '') {
+                    listHtml += '<div class="col-md-4">';
+                    listHtml += '<a href="">';
+                    listHtml += '<img style="width:100%;" src="' + list[i].cover_img_url + '">';
+                    listHtml += '</a>';
+                    listHtml += '</div>';
+                }
+                listHtml += '</div><hr>';
             }
             $('#frontend-articles').html(listHtml);
         }

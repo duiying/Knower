@@ -1,5 +1,10 @@
 @extends('frontend.layouts.app')
 @section('content')
+
+    <script src="/storage/frontend/editormd/editormd.min.js"></script>
+    <script src="/storage/frontend/markdown/marked.min.js"></script>
+    <script src="/storage/frontend/markdown/prettify.min.js"></script>
+
     <input name="id" type="hidden" value="{{ $id }}">
     <input name="comment_id" type="hidden" value="{{ $comment_id }}">
     <div class="container" style="margin-top:20px;">
@@ -17,7 +22,7 @@
                             <textarea style="display:none;" id="article-content">  </textarea>
                         </p>
                         <p class="text-center" style="margin-top:20px;">
-                            如果这篇文章帮助到了您，可以赞助下主机费~~<br>
+                            如果这篇文章帮助到了您，可以赞助下服务器费~~<br>
                         </p>
                         <p class="text-center">
                             <button class="btn btn-success" id="zanshang">赞赏</button>
@@ -68,70 +73,66 @@
             </div>
         </div>
     </div>
-
-    <script src="/storage/frontend/editormd/editormd.min.js"></script>
-    <script src="/storage/frontend/markdown/marked.min.js"></script>
-    <script src="/storage/frontend/markdown/prettify.min.js"></script>
     <script type="text/javascript">
-        articleId = parseInt($('input[name=id]').val());
-        commentId = parseInt($('input[name=comment_id]').val());
+        $(function () {
+            articleId = parseInt($('input[name=id]').val());
+            commentId = parseInt($('input[name=comment_id]').val());
 
-        // 渲染文章数据
-        function renderArticleData()
-        {
-            var data = detailArticle({id : articleId});
-            if (data !== false) {
-                $('#article-title').html(data.title);
-                $('#article-content').html(data.content);
-            }
-        }
-
-        commentList = comments({third_id : articleId});
-        // 渲染评论数据
-        function renderCommentData()
-        {
-            var listHtml = '';
-            if (commentList !== false) {
-                var list = commentList.list;
-                for (var i = 0; i < list.length; i++) {
-                    listHtml += '<tr>';
-                    listHtml += '<td style="padding: 0 10px;">';
-                    listHtml += '<a href="javascript:;">';
-                    listHtml += '<img style="height:35px;border-radius:50%;" src="' + list[i].account_info.avatar + '">';
-                    listHtml += '</a>';
-                    listHtml += '</td>';
-                    listHtml += '<td>';
-                    listHtml += '<a href="javascript:;">' + list[i].account_info.nickname + '</a><br>'
-                    listHtml += '<span style="color:#ddd;">' + list[i].ctime + '</span>'
-                    listHtml += '</td></tr>';
-                    listHtml += '<tr><td></td>';
-                    listHtml += '<td>';
-                    listHtml += '<p style="padding: 0 0 15px 0;" id="comment-content-' + list[i].id + '">';
-                    listHtml += '<textarea style="display:none;">' + list[i].content + '</textarea>';
-                    listHtml += '</p></td></tr>';
+            // 渲染文章数据
+            function renderArticleData()
+            {
+                var data = detailArticle({id : articleId});
+                if (data !== false) {
+                    $('#article-title').html(data.title);
+                    $('#article-content').html(data.content);
                 }
             }
-            $('#commentList').html(listHtml);
-        }
 
-        renderArticleData();
-        renderCommentData();
-
-        var tit = document.getElementById('menu');
-        var titleTop = tit.offsetTop;
-        // 滚动事件
-        document.onscroll = function () {
-            // 获取当前滚动的距离
-            var btop = document.body.scrollTop || document.documentElement.scrollTop;
-            // 如果滚动距离大于导航条据顶部的距离
-            if (btop >= titleTop) {
-                tit.style.top = "0px";
-            } else {
-                tit.style.top = (titleTop - btop) + 'px';
+            commentList = comments({third_id : articleId});
+            // 渲染评论数据
+            function renderCommentData()
+            {
+                var listHtml = '';
+                if (commentList !== false) {
+                    var list = commentList.list;
+                    for (var i = 0; i < list.length; i++) {
+                        listHtml += '<tr>';
+                        listHtml += '<td style="padding: 0 10px;">';
+                        listHtml += '<a href="javascript:;">';
+                        listHtml += '<img style="height:35px;border-radius:50%;" src="' + list[i].account_info.avatar + '">';
+                        listHtml += '</a>';
+                        listHtml += '</td>';
+                        listHtml += '<td>';
+                        listHtml += '<a href="javascript:;">' + list[i].account_info.nickname + '</a><br>'
+                        listHtml += '<span style="color:#ddd;">' + list[i].ctime + '</span>'
+                        listHtml += '</td></tr>';
+                        listHtml += '<tr><td></td>';
+                        listHtml += '<td>';
+                        listHtml += '<p style="padding: 0 0 15px 0;" id="comment-content-' + list[i].id + '">';
+                        listHtml += '<textarea style="display:none;">' + list[i].content + '</textarea>';
+                        listHtml += '</p></td></tr>';
+                    }
+                }
+                $('#commentList').html(listHtml);
             }
-        }
 
-        $(function () {
+            renderArticleData();
+            renderCommentData();
+
+            var tit = document.getElementById('menu');
+            var titleTop = tit.offsetTop;
+            // 滚动事件
+            document.onscroll = function () {
+                // 获取当前滚动的距离
+                var btop = document.body.scrollTop || document.documentElement.scrollTop;
+                // 如果滚动距离大于导航条据顶部的距离
+                if (btop >= titleTop) {
+                    tit.style.top = "0px";
+                } else {
+                    tit.style.top = (titleTop - btop) + 'px';
+                }
+            }
+
             $('#jumpToTop').click(function () {
                 $("html,body").animate({scrollTop: $("#app").offset().top}, 500);
             });

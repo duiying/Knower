@@ -12,7 +12,6 @@
             <ul class="navbar-nav mr-auto">
                 <li><a class="nav-link active" href="">首页</a></li>
                 <li><a class="nav-link" href="">专栏</a></li>
-                <li><a class="nav-link" href="">教程</a></li>
             </ul>
 
             <form action="/" class="form-inline my-2 my-lg-0" method="get">
@@ -40,22 +39,24 @@
     </div>
 </nav>
 <script type="text/javascript">
-    function renderLogin()
-    {
-        var data = getInfoByToken();
-        // 已登录
-        if (data !== false && data.id !== undefined) {
-            $('#account-logout').css('display', 'inline-block');
-            $('#account-login').css('display', 'none');
-            $('#user-nickname').html(data.nickname);
-            $('#user-avatar').attr('src', data.avatar);
+    $(function () {
+        function renderLogin()
+        {
+            var data = getInfoByToken();
+            // 已登录
+            if (data !== false && data.id !== undefined) {
+                $('#account-logout').css('display', 'inline-block');
+                $('#account-login').css('display', 'none');
+                $('#user-nickname').html(data.nickname);
+                $('#user-avatar').attr('src', data.avatar);
+            }
+            // 未登录
+            else {
+                $('#account-login').css('display', 'inline-block');
+                $('#account-logout').css('display', 'none');
+            }
         }
-        // 未登录
-        else {
-            $('#account-login').css('display', 'inline-block');
-            $('#account-logout').css('display', 'none');
-        }
-    }
 
-    renderLogin();
+        renderLogin();
+    });
 </script>
