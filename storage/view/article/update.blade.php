@@ -38,7 +38,7 @@
                                     <label class="custom-file-label" for="inputFile">请上传封面图</label>
                                 </div>
                                 <div class="input-group-append">
-                                    <span class="input-group-text" style="font-size: 0.85rem;hover" id="upload-file">Upload</span>
+                                    <span class="input-group-text" style="font-size: 0.85rem;" id="upload-file">Upload</span>
                                 </div>
                             </div>
                         </div>
@@ -80,6 +80,10 @@
     <script type="text/javascript">
         var simplemde = getSimpleMDE("article-markdown");
 
+        $('#inputFile, #upload-file').mouseover(function () {
+            $(this).css('cursor', 'pointer');
+        });
+
         var data = findArticle({id : $('input[name=id]').val()});
 
         if (data !== false) {
@@ -101,6 +105,31 @@
         $('input[type="file"]').change(function(e) {
             var fileName = e.target.files[0].name;
             $('.custom-file-label').html(fileName);
+        });
+
+        $('#upload-file').click(function () {
+            var formData = new FormData();
+            formData.append('file', $('#inputFile')[0].files[0]);
+            $.ajax({
+                type: "POST",
+                url: "/v1/img/upload",
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: formData ,
+                async:false,
+                success: function (resp) {
+                    if (resp.code !== 0) {
+                        $('#cover-img').addClass('display-none');
+                        alert.error(resp.msg);
+                    } else {
+                        $('#cover-img').removeClass('display-none');
+                        $('#cover-img-url').attr('src', resp.data.cover_img);
+                        $('#cover_img_id').attr('value', resp.data.id);
+                        alert.success('上传成功！');
+                    }
+                }
+            });
         });
 
         function handleSubmit()

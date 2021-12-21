@@ -36,7 +36,7 @@
                                     <label class="custom-file-label" for="inputFile">请上传封面图</label>
                                 </div>
                                 <div class="input-group-append">
-                                    <span class="input-group-text" style="font-size: 0.85rem;hover" id="upload-file">Upload</span>
+                                    <span class="input-group-text" style="font-size: 0.85rem;" id="upload-file">Upload</span>
                                 </div>
                             </div>
                         </div>
