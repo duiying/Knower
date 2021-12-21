@@ -121,7 +121,7 @@ class ArticleService
     }
 
     /**
-     * 删除 ElasticSearch 中 Article 文档
+     * 更新 ElasticSearch 中 Article 文档的 status 字段
      *
      * @param $id
      * @return bool
@@ -131,10 +131,24 @@ class ArticleService
         // 如果文档不存在，直接返回
         if (!$this->existsEsArticle($id)) return false;
 
+        /* 如果要删除 ElasticSearch 中 Article 文档，执行下面代码
         $this->es->esClient->delete([
             'index'     => ElasticSearchConst::INDEX_ARTICLE,
             'id'        => $id,
         ]);
+        */
+
+        // 如果不删除 ElasticSearch 中 Article 文档，只更新 status 字段，执行下面代码
+        $this->es->esClient->update([
+            'index'     => ElasticSearchConst::INDEX_ARTICLE,
+            'id'        => $id,
+            'body'      => [
+                'doc' => [
+                    'status' => ArticleConstant::ARTICLE_STATUS_DELETE
+                ],
+            ],
+        ]);
+
 
         return true;
     }
@@ -300,8 +314,7 @@ class ArticleService
     public function getSyncToEsArticleData($lastId = 0, $count = 100)
     {
         return $this->search([
-            'status'    => ArticleConstant::ARTICLE_STATUS_NORMAL,
-            'id'        => ['>', $lastId]
+            'id' => ['>', $lastId]
         ], 0, $count);
     }
 }

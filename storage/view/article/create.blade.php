@@ -28,6 +28,35 @@
                                 <input type="text" name="desc" class="form-control" placeholder="描述">
                             </div>
                         </div>
+                        <div class="form-group row" id="upload-file-block">
+                            <label class="col-sm-2 col-form-label">封面图</label>
+                            <div class="input-group col-sm-10">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="inputFile">
+                                    <label class="custom-file-label" for="inputFile">请上传封面图</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="font-size: 0.85rem;hover" id="upload-file">Upload</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row display-none">
+                            <div class="col-sm-12">
+                                <input type="text" id="cover_img_id" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group row display-none" id="cover-img">
+                            <label class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <img src="/public/1.png" style="max-height: 200px;" id="cover-img-url">
+                            </div>
+                        </div>
+                        <script type="application/javascript">
+                            $('input[type="file"]').change(function(e) {
+                                var fileName = e.target.files[0].name;
+                                $('.custom-file-label').html(fileName);
+                            });
+                        </script>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">内容<span class="text-danger">*</span></label>
                             <div class="col-sm-10">
@@ -55,6 +84,35 @@
     <script type="text/javascript">
         var simplemde = getSimpleMDE("article-markdown");
 
+        $('#inputFile, #upload-file').mouseover(function () {
+            $(this).css('cursor', 'pointer');
+        });
+
+        $('#upload-file').click(function () {
+            var formData = new FormData();
+            formData.append('file', $('#inputFile')[0].files[0]);
+            $.ajax({
+                type: "POST",
+                url: "/v1/img/upload",
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: formData ,
+                async:false,
+                success: function (resp) {
+                    if (resp.code !== 0) {
+                        $('#cover-img').addClass('display-none');
+                        alert.error(resp.msg);
+                    } else {
+                        $('#cover-img').removeClass('display-none');
+                        $('#cover-img-url').attr('src', resp.data.cover_img);
+                        $('#cover_img_id').attr('value', resp.data.id);
+                        alert.success('上传成功！');
+                    }
+                }
+            });
+        });
+        
         function handleSubmit()
         {
             if (validateArticleParam('article-create')) {

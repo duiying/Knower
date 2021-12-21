@@ -41,9 +41,6 @@ class SearchAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        // 默认取正常状态
-        if (!isset($requestData['status'])) $requestData['status'] = ArticleConstant::ARTICLE_STATUS_NORMAL;
-
         $p      = isset($requestData['p']) ? $requestData['p'] : CommonConstant::DEFAULT_PAGE;
         $size   = isset($requestData['size']) ? $requestData['size'] : CommonConstant::DEFAULT_SIZE;
         if (isset($requestData['p']))       unset($requestData['p']);

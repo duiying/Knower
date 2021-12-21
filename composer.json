@@ -21,7 +21,7 @@
         "hyperf/database": "~2.2.0",
         "hyperf/db-connection": "~2.2.0",
         "hyperf/elasticsearch": "~2.2.0",
-        "hyperf/filesystem": "~2.2.0",
+        "hyperf/filesystem": "^2.2",
         "hyperf/framework": "~2.2.0",
         "hyperf/guzzle": "~2.2.0",
         "hyperf/http-server": "~2.2.0",

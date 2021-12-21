@@ -31,8 +31,10 @@
                     <th style="width: 50px">ID</th>
                     <th style="width: 60px">排序</th>
                     <th style="width: 200px">标题</th>
+                    <th style="width: 200px">封面图</th>
                     <th style="width: 200px">描述</th>
                     <th style="width: 200px">内容</th>
+                    <th style="width: 100px">状态</th>
                     <th style="width: 150px">创建时间</th>
                     <th style="width: 150px">更新时间</th>
                     <th style="width: 150px">操作</th>
@@ -77,6 +79,11 @@
                     } else {
                         listHtml += '<td>' + cutString(list[i].highlight_title, 500) + '</td>';
                     }
+                    if (list[i].cover_img_url === '') {
+                        listHtml += '<td></td>';
+                    } else {
+                        listHtml += '<td><img style="max-width:180px;max-height: 180px;" src="' + list[i].cover_img_url + '"></td>';
+                    }
                     if (list[i].highlight_desc == '') {
                         listHtml += '<td>' + cutString(list[i].desc, 500) + '</td>';
                     } else {
@@ -87,11 +94,20 @@
                     } else {
                         listHtml += '<td><p>' + cutString(list[i].highlight_content, 500) + '</p></td>';
                     }
+                    listHtml += '<td>';
+                    if (list[i].status === 1) {
+                        listHtml += '<span class="label label-success">' + list[i].status_text + '</span>';
+                    } else {
+                        listHtml += '<span class="label label-warning">' + list[i].status_text + '</span>';
+                    }
+                    listHtml += '</td>';
                     listHtml += '<td>' + list[i].ctime + '</td>';
                     listHtml += '<td>' + list[i].mtime + '</td>';
                     listHtml += '<td>';
                     listHtml += '<a href="/view/article/update?id=' + list[i].id + '"><i class="fas fa-edit"></i></a>';
-                    listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
+                    if (list[i].status === 1) {
+                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
+                    }
                     listHtml += '</td>';
                     listHtml += '</tr>';
                 }

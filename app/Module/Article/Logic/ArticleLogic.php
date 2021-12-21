@@ -5,6 +5,7 @@ namespace App\Module\Article\Logic;
 use App\Constant\AppErrorCode;
 use App\Constant\ElasticSearchConst;
 use App\Module\Article\Constant\ArticleConstant;
+use App\Module\Img\Logic\ImgLogic;
 use App\Util\AppException;
 use App\Util\Log;
 use App\Util\Util;
@@ -21,6 +22,12 @@ class ArticleLogic
      * @var ArticleService
      */
     private $service;
+
+    /**
+     * @Inject()
+     * @var ImgLogic
+     */
+    private $imgLogic;
 
     private $sort = ['sort' => 'asc', 'ctime' => 'desc'];
 
@@ -59,6 +66,10 @@ class ArticleLogic
      */
     public function create($requestData)
     {
+        if (isset($requestData['cover_img_id']) && !empty($requestData['cover_img_id'])) {
+            $this->imgLogic->checkImgExist($requestData['cover_img_id']);
+        }
+
         $id = $this->service->create($requestData);
 
         // 写入 ElasticSearch
@@ -85,10 +96,15 @@ class ArticleLogic
         // 1、先检查文章是否存在
         $this->checkArticleExist($id);
 
-        // 2、更新 MySQL
+        // 2、检查封面图片 ID 是否存在
+        if (isset($requestData['cover_img_id']) && !empty($requestData['cover_img_id'])) {
+            $this->imgLogic->checkImgExist($requestData['cover_img_id']);
+        }
+
+        // 3、更新 MySQL
         $updateRes = $this->service->update(['id' => $id], $requestData);
 
-        // 更新 ElasticSearch
+        // 4、更新 ElasticSearch
         try {
             $this->service->updateEsArticle($id);
         } catch (\Exception $exception) {
@@ -176,10 +192,11 @@ class ArticleLogic
         $list  = $this->service->search($requestData, $p, $size, ['*'], ['sort' => 'asc', 'ctime' => 'desc']);
         $total = $this->service->count($requestData);
         foreach ($list as $k => $v) {
-            $list[$k]['highlight_title'] = '';
-            $list[$k]['highlight_desc'] = '';
-            $list[$k]['highlight_content'] = '';
+            $list[$k]['highlight_title']    = '';
+            $list[$k]['highlight_desc']     = '';
+            $list[$k]['highlight_content']  = '';
         }
+        $this->assembleArticleList($list);
         return Util::formatSearchRes($p, $size, $total, $list);
     }
 
@@ -266,7 +283,28 @@ class ArticleLogic
             }
         }
 
+        $this->assembleArticleList($list);
+
         return Util::formatSearchRes($p, $size, $total, $list);
+    }
+
+    /**
+     * 组装后台列表字段
+     *
+     * @param $list
+     */
+    public function assembleArticleList(&$list)
+    {
+        if (empty($list)) {
+            return;
+        }
+        $coverImgIdList = empty($list) ? [] : array_column($list, 'cover_img_id');
+        $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList($coverImgIdList);
+        foreach ($list as $k => $v) {
+            $list[$k]['status_text']        = ArticleConstant::ARTICLE_STATUS_TEXT_MAP[$v['status']];
+            $list[$k]['cover_img_url']      = isset($imgInfoMap[$v['cover_img_id']]) ? $imgInfoMap[$v['cover_img_id']] : '';
+            unset($list[$k]['cover_img_id']);
+        }
     }
 
     /**

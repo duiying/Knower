@@ -29,9 +29,10 @@ class CreateAction
         'desc'          => 'required|string|max:255',
         'content'       => 'required|string',
         'sort'          => 'integer|min:1|max:999',
+        'cover_img_id'  => 'integer',
     ];
 
-    public function handle(RequestInterface $request, ResponseInterface $response)
+    public function handle(RequestInterface $request, ResponseInterface $response, \League\Flysystem\Filesystem $filesystem)
     {
         // 参数校验
         $requestData = $request->all();

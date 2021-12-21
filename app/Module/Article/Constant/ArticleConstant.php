@@ -8,6 +8,12 @@ class ArticleConstant
     const ARTICLE_STATUS_DELETE = -1;
     const ARTICLE_STATUS_NORMAL = 1;
 
+    // 状态文案
+    const ARTICLE_STATUS_TEXT_MAP = [
+        self::ARTICLE_STATUS_DELETE => '已删除',
+        self::ARTICLE_STATUS_NORMAL => '正常',
+    ];
+
     // 允许的状态
     const ALLOWED_ARTICLE_STATUS_LIST = [
         self::ARTICLE_STATUS_DELETE,

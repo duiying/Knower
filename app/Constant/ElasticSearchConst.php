@@ -23,13 +23,14 @@ class ElasticSearchConst
 
     // 文章索引映射
     const INDEX_ARTICLE_MAPPINGS = [
-        'id'        => ['type' => 'integer'],
-        'title'     => ['type' => 'text', 'analyzer' => 'ik_smart'],
-        'desc'      => ['type' => 'text', 'analyzer' => 'ik_smart'],
-        'content'   => ['type' => 'text', 'analyzer' => 'ik_smart'],
-        'status'    => ['type' => 'byte'],
-        'sort'      => ['type' => 'integer'],
-        'mtime'     => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
-        'ctime'     => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
+        'id'            => ['type' => 'integer'],
+        'title'         => ['type' => 'text', 'analyzer' => 'ik_smart'],
+        'desc'          => ['type' => 'text', 'analyzer' => 'ik_smart'],
+        'content'       => ['type' => 'text', 'analyzer' => 'ik_smart'],
+        'status'        => ['type' => 'byte'],
+        'sort'          => ['type' => 'integer'],
+        'cover_img_id'  => ['type' => 'integer'],
+        'mtime'         => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
+        'ctime'         => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
     ];
 }

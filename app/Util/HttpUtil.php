@@ -30,7 +30,7 @@ class HttpUtil
      * @param null $data
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public static function error(ResponseInterface $response, $code = 0, $msg = '', $data = null): \Psr\Http\Message\ResponseInterface
+    public static function error(ResponseInterface $response, $code = 500, $msg = '', $data = null): \Psr\Http\Message\ResponseInterface
     {
         $response->withHeader('Content-Type', 'text/html; charset=utf-8');
         return $response->json([CommonConstant::API_CODE => $code, CommonConstant::API_MESSAGE => $msg, CommonConstant::API_DATA => $data]);

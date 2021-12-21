@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07fd855a9ff21f8b408da49a0dbd85b3",
+    "content-hash": "0aa2ae1b364aa460c52d5f29b6ed5658",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1943,16 +1943,16 @@
         },
         {
             "name": "hyperf/filesystem",
-            "version": "v2.2.16",
+            "version": "v2.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/filesystem.git",
-                "reference": "b0a4926d5b818d5d5cc88ec3c5f99b4912cedb0e"
+                "reference": "69e9704f0c71a68ba3d59e1526e25cc2de11ac82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/filesystem/zipball/b0a4926d5b818d5d5cc88ec3c5f99b4912cedb0e",
-                "reference": "b0a4926d5b818d5d5cc88ec3c5f99b4912cedb0e",
+                "url": "https://api.github.com/repos/hyperf/filesystem/zipball/69e9704f0c71a68ba3d59e1526e25cc2de11ac82",
+                "reference": "69e9704f0c71a68ba3d59e1526e25cc2de11ac82",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2004,9 +2004,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hyperf/filesystem/issues",
-                "source": "https://github.com/hyperf/filesystem/tree/v2.2.16"
+                "source": "https://github.com/hyperf/filesystem/tree/v2.2.17"
             },
-            "time": "2021-11-15T02:27:27+00:00"
+            "time": "2021-11-17T11:20:49+00:00"
         },
         {
             "name": "hyperf/framework",

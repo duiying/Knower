@@ -18,6 +18,19 @@ class ImgLogic
     private $service;
 
     /**
+     * 检查图片 ID 是否存在
+     *
+     * @param $id
+     */
+    public function checkImgExist($id)
+    {
+        $img = $this->service->getLineByWhere(['id' => $id, 'status' => ImgConstant::IMG_STATUS_NORMAL], ['id']);
+        if (empty($img)) {
+            throw new AppException(AppErrorCode::PARAMS_INVALID);
+        }
+    }
+
+    /**
      * 根据图片原 url，返回图片 id
      *
      * @param string $originUrl
@@ -60,9 +73,26 @@ class ImgLogic
         $imgUrlMap = [];
 
         foreach ($imgInfoList as $k => $v) {
-            $imgUrlMap[$v['id']] = $v['origin_url'];
+            $imgUrlMap[$v['id']] = !empty($v['local_url']) ? $v['local_url'] : $v['origin_url'];
         }
 
         return $imgUrlMap;
+    }
+
+    /**
+     * 创建
+     *
+     * @param $originUrl
+     * @param string $localUrl
+     * @return int
+     */
+    public function create($originUrl, $localUrl = '')
+    {
+        $createImgParams = [
+            'origin_url'    => $originUrl,
+            'local_url'     => $localUrl
+        ];
+
+        return $this->service->create($createImgParams);
     }
 }

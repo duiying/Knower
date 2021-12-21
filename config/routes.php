@@ -111,6 +111,9 @@ Router::addGroup('/v1/',function () {
     // 用户相关
     Router::get('account/search', Route::decoration('Account\Action\SearchAction'));
     Router::post('account/update_field', Route::decoration('Account\Action\UpdateFieldAction'));
+
+    // 图片上传
+    Router::post('img/upload', Route::decoration('Img\Action\UploadAction'));
 }, ['middleware' => [CorsMiddleware::class, PassportMiddleware::class, ValidationMiddleware::class]]);
 
 // 退出登录
