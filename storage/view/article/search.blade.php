@@ -104,8 +104,8 @@
                     listHtml += '<td>' + list[i].ctime + '</td>';
                     listHtml += '<td>' + list[i].mtime + '</td>';
                     listHtml += '<td>';
-                    listHtml += '<a href="/view/article/update?id=' + list[i].id + '"><i class="fas fa-edit"></i></a>';
                     if (list[i].status === 1) {
+                        listHtml += '<a href="/view/article/update?id=' + list[i].id + '"><i class="fas fa-edit"></i></a>';
                         listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
                     }
                     listHtml += '</td>';

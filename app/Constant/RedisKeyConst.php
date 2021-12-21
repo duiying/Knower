@@ -28,10 +28,13 @@ namespace App\Constant;
  */
 class RedisKeyConst
 {
-    // 示例key
+    // 示例 key
     const EXAMPLE_KEY = 's:服务简称:业务名称';
 
     const USER_TOKEN = 's:ps:token_user_id:';
 
     const GITHUB_STATE = 's:us:github:state:';
+
+    // 全量同步 ES 限速
+    const ASYNC_ES = 's:cs:async:es:limit';
 }

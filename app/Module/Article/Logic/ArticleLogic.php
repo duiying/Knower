@@ -4,10 +4,13 @@ namespace App\Module\Article\Logic;
 
 use App\Constant\AppErrorCode;
 use App\Constant\ElasticSearchConst;
+use App\Constant\RedisKeyConst;
 use App\Module\Article\Constant\ArticleConstant;
 use App\Module\Img\Logic\ImgLogic;
 use App\Util\AppException;
+use App\Util\HttpUtil;
 use App\Util\Log;
+use App\Util\Redis;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Article\Service\ArticleService;
@@ -117,12 +120,20 @@ class ArticleLogic
     /**
      * 全量同步 ElasticSearch
      *
-     * @param $requestData
      * @return bool
      * @throws \Throwable
      */
-    public function asyncEs($requestData)
+    public function asyncEs()
     {
+        // 限流
+        $redis = Redis::instance();
+        $noRepeat = $redis->set(RedisKeyConst::ASYNC_ES, 1, ['nx', 'ex' => 10]);
+
+        // 可能重放了，或者重复提交了，在这里防一手
+        if (!$noRepeat) {
+            throw new AppException(AppErrorCode::ACTION_TOO_FAST);
+        }
+
         // 投递 Task（全量同步 ElasticSearch 是耗时任务，使用 Task 进程来防止接口超时）
         $container = ApplicationContext::getContainer();
         $exec = $container->get(TaskExecutor::class);
