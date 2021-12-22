@@ -1,6 +1,5 @@
 @extends('frontend.layouts.app')
 @section('content')
-
     <script src="/storage/frontend/editormd/editormd.min.js"></script>
     <script src="/storage/frontend/markdown/marked.min.js"></script>
     <script src="/storage/frontend/markdown/prettify.min.js"></script>
@@ -31,7 +30,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="card" style="margin-top:15px;">
+                <div class="card" style="margin-top:15px;margin-bottom:80px;">
                     <div class="card-body">
                         <h3 id="commentHead">评论</h3>
                         <hr>

@@ -14,6 +14,12 @@
                 <div class="card-body" id="frontend-articles">
 
                 </div>
+                <div class="card-footer clearfix" id="pagination">
+                    <div class="float-left" id="pagination-total"></div>
+                    <ul class="pagination pagination-sm m-0 float-right">
+
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col-md-4" style="padding-left:20px;">
@@ -77,6 +83,7 @@
             }
             $('#frontend-articles').html(listHtml);
         }
+        renderPage(data);
     }
 
     // 渲染列表
