@@ -25,4 +25,7 @@ class CommonConstant
 
     // 前台登录 token
     const FRONTEND_TOKEN_COOKIE_NAME = 'knower_access_token';
+
+    // Markdown 中的图片是否缓存到本地
+    const MARKDOWN_IMG_CACHE = TRUE;
 }

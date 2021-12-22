@@ -82,6 +82,9 @@ class ArticleLogic
             Log::error('创建 ElasticSearch 中 Article 文档异常', ['code' => $exception->getCode(), 'msg' => $exception->getMessage(), 'id' => $id]);
         }
 
+        // 下载图片到本地
+        $this->downloadImg4Content($requestData['content']);
+
         return $id;
     }
 
@@ -114,6 +117,9 @@ class ArticleLogic
             Log::error('更新 ElasticSearch 中 Article 文档异常', ['code' => $exception->getCode(), 'msg' => $exception->getMessage(), 'id' => $id]);
         }
 
+        // 5、下载图片到本地
+        $this->downloadImg4Content($requestData['content']);
+
         return $updateRes;
     }
 
@@ -132,16 +138,8 @@ class ArticleLogic
             throw new AppException(AppErrorCode::ACTION_TOO_FAST);
         }
 
-        // 投递 Task（全量同步 ElasticSearch 是耗时任务，使用 Task 进程来防止接口超时）
-        $container = ApplicationContext::getContainer();
-        $exec = $container->get(TaskExecutor::class);
-        try {
-            $result = $exec->execute(new Task([ArticleService::class, 'asyncEs']));
-        } catch (\Exception $exception) {
-            Log::error('全量同步 ElasticSearch 异常', ['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
-        }
+        $this->service->asyncEs();
 
-        // 投递 Task 之后，直接返回 true
         return true;
     }
 
@@ -336,5 +334,40 @@ class ArticleLogic
         $article['cover_img_url'] = $coverImgId && isset($imgInfoMap[$coverImgId]) ? $imgInfoMap[$coverImgId] : '';
         $article['filename'] = empty($article['cover_img_url']) ? '' : basename($article['cover_img_url']);
         return $article;
+    }
+
+    /**
+     * 正则匹配文章内容中的远程图片，下载到本地
+     *
+     * @param string $content
+     */
+    public function downloadImg4Content($content = '')
+    {
+        Log::info('异步下载内容中的图片开始');
+
+        if (empty($content)) {
+            return;
+        }
+
+        // 1、匹配原生 HTML img 标签语法；2、匹配 markdown img 语法；
+        $pregHtmlImg        = "/<img.*?src=[\"|\']?(.*?)[\"|\']?\s.*?>/i";
+        $pregMarkdownImg    = '/!\\[.*\\]\\((.+)\\)/';
+
+        preg_match_all($pregHtmlImg, $content, $pregHtmlImgInfoList);
+        preg_match_all($pregMarkdownImg, $content, $pregMarkdownImgInfoList);
+
+        if (isset($pregHtmlImgInfoList[1]) && !empty($pregHtmlImgInfoList[1])) {
+            foreach ($pregHtmlImgInfoList[1] as $k => $v) {
+                $this->imgLogic->download($v);
+            }
+        }
+
+        if (isset($pregMarkdownImgInfoList[1]) && !empty($pregMarkdownImgInfoList[1])) {
+            foreach ($pregMarkdownImgInfoList[1] as $k => $v) {
+                $this->imgLogic->download($v);
+            }
+        }
+
+        Log::info('异步下载内容中的图片结束');
     }
 }

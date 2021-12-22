@@ -35,8 +35,8 @@ class UploadAction
         $filename   = $file->getClientFilename();
 
         // 如果有该文件名，需要进行重命名
-        if (file_exists(BASE_PATH . '/public/' . $filename)) {
-            $filename = date('YmdHis') . rand(1000, 9999) . '.' . explode('.', $file->getClientFilename())[1];
+        if (file_exists($this->logic->getSaveDir() . '/' . $filename)) {
+            $filename = $this->logic->genNewPreFileName() . '.' . explode('.', $file->getClientFilename())[1];
         }
 
         // 保存文件到本地
