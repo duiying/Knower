@@ -278,3 +278,21 @@ CREATE TABLE `t_user_oauth` (
                                 KEY `idx_oauth_id` (`oauth_id`),
                                 KEY `idx_token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='第三方登录表';
+
+DROP TABLE IF EXISTS `t_user_action_log`;
+CREATE TABLE `t_user_action_log` (
+                                     `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                     `account_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户ID（0 为游客）',
+                                     `third_id` int(10) NOT NULL DEFAULT '0' COMMENT '第三方ID（比如文章ID）',
+                                     `type` int(10) NOT NULL DEFAULT '0' COMMENT '行为类型',
+                                     `snapshot` varchar(2000) NOT NULL DEFAULT '' COMMENT '快照内容',
+                                     `ip` varchar(50) NOT NULL DEFAULT '' COMMENT '客户端IP地址',
+                                     `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                     `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_account_id` (`account_id`),
+                                     KEY `idx_third_id` (`third_id`),
+                                     KEY `idx_type` (`type`),
+                                     KEY `idx_ip` (`ip`),
+                                     KEY `idx_ctime` (`ctime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户行为日志表';

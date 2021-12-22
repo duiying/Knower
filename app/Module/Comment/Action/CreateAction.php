@@ -40,7 +40,8 @@ class CreateAction
         $requestData = $request->all();
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
-        $requestData['account_id'] = $request->getAttribute('account_id');
+        $requestData['client_real_ip']  = $request->getAttribute('client_real_ip');
+        $requestData['account_id']      = $request->getAttribute('account_id');
 
         $res = $this->logic->create($requestData);
         return HttpUtil::success($response, $res);

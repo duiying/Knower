@@ -4,6 +4,8 @@ namespace App\Module\Comment\Logic;
 
 use App\Constant\AppErrorCode;
 use App\Module\Account\Logic\AccountLogic;
+use App\Module\ActionLog\Constant\ActionLogConstant;
+use App\Module\ActionLog\Logic\ActionLogLogic;
 use App\Module\Article\Logic\ArticleLogic;
 use App\Module\Comment\Constant\CommentConstant;
 use App\Module\Comment\Service\CommentService;
@@ -18,19 +20,25 @@ class CommentLogic
      * @Inject()
      * @var CommentService
      */
-    public $service;
+    private $service;
 
     /**
      * @Inject()
      * @var ArticleLogic
      */
-    public $articleLogic;
+    private $articleLogic;
 
     /**
      * @Inject()
      * @var AccountLogic
      */
-    public $accountLogic;
+    private $accountLogic;
+
+    /**
+     * @Inject()
+     * @var ActionLogLogic
+     */
+    private $actionLogLogic;
 
     /**
      * 检查 status 字段
@@ -102,7 +110,12 @@ class CommentLogic
             $createData['audit'] = CommentConstant::AUDIT_AUDITED;
         }
 
-        return $this->service->create($createData);
+        $id = $this->service->create($createData);
+
+        // 记录操作日志
+        $this->actionLogLogic->create($requestData['account_id'], $id, ActionLogConstant::TYPE_CREATE_COMMENT, $content, $requestData['client_real_ip']);
+
+        return $id;
     }
 
     /**

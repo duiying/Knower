@@ -5,6 +5,8 @@ namespace App\Module\Article\Logic;
 use App\Constant\AppErrorCode;
 use App\Constant\ElasticSearchConst;
 use App\Constant\RedisKeyConst;
+use App\Module\ActionLog\Constant\ActionLogConstant;
+use App\Module\ActionLog\Logic\ActionLogLogic;
 use App\Module\Article\Constant\ArticleConstant;
 use App\Module\Img\Logic\ImgLogic;
 use App\Util\AppException;
@@ -31,6 +33,12 @@ class ArticleLogic
      * @var ImgLogic
      */
     private $imgLogic;
+
+    /**
+     * @Inject()
+     * @var ActionLogLogic
+     */
+    private $actionLogLogic;
 
     private $sort = ['sort' => 'asc', 'ctime' => 'desc'];
 
@@ -318,13 +326,17 @@ class ArticleLogic
      * 获取一行
      *
      * @param $requestData
+     * @param false $fromFrontend
      * @return array
      */
-    public function find($requestData)
+    public function find($requestData, $fromFrontend = false)
     {
         $id = $requestData['id'];
         $this->checkArticleExist($id);
-        $article = $this->service->getLineByWhere($requestData);
+        $where = [
+            'id' => $id
+        ];
+        $article = $this->service->getLineByWhere($where);
 
         // 查出文章的封面图片信息
         $coverImgId = $article['cover_img_id'];
@@ -333,6 +345,12 @@ class ArticleLogic
         }
         $article['cover_img_url'] = $coverImgId && isset($imgInfoMap[$coverImgId]) ? $imgInfoMap[$coverImgId] : '';
         $article['filename'] = empty($article['cover_img_url']) ? '' : basename($article['cover_img_url']);
+
+        // 记录操作日志
+        if ($fromFrontend) {
+            $this->actionLogLogic->create($requestData['account_id'], $id, ActionLogConstant::TYPE_ARTICLE_DETAIL, $article['title'], $requestData['client_real_ip']);
+        }
+
         return $article;
     }
 

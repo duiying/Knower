@@ -3,6 +3,7 @@
 namespace App\Util;
 
 use App\Constant\CommonConstant;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class HttpUtil
@@ -46,5 +47,24 @@ class HttpUtil
     public static function redirect(ResponseInterface $response, $url): \Psr\Http\Message\ResponseInterface
     {
         return $response->redirect($url);
+    }
+
+    /**
+     * 获取客户端真实 IP
+     *
+     * @param RequestInterface $request
+     * @return string
+     */
+    public static function getClientRealIp(RequestInterface $request)
+    {
+        $headers = $request->getHeaders();
+        if (isset($headers['x-forwarded-for'][0]) && !empty($headers['x-forwarded-for'][0])) {
+            return $headers['x-forwarded-for'][0];
+        } elseif (isset($headers['x-real-ip'][0]) && !empty($headers['x-real-ip'][0])) {
+            return $headers['x-real-ip'][0];
+        }
+
+        $serverParams = $request->getServerParams();
+        return $serverParams['remote_addr'] ?? '';
     }
 }

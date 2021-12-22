@@ -4,6 +4,7 @@ namespace App\Module\Article\Action;
 
 use App\Module\Article\Logic\ArticleLogic;
 use App\Util\HttpUtil;
+use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -35,7 +36,10 @@ class InfoAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        $res = $this->logic->find($requestData);
+        $requestData['client_real_ip']  = $request->getAttribute('client_real_ip');
+        $requestData['account_id']      = $request->getAttribute('account_id');
+
+        $res = $this->logic->find($requestData, true);
         return HttpUtil::success($response, $res);
     }
 }
