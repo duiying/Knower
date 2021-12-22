@@ -53,4 +53,7 @@ class CommentConstant
         self::AUDIT_WAIT_AUDIT  => '待审核',
         self::AUDIT_AUDITED     => '已审核',
     ];
+
+    // 当天一篇文章下最多 200 条评论（防止有人用脚本刷评论）
+    const DAY_MAX_COMMENT_NUM = 200;
 }

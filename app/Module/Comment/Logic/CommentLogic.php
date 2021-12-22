@@ -75,6 +75,20 @@ class CommentLogic
             $this->articleLogic->checkArticleExist($thirdId);
         }
 
+        $dayBeginTime = date('Y-m-d') . '00:00:00';
+        $dayEndTime = date('Y-m-d') . '23:59:59';
+
+        // 防止有人刷评论
+        $count = $this->service->count([
+            'third_id'      => $thirdId,
+            'account_id'    => $accountId,
+            'third_type'    => $thirdType,
+            'ctime'         => ['&', [$dayBeginTime, $dayEndTime]]
+        ]);
+        if ($count > CommentConstant::DAY_MAX_COMMENT_NUM) {
+            throw new AppException(AppErrorCode::COMMENT_TOO_MANY_ERROR);
+        }
+
         $createData = [
             'third_id'      => $thirdId,
             'account_id'    => $accountId,

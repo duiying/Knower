@@ -300,7 +300,7 @@ class AccountLogic
     public function getAccountInfoByToken($accessToken = '')
     {
         if (empty($accessToken)) return [];
-        $accountInfo = $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar_img_id', 'last_active_time']);
+        $accountInfo = $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar_img_id', 'last_active_time', 'status']);
         $avatarImgId = $accountInfo['avatar_img_id'];
         $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList([$avatarImgId]);
         $accountInfo['avatar'] = isset($imgInfoMap[$avatarImgId]) ? $imgInfoMap[$avatarImgId] : '';

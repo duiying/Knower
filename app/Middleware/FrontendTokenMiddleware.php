@@ -3,6 +3,7 @@
 namespace App\Middleware;
 
 use App\Constant\CommonConstant;
+use App\Module\Account\Constant\AccountConstant;
 use App\Module\Account\Logic\AccountLogic;
 use App\Util\HttpUtil;
 use Hyperf\Di\Annotation\Inject;
@@ -64,6 +65,9 @@ class FrontendTokenMiddleware
         $accountInfo = $this->accountLogic->getAccountInfoByToken($accessToken);
         if (empty($accountInfo)) {
             return HttpUtil::error($this->response, 403, 'Token 无效，请重新登录！');
+        }
+        if ($accountInfo['status'] === AccountConstant::ACCOUNT_STATUS_FORBIDDEN) {
+            return HttpUtil::error($this->response, 403, '账号已被停用！');
         }
 
         $accountId = $accountInfo['id'];
