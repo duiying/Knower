@@ -3,6 +3,7 @@
 namespace App\Module\Article\Logic;
 
 use App\Constant\AppErrorCode;
+use App\Constant\CommonConstant;
 use App\Constant\ElasticSearchConst;
 use App\Constant\RedisKeyConst;
 use App\Module\ActionLog\Constant\ActionLogConstant;
@@ -347,6 +348,11 @@ class ArticleLogic
         $article['filename'] = empty($article['cover_img_url']) ? '' : basename($article['cover_img_url']);
 
         if ($fromFrontend) {
+            $article['cached_content'] = '';
+            if (CommonConstant::MARKDOWN_IMG_CACHE) {
+                $article['cached_content'] = $this->replaceOriginImg2Local($article['content']);
+            }
+
             // 阅读数 +1
             $this->service->incrReadCount($id);
 
@@ -358,7 +364,55 @@ class ArticleLogic
     }
 
     /**
+     * 替换内容中的远程图片 url 为本地图片 url
+     *
+     * @param string $content
+     * @return string
+     */
+    public function replaceOriginImg2Local($content = '')
+    {
+        if (empty($content)) {
+            return '';
+        }
+
+        // 1、匹配原生 HTML img 标签语法；2、匹配 markdown img 语法；
+        $pregHtmlImg        = "/<img.*?src=[\"|\']?(.*?)[\"|\']?\s.*?>/i";
+        $pregMarkdownImg    = '/!\\[.*\\]\\((.+)\\)/';
+
+        preg_match_all($pregHtmlImg, $content, $pregHtmlImgInfoList);
+        preg_match_all($pregMarkdownImg, $content, $pregMarkdownImgInfoList);
+
+        // 需要替换的图片 url 列表
+        $originImgUrlList = [];
+
+        if (isset($pregHtmlImgInfoList[1]) && !empty($pregHtmlImgInfoList[1])) {
+            $originImgUrlList = array_merge($originImgUrlList, $pregHtmlImgInfoList[1]);
+        }
+
+        if (isset($pregMarkdownImgInfoList[1]) && !empty($pregMarkdownImgInfoList[1])) {
+            $originImgUrlList = array_merge($originImgUrlList, $pregMarkdownImgInfoList[1]);
+        }
+
+        // Markdown 文本中没有要替换的图片
+        if (empty($originImgUrlList)) return $content;
+
+        $urlMap = $this->imgLogic->getImgLocalUrlByOriginUrl($originImgUrlList);
+
+        // Markdown 中有需要替换的图片 url，但是在图片表中没有查到本地的 url
+        if (empty($urlMap)) return $content;
+
+        foreach ($urlMap as $originUrl => $localUrl) {
+            if (!empty($localUrl)) {
+                $content = str_replace($originUrl, $localUrl, $content);
+            }
+        }
+
+        return $content;
+    }
+
+    /**
      * 正则匹配文章内容中的远程图片，下载到本地
+     * 为什么需要这个方法呢？因为我用了 GitHub 作为图床，图片经常加载不出来，于是将图片缓存在本地吧
      *
      * @param string $content
      */

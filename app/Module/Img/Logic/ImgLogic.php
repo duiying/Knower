@@ -6,7 +6,6 @@ use App\Constant\AppErrorCode;
 use App\Module\Img\Constant\ImgConstant;
 use App\Util\AppException;
 use App\Util\Log;
-use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Img\Service\ImgService;
 use Hyperf\Utils\Coroutine;
@@ -30,6 +29,29 @@ class ImgLogic
         if (empty($img)) {
             throw new AppException(AppErrorCode::PARAMS_INVALID);
         }
+    }
+
+    /**
+     * 根据远程图片 url 获取本地图片 url
+     *
+     * @param array $originUrlList
+     * @return array
+     */
+    public function getImgLocalUrlByOriginUrl($originUrlList = [])
+    {
+        $originUrlList = array_unique($originUrlList);
+        $map = [];
+        if (empty($originUrlList)) {
+            return $map;
+        }
+        $imgInfoList = $this->service->getImgLocalUrlByOriginUrl($originUrlList);
+        foreach ($imgInfoList as $k => $v) {
+            if (!empty($v['local_url'])) {
+                $map[$v['origin_url']] = $v['local_url'];
+            }
+        }
+
+        return $map;
     }
 
     /**

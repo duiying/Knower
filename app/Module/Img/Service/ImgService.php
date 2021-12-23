@@ -2,7 +2,6 @@
 
 namespace App\Module\Img\Service;
 
-use App\Module\Img\Constant\ImgConstant;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Img\Dao\ImgDao;
 
@@ -98,5 +97,16 @@ class ImgService
     public function count($where = [])
     {
         return $this->dao->count($where);
+    }
+
+    /**
+     * 根据远程图片 url 获取本地图片 url
+     *
+     * @param array $originUrlList
+     * @return array
+     */
+    public function getImgLocalUrlByOriginUrl($originUrlList = [])
+    {
+       return $this->dao->getImgLocalUrlByOriginUrl($originUrlList);
     }
 }
