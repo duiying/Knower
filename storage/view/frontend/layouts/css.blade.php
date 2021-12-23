@@ -29,4 +29,12 @@
     .page-link {
         color: rgba(0, 0, 0, .7);
     }
+
+    code {
+        padding: 2px 4px;
+        font-size: 90%;
+        color: #c7254e !important;
+        background-color: #f9f2f4;
+        border-radius: 4px;
+    }
 </style>

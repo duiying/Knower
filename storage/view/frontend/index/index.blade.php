@@ -52,7 +52,11 @@
             var list = data.list;
             for (var i = 0; i < list.length; i++) {
                 listHtml += '<h5 style="padding-top:10px;padding-bottom:5px;"><strong><a href="/article/detail?id=' + list[i].id + '">';
-                listHtml +=  list[i].title;
+                if (list[i].highlight_title == '') {
+                    listHtml +=  list[i].title;
+                } else {
+                    listHtml +=  list[i].highlight_title;
+                }
                 listHtml += '</a></strong></h5>';
                 listHtml += '<div class="row">';
                 if (list[i].cover_img_url === '') {
@@ -60,8 +64,16 @@
                 } else {
                     listHtml += '<div class="col-md-8">';
                 }
-                listHtml += '<div style="margin-bottom: 5px;"><a href="">';
-                listHtml += list[i].desc;
+                listHtml += '<div style="margin-bottom: 5px;"><a href="/article/detail?id=' + list[i].id + '">';
+                if (list[i].highlight_desc == '') {
+                    listHtml += list[i].desc;
+                    if (list[i].highlight_desc === '' && list[i].highlight_title === '' && searchParam.keywords !== undefined) {
+                        listHtml += '<span style="color:#ccc;">（内容中含有<span><code>' + searchParam.keywords + '</code><span style="color:#ccc;">关键词）</span>';
+                    }
+                } else {
+                    listHtml += list[i].highlight_desc;
+                }
+
                 listHtml += '</a></div><div><i class="fa fa-clock-o"></i>&nbsp;';
                 listHtml += list[i].mtime;
                 listHtml += ' &nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;';
@@ -97,7 +109,11 @@
     function handleSearch(p = 1)
     {
         handleSearchCallback(function () {
-            var searchParam = {p : p, keywords : $('#keywords').val()};
+            var keywords = $('#keywords').val().trim();
+            var searchParam = {p : p};
+            if (keywords !== '') {
+                searchParam.keywords = keywords;
+            }
             renderArticleList(searchParam);
         });
     }
