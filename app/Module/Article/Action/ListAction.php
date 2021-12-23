@@ -41,15 +41,12 @@ class ListAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        // 前台只展示正常状态的文章
-        $requestData['status'] = ArticleConstant::ARTICLE_STATUS_NORMAL;
-
         $p      = isset($requestData['p']) ? $requestData['p'] : CommonConstant::DEFAULT_PAGE;
-        $size   = isset($requestData['size']) ? $requestData['size'] : CommonConstant::DEFAULT_SIZE;
+        $size   = isset($requestData['size']) ? $requestData['size'] : 10;
         if (isset($requestData['p']))       unset($requestData['p']);
         if (isset($requestData['size']))    unset($requestData['size']);
 
-        $res = $this->logic->search($requestData, $p, $size);
+        $res = $this->logic->search($requestData, $p, $size, true);
         return HttpUtil::success($response, $res);
     }
 }

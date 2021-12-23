@@ -98,4 +98,16 @@ class CommentService
     {
         return $this->dao->count($where);
     }
+
+    /**
+     * 获取评论数
+     *
+     * @param $thirdIdList
+     * @param $thirdType
+     * @return array
+     */
+    public function getCommentCount($thirdIdList, $thirdType)
+    {
+        return $this->dao->getCommentCount($thirdIdList, $thirdType);
+    }
 }

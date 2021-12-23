@@ -9,6 +9,8 @@ use App\Constant\RedisKeyConst;
 use App\Module\ActionLog\Constant\ActionLogConstant;
 use App\Module\ActionLog\Logic\ActionLogLogic;
 use App\Module\Article\Constant\ArticleConstant;
+use App\Module\Comment\Constant\CommentConstant;
+use App\Module\Comment\Logic\CommentLogic;
 use App\Module\Img\Logic\ImgLogic;
 use App\Util\AppException;
 use App\Util\HttpUtil;
@@ -34,6 +36,12 @@ class ArticleLogic
      * @var ImgLogic
      */
     private $imgLogic;
+
+    /**
+     * @Inject()
+     * @var CommentLogic
+     */
+    private $commentLogic;
 
     /**
      * @Inject()
@@ -183,14 +191,21 @@ class ArticleLogic
      * @param $requestData
      * @param $p
      * @param $size
+     * @param false $fromFrontend
      * @return array
      */
-    public function search($requestData, $p, $size)
+    public function search($requestData, $p, $size, $fromFrontend = false)
     {
+        if ($fromFrontend) {
+            // 前台只展示正常状态的文章
+            $requestData['status'] = ArticleConstant::ARTICLE_STATUS_NORMAL;
+        }
+
         if (isset($requestData['keywords'])) {
             // 通过 ElasticSearch 查询
             return $this->searchByEs($requestData, $p, $size);
         }
+
         // 走 MySQL 查询
         return $this->searchByMySQL($requestData, $p, $size);
     }
@@ -311,14 +326,21 @@ class ArticleLogic
      */
     public function assembleArticleList(&$list)
     {
-        if (empty($list)) {
-            return;
-        }
-        $coverImgIdList = empty($list) ? [] : array_column($list, 'cover_img_id');
+        if (empty($list)) return;
+
+        $idList = array_column($list, 'id');
+
+        // 封面图片
+        $coverImgIdList = array_column($list, 'cover_img_id');
         $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList($coverImgIdList);
+
+        // 评论数
+        $commentCountMap = $this->commentLogic->getCommentCountMap($idList, CommentConstant::THIRD_TYPE_ARTICLE);
+
         foreach ($list as $k => $v) {
             $list[$k]['status_text']        = ArticleConstant::ARTICLE_STATUS_TEXT_MAP[$v['status']];
             $list[$k]['cover_img_url']      = isset($imgInfoMap[$v['cover_img_id']]) ? $imgInfoMap[$v['cover_img_id']] : '';
+            $list[$k]['comment_count']      = isset($commentCountMap[$v['id']]) ? $commentCountMap[$v['id']] : 0;
             unset($list[$k]['cover_img_id']);
         }
     }

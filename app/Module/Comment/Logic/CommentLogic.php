@@ -24,12 +24,6 @@ class CommentLogic
 
     /**
      * @Inject()
-     * @var ArticleLogic
-     */
-    private $articleLogic;
-
-    /**
-     * @Inject()
      * @var AccountLogic
      */
     private $accountLogic;
@@ -80,7 +74,8 @@ class CommentLogic
 
         // 如果是文章的评论，检查文章是否存在
         if ($thirdType === CommentConstant::THIRD_TYPE_ARTICLE) {
-            $this->articleLogic->checkArticleExist($thirdId);
+            $articleLogic = make(ArticleLogic::class);
+            $articleLogic->checkArticleExist($thirdId);
         }
 
         $dayBeginTime = date('Y-m-d') . '00:00:00';
@@ -200,5 +195,23 @@ class CommentLogic
         if (isset($requestData['audit'])) $this->checkAudit($requestData['audit']);
 
         return $this->service->update(['id' => $id], $requestData);
+    }
+
+    /**
+     * 获取评论数
+     *
+     * @param $thirdIdList
+     * @param $thirdType
+     * @return array
+     */
+    public function getCommentCountMap($thirdIdList, $thirdType)
+    {
+        $thirdIdList = array_unique($thirdIdList);
+        $commentCountList = $this->service->getCommentCount($thirdIdList, $thirdType);
+        $map = [];
+        foreach ($commentCountList as $k => $v) {
+            $map[$v['third_id']] = $v['count'];
+        }
+        return $map;
     }
 }

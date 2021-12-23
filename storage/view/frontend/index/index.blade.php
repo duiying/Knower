@@ -65,9 +65,9 @@
                 listHtml += '</a></div><div><i class="fa fa-clock-o"></i>&nbsp;';
                 listHtml += list[i].mtime;
                 listHtml += ' &nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;';
-                listHtml += list[i].read_count;;
+                listHtml += list[i].read_count;
                 listHtml += ' &nbsp;&nbsp; <i class="fa fa-comments-o"></i>&nbsp;';
-                listHtml += '30';
+                listHtml += list[i].comment_count;
                 listHtml += '</div></div>';
                 if (list[i].cover_img_url !== '') {
                     listHtml += '<div class="col-md-4">';
