@@ -317,4 +317,15 @@ class ArticleService
             'id' => ['>', $lastId]
         ], 0, $count);
     }
+
+    /**
+     * 阅读数 +1
+     *
+     * @param $id
+     * @return int
+     */
+    public function incrReadCount($id)
+    {
+        return $this->dao->incrReadCount($id);
+    }
 }

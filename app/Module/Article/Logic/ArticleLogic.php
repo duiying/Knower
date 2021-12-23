@@ -346,8 +346,11 @@ class ArticleLogic
         $article['cover_img_url'] = $coverImgId && isset($imgInfoMap[$coverImgId]) ? $imgInfoMap[$coverImgId] : '';
         $article['filename'] = empty($article['cover_img_url']) ? '' : basename($article['cover_img_url']);
 
-        // 记录操作日志
         if ($fromFrontend) {
+            // 阅读数 +1
+            $this->service->incrReadCount($id);
+
+            // 记录操作日志
             $this->actionLogLogic->create($requestData['account_id'], $id, ActionLogConstant::TYPE_ARTICLE_DETAIL, $article['title'], $requestData['client_real_ip']);
         }
 
