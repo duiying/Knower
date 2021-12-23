@@ -122,11 +122,9 @@ class CommentLogic
      * 前台评论列表
      *
      * @param $requestData
-     * @param $p
-     * @param $size
      * @return array
      */
-    public function comments($requestData, $p, $size)
+    public function comments($requestData)
     {
         // 1、先查询普通评论（而且是已审核、正常状态）
         $requestData['audit']       = CommentConstant::AUDIT_AUDITED;
@@ -134,7 +132,8 @@ class CommentLogic
         $requestData['type']        = CommentConstant::TYPE_COMMENT;
         $requestData['third_type']  = CommentConstant::THIRD_TYPE_ARTICLE;
 
-        $list  = $this->service->search($requestData, $p, $size,
+        // 预测评论数不会太多，这里就不做分页了
+        $list  = $this->service->search($requestData, 0, 0,
             ['id', 'account_id', 'third_id', 'third_type', 'reply_id', 'comment_id', 'content', 'type', 'ctime'],
             ['ctime' => 'desc']
         );
@@ -152,7 +151,7 @@ class CommentLogic
         }
 
         $total = $this->service->count($requestData);
-        return Util::formatSearchRes($p, $size, $total, $list);
+        return Util::formatSearchRes(0, 0, $total, $list);
     }
 
     /**

@@ -40,7 +40,7 @@ class Util
             'p'         => $p,
             'size'      => $size,
             'total'     => $total,
-            'next'      => $p * $size < $total ? 1 : 0,
+            'next'      => ($p * $size < $total) && ($p * $size > 0) ? 1 : 0,
             'list'      => $list
         ];
     }

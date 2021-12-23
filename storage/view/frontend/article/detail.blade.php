@@ -26,10 +26,10 @@
                         </p>
                     </div>
                 </div>
+                <hr>
+                <div class="text-center" style="margin-top:15px;" id="commentHead">评论数量：<span id="comment-total">0</span></div>
                 <div class="card" style="margin-top:15px;margin-bottom:80px;">
                     <div class="card-body">
-                        <h3 id="commentHead">评论</h3>
-                        <hr>
                         <table id="commentList" style="margin:10px 0 20px 0;">
 
                         </table>
@@ -92,6 +92,7 @@
         {
             var listHtml = '';
             if (commentList !== false) {
+                $('#comment-total').html(commentList.total);
                 var list = commentList.list;
                 for (var i = 0; i < list.length; i++) {
                     listHtml += '<tr>';
