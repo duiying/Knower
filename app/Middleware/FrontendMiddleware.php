@@ -59,6 +59,10 @@ class FrontendMiddleware
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): \Psr\Http\Message\ResponseInterface
     {
+        // 路由
+        $requestPath = $this->request->getUri()->getPath();
+        $indexRequest = empty($requestPath) || $requestPath === '/';
+
         // 1、封装客户端真实 IP 信息
         $clientRealIp = HttpUtil::getClientRealIp($this->request);
         // 在控制器中可以通过 $request->getAttribute('client_real_ip') 获取当前用户的真实 IP 地址
@@ -73,7 +77,9 @@ class FrontendMiddleware
         if (empty($accessToken)) $accessToken = $this->request->cookie($tokenName);
         if (empty($accessToken)) {
             // 记录操作日志
-            $this->actionLogLogic->create(0, 0, ActionLogConstant::TYPE_INDEX, '', $clientRealIp);
+            if ($indexRequest) {
+                $this->actionLogLogic->create(0, 0, ActionLogConstant::TYPE_INDEX, '', $clientRealIp);
+            }
             $request = $request->withAttribute('account_id', 0);
             return $handler->handle($request);
         }
@@ -92,7 +98,9 @@ class FrontendMiddleware
         $request = $request->withAttribute('account_id', $accountId);
 
         // 记录操作日志
-        $this->actionLogLogic->create($accountId, 0, ActionLogConstant::TYPE_INDEX, '', $clientRealIp);
+        if ($indexRequest) {
+            $this->actionLogLogic->create($accountId, 0, ActionLogConstant::TYPE_INDEX, '', $clientRealIp);
+        }
 
         return $handler->handle($request);
     }

@@ -75,6 +75,11 @@ class FrontendTokenMiddleware
         // 在控制器中可以通过 $request->getAttribute('account_id') 获取当前登录的用户 ID
         $request = $request->withAttribute('account_id', $accountId);
 
+        // 封装客户端真实 IP 信息
+        $clientRealIp = HttpUtil::getClientRealIp($this->request);
+        // 在控制器中可以通过 $request->getAttribute('client_real_ip') 获取当前用户的真实 IP 地址
+        $request = $request->withAttribute('client_real_ip', $clientRealIp);
+
         return $handler->handle($request);
     }
 }

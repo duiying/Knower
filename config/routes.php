@@ -57,6 +57,9 @@ Router::addGroup('/view/',function () {
 
     // 用户相关
     Router::get('account/search','App\View\Backend\Account\Action\SearchAction@handle');
+
+    // 行为日志
+    Router::get('action_log/search', 'App\View\Backend\ActionLog\Action\SearchAction@handle');
 }, ['middleware' => [PassportMiddleware::class, PjaxMiddleware::class]]);
 
 // 后台接口相关路由（统一由 /v1 开头）
@@ -113,6 +116,9 @@ Router::addGroup('/v1/',function () {
     // 用户相关
     Router::get('account/search', Route::decoration('Account\Action\SearchAction'));
     Router::post('account/update_field', Route::decoration('Account\Action\UpdateFieldAction'));
+
+    // 行为日志
+    Router::get('action_log/search', Route::decoration('ActionLog\Action\SearchAction'));
 
     // 图片上传
     Router::post('img/upload', Route::decoration('Img\Action\UploadAction'));

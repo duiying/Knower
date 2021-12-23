@@ -163,7 +163,7 @@
             }
         }
 
-        $("#doc-content").find("h2,h3,h4,h5,h6").each(function(i, item) {
+        $("#doc-content").find("h1,h2,h3,h4,h5,h6").each(function(i, item) {
             var tag = $(item).get(0).localName;
             $(item).attr("id", "wow" + i);
             $("#menu-content").append('<div><a style="color:#505050;" class="new' + tag + ' anchor-link" onclick="return false;" href="#" link="#wow' + i + '">' + (i + 1) + " · " + $(this).text() + '</a></div>');

@@ -3,6 +3,8 @@
 namespace App\Module\ActionLog\Logic;
 
 use App\Constant\AppErrorCode;
+use App\Module\Account\Logic\AccountLogic;
+use App\Module\ActionLog\Constant\ActionLogConstant;
 use App\Module\ActionLog\Service\ActionLogService;
 use App\Util\AppException;
 use App\Util\Log;
@@ -17,6 +19,12 @@ class ActionLogLogic
      */
     private $service;
 
+    /**
+     * @Inject()
+     * @var AccountLogic
+     */
+    private $accountLogic;
+
     public function create($accountId, $thirdId, $type, $snapshot, $ip)
     {
         $createParams = [
@@ -27,5 +35,33 @@ class ActionLogLogic
             'ip'            => $ip
         ];
         return $this->service->create($createParams);
+    }
+
+    /**
+     * 查找
+     *
+     * @param $requestData
+     * @param $p
+     * @param $size
+     * @return array
+     */
+    public function search($requestData, $p, $size)
+    {
+        $list  = $this->service->search($requestData, $p, $size,
+            ['*'],
+            ['ctime' => 'desc']
+        );
+
+        $accountIdList = empty($list) ? [] : array_column($list, 'account_id');
+        $accountInfoMap = $this->accountLogic->getAccountInfoMapByIdList($accountIdList);
+
+        foreach ($list as $k => $v) {
+            $accountId = $v['account_id'];
+            $list[$k]['type_text']      = ActionLogConstant::TYPE_TEXT_MAP[$v['type']];
+            $list[$k]['account_info']   = $accountId ? $accountInfoMap[$accountId] : new \stdClass();
+        }
+
+        $total = $this->service->count($requestData);
+        return Util::formatSearchRes($p, $size, $total, $list);
     }
 }

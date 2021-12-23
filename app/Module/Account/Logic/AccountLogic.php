@@ -316,9 +316,10 @@ class AccountLogic
      */
     public function getAccountInfoMapByIdList($idList = [])
     {
-        if (empty($idList)) return [];
         // 用户 ID 去重
-        $idList = array_unique($idList);
+        $idList = array_filter(array_unique($idList));
+        if (empty($idList)) return [];
+
         $accountInfoList = $this->accountService->search(['id' => $idList], 0, 0, ['id', 'nickname', 'avatar_img_id', 'last_active_time']);
 
         // 组装用户信息
