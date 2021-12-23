@@ -78,7 +78,11 @@
             var data = detailArticle({id : articleId});
             if (data !== false) {
                 $('#article-title').html(data.title);
-                $('#article-content').html(data.content);
+                if (data.cached_content !== '') {
+                    $('#article-content').html(data.cached_content);
+                } else {
+                    $('#article-content').html(data.content);
+                }
             }
         }
 
