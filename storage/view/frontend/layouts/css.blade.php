@@ -1,6 +1,7 @@
 <link href="/storage/frontend/css/app.css" rel="stylesheet">
 <link href="/storage/frontend/editormd/editormd.min.css" rel="stylesheet">
 <link href="/storage/frontend/css/font-awesome.min.css" rel="stylesheet">
+<link href="/storage/frontend/sweetalert2/sweetalert2.min.css" rel="stylesheet">
 <!-- nprogress -->
 <link rel="stylesheet" href="/storage/css/base/nprogress.css">
 <style>

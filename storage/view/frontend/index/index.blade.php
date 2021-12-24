@@ -23,19 +23,13 @@
             </div>
         </div>
         <div class="col-md-4" style="padding-left:20px;">
-            <div class="card" style="margin-top:20px;">
-                <div class="card-body">
-                    <h5>关注</h5>
-                    <hr>
+            <!-- 作者 begin -->
+            @include('frontend.layouts.author')
+            <!-- 作者 end -->
 
-                </div>
-            </div>
-
-            <div style="margin-top:20px;">
-                <!-- 标签 begin -->
-                @include('frontend.layouts.tag')
-                <!-- 标签 end -->
-            </div>
+            <!-- 标签 begin -->
+            @include('frontend.layouts.tag')
+            <!-- 标签 end -->
         </div>
     </div>
 </div>
