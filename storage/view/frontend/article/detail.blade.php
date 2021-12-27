@@ -28,11 +28,13 @@
                 </div>
                 <hr>
                 <div class="text-center" style="margin-top:15px;" id="commentHead">评论数量：<span id="comment-total">0</span></div>
+
+                <div id="commentList">
+
+                </div>
+                <div class="clearfix"></div>
                 <div class="card" style="margin-top:15px;margin-bottom:80px;">
                     <div class="card-body">
-                        <table id="commentList" style="margin:10px 0 20px 0;">
-
-                        </table>
                         <form id="commentForm" onsubmit="return false;">
                             <div class="form-group">
                                 <label for="content"
@@ -95,21 +97,24 @@
                 $('#comment-total').html(commentList.total);
                 var list = commentList.list;
                 for (var i = 0; i < list.length; i++) {
-                    listHtml += '<tr>';
-                    listHtml += '<td style="padding: 0 10px;">';
-                    listHtml += '<a href="javascript:;">';
+                    listHtml += '<div style="margin-top:15px;padding:20px 20px 0px;background-color:#fff;" class="card">';
+                    listHtml += '<div>';
+                    listHtml += '<div class="float-left">';
                     listHtml += '<img style="height:35px;border-radius:50%;" src="' + list[i].account_info.avatar + '">';
-                    listHtml += '</a>';
-                    listHtml += '</td>';
-                    listHtml += '<td>';
-                    listHtml += '<a href="javascript:;">' + list[i].account_info.nickname + '</a><br>'
-                    listHtml += '<span style="color:#ddd;">' + list[i].ctime + '</span>'
-                    listHtml += '</td></tr>';
-                    listHtml += '<tr><td></td>';
-                    listHtml += '<td>';
-                    listHtml += '<p style="padding: 0 0 15px 0;" id="comment-content-' + list[i].id + '">';
+                    listHtml += '</div>';
+                    listHtml += '<div class="col-md-11 float-left">';
+                    listHtml += '<p style="margin: 0px;">' + list[i].account_info.nickname + '</p>';
+                    listHtml += '<p style="margin:0px;color:#ddd;">' + list[i].format_ctime + '</p>';
+                    listHtml += '</div>';
+                    listHtml += '</div>';
+                    listHtml += '<div class="clearfix"></div>';
+                    listHtml += '<div class="col-md-12 mt-1">';
+                    listHtml += '<p id="comment-content-' + list[i].id + '" style="padding:0;">';
                     listHtml += '<textarea style="display:none;">' + list[i].content + '</textarea>';
-                    listHtml += '</p></td></tr>';
+                    listHtml += '</p>';
+                    listHtml += '</div>'
+                    listHtml += '</div>';
+                    listHtml += '<div></div>';
                 }
             }
             $('#commentList').html(listHtml);
@@ -194,10 +199,12 @@
             };
             var data = createComment(createCommentParams);
             if (data !== false) {
-                alert('评论成功！');
-                location.href = '/article/detail?id=' + articleId + '&comment_id=' + data;
+                alertSuccess('评论成功！');
+                setTimeout(function () {
+                    location.href = '/article/detail?id=' + articleId + '&comment_id=' + data;
+                }, 1500);
             } else {
-                alert('评论失败！');
+                alertError('评论失败！');
             }
         });
     </script>

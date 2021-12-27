@@ -11,4 +11,5 @@
 <script src="/storage/frontend/markdown/marked.min.js"></script>
 <script src="/storage/frontend/markdown/prettify.min.js"></script>
 <script src="/storage/frontend/sweetalert2/sweetalert2.min.js"></script>
+<script src="/storage/frontend/js/alert.js"></script>
 

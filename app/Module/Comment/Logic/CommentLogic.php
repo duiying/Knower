@@ -142,6 +142,7 @@ class CommentLogic
             foreach ($list as $k => $v) {
                 // 组装用户信息
                 $list[$k]['account_info'] = isset($accountInfoMap[$v['account_id']]) ? $accountInfoMap[$v['account_id']] : new \stdClass();
+                $list[$k]['format_ctime'] = Util::formatTime($v['ctime']);
             }
         }
 

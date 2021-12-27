@@ -38,4 +38,7 @@
         background-color: #f9f2f4;
         border-radius: 4px;
     }
+
+    .swal2-success-ring{width: 30px;font-size: 1rem;}
+    .swal2-title{font-size: 1rem;}
 </style>

@@ -240,4 +240,29 @@ class Util
 
         return array_values($tmpArr);
     }
+
+    /**
+     * 人性化时间
+     *
+     * @param $time
+     * @return string
+     */
+    public static function formatTime($time)
+    {
+        $intTime = is_string($time) ? strtotime($time) : $time;
+        $now = time();
+        $diff = $now - $intTime;
+        if ($diff < 60) {
+            $str = '刚刚';
+        } elseif ($diff < 60 * 60) {
+            $min = floor($diff / 60);
+            $str = $min . ' 分钟前';
+        } elseif ($diff < 60 * 60 * 24) {
+            $h = floor($diff / (60 * 60));
+            $str = $h . ' 小时前';
+        } else {
+            $str = date('Y-m-d H:i', $intTime);
+        }
+        return $str;
+    }
 }
