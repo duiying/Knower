@@ -102,11 +102,12 @@
                     listHtml += '<div class="float-left">';
                     listHtml += '<img style="height:35px;border-radius:50%;" src="' + list[i].account_info.avatar + '">';
                     listHtml += '</div>';
-                    listHtml += '<div class="col-md-11 float-left">';
-                    listHtml += '<p style="margin: 0px;">' + list[i].account_info.nickname + '</p>';
-                    listHtml += '<p style="margin:0px;color:#ddd;">' + list[i].format_ctime + '</p>';
+                    listHtml += '<div class="col-md-10 float-left">';
+                    listHtml += '<p style="margin: 0px;">' + list[i].account_info.nickname + '<span style="color:#ddd;font-size:0.8rem;margin-left:10px;">' + list[i].format_ctime + '<span></p>';
                     listHtml += '</div>';
+                    listHtml += '<div class="col-md-1 float-right"><a href="" style="color:#007bff;"><i class="fas fa-trash"></i></a></div>';
                     listHtml += '</div>';
+                    listHtml += '<hr style="margin-top:3px;">';
                     listHtml += '<div class="clearfix"></div>';
                     listHtml += '<div class="col-md-12 mt-1">';
                     listHtml += '<p id="comment-content-' + list[i].id + '" style="padding:0;">';
@@ -114,7 +115,6 @@
                     listHtml += '</p>';
                     listHtml += '</div>'
                     listHtml += '</div>';
-                    listHtml += '<div></div>';
                 }
             }
             $('#commentList').html(listHtml);
