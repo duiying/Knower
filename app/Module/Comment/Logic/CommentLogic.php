@@ -121,6 +121,9 @@ class CommentLogic
      */
     public function comments($requestData)
     {
+        $currentAccountId = $requestData['account_id'];
+        unset($requestData['account_id']);
+
         // 1、先查询普通评论（而且是已审核、正常状态）
         $requestData['audit']       = CommentConstant::AUDIT_AUDITED;
         $requestData['status']      = CommentConstant::COMMENT_STATUS_NORMAL;
@@ -140,9 +143,11 @@ class CommentLogic
 
             // 评论列表组装信息
             foreach ($list as $k => $v) {
+                $accountId = $v['account_id'];
                 // 组装用户信息
-                $list[$k]['account_info'] = isset($accountInfoMap[$v['account_id']]) ? $accountInfoMap[$v['account_id']] : new \stdClass();
+                $list[$k]['account_info'] = isset($accountInfoMap[$accountId]) ? $accountInfoMap[$accountId] : new \stdClass();
                 $list[$k]['format_ctime'] = Util::formatTime($v['ctime']);
+                $list[$k]['show_delete'] = $currentAccountId === $accountId ? 1 : 0;
             }
         }
 
@@ -214,5 +219,35 @@ class CommentLogic
             $map[$v['third_id']] = $v['count'];
         }
         return $map;
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param $requestData
+     * @return int
+     */
+    public function deleteComment($requestData)
+    {
+        $id = $requestData['id'];
+        $accountId = $requestData['account_id'];
+
+        $where = [
+            'id'            => $id,
+            'status'        => CommentConstant::COMMENT_STATUS_NORMAL,
+            'account_id'    => $accountId
+        ];
+
+        // 先检查评论是否存在
+        $comment = $this->service->getLineByWhere($where, ['id', 'content']);
+        if (empty($comment)) throw new AppException(AppErrorCode::COMMENT_NOT_EXIST_ERROR);
+
+        // 如果评论存在，更新状态为已删除
+        $res = $this->service->update($where, ['status' => CommentConstant::COMMENT_STATUS_DELETE]);
+
+        // 记录操作日志
+        $this->actionLogLogic->create($accountId, $id, ActionLogConstant::TYPE_DELETE_COMMENT, $comment['content'], $requestData['client_real_ip']);
+
+        return $res;
     }
 }

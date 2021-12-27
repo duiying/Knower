@@ -197,5 +197,10 @@ class AppErrorCode extends AbstractConstants
      */
     const COMMENT_TOO_MANY_ERROR = 3000701;
 
+    /**
+     * @Message("评论不存在！")
+     */
+    const COMMENT_NOT_EXIST_ERROR = 3000702;
+
     /******************** 评论模块错误码 end *****************************************************************************/
 }

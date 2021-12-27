@@ -90,14 +90,14 @@
 
         commentList = comments({third_id : articleId});
         // 渲染评论数据
-        function renderCommentData()
+        function renderCommentData(commentList)
         {
             var listHtml = '';
             if (commentList !== false) {
                 $('#comment-total').html(commentList.total);
                 var list = commentList.list;
                 for (var i = 0; i < list.length; i++) {
-                    listHtml += '<div style="margin-top:15px;padding:20px 20px 0px;background-color:#fff;" class="card">';
+                    listHtml += '<div style="margin-top:15px;padding:20px 20px 0px;background-color:#fff;" class="card" id="comment-div-' + list[i].id + '">';
                     listHtml += '<div>';
                     listHtml += '<div class="float-left">';
                     listHtml += '<img style="height:35px;border-radius:50%;" src="' + list[i].account_info.avatar + '">';
@@ -105,7 +105,9 @@
                     listHtml += '<div class="col-md-10 float-left">';
                     listHtml += '<p style="margin: 0px;">' + list[i].account_info.nickname + '<span style="color:#ddd;font-size:0.8rem;margin-left:10px;">' + list[i].format_ctime + '<span></p>';
                     listHtml += '</div>';
-                    listHtml += '<div class="col-md-1 float-right"><a href="" style="color:#007bff;"><i class="fas fa-trash"></i></a></div>';
+                    if (list[i].show_delete === 1) {
+                        listHtml += '<div class="col-md-1 float-right"><a href="javascript:;" style="color:#007bff;" onclick="delComment(' + list[i].id + ')"><i class="fas fa-trash"></i></a></div>';
+                    }
                     listHtml += '</div>';
                     listHtml += '<hr style="margin-top:3px;">';
                     listHtml += '<div class="clearfix"></div>';
@@ -121,7 +123,7 @@
         }
 
         renderArticleData();
-        renderCommentData();
+        renderCommentData(commentList);
 
         var tit = document.getElementById('menu');
         var titleTop = tit.offsetTop;
@@ -188,7 +190,7 @@
             $("html,body").animate({scrollTop: $($(this).attr("link")).offset().top}, 1000);
         });
 
-        if (commentId !== 0) {
+        if (commentId !== 0 && $('#comment-div-' + commentId).length > 0) {
             $("html,body").animate({scrollTop: $("#comment-content-" + commentId).offset().top - 80}, 300);
         }
 
@@ -207,5 +209,18 @@
                 alertError('评论失败！');
             }
         });
+
+        function delComment(id)
+        {
+            alertConfirm(function () {
+                var deleteRes = deleteComment({id : id});
+                if (deleteRes !== false) {
+                    $('#comment-div-' + id).css('display', 'none');
+                    var commentTotal = $('#comment-total').html();
+                    commentTotal = commentTotal - 1;
+                    $('#comment-total').html(commentTotal)
+                }
+            });
+        }
     </script>
 @endsection

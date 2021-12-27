@@ -208,6 +208,10 @@ function createComment(data = {}) {
     return request.post('comment/create', data, false);
 }
 
+function deleteComment(data = {}) {
+    return request.post('comment/delete', data, false);
+}
+
 function searchComment(data = {}) {
     return request.get('v1/comment/search', data);
 }

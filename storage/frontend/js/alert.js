@@ -22,3 +22,18 @@ function alertError(msg = '操作失败！') {
     })
 }
 
+function alertConfirm(callback, msg = '确认操作吗？') {
+    Swal.fire({
+        position: 'center',
+        width: 300,
+        title: msg,
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+    })
+}
+

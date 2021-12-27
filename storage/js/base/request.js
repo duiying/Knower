@@ -36,6 +36,20 @@ request = {
                             alert.success('操作成功！');
                         }
                     }
+                } else {
+                    if (resp.code !== 0) {
+                        if (resp.msg !== '') {
+                            alertError(resp.msg);
+                        } else {
+                            alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
+                        }
+                    } else {
+                        if (resp.msg !== '') {
+                            alertSuccess(resp.msg);
+                        } else {
+                            alertSuccess('操作成功！');
+                        }
+                    }
                 }
             }
         });
@@ -70,8 +84,14 @@ request = {
                             alert.error('操作失败，请稍后重试，如果失败多次请联系技术解决！');
                         }
                         console.log(resp);
-                    } else {
-                        res = resp.data;
+                    }
+                } else {
+                    if (resp.code !== 0) {
+                        if (resp.msg !== '') {
+                            alertError(resp.msg);
+                        } else {
+                            alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
+                        }
                     }
                 }
             }

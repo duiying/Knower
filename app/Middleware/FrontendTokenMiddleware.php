@@ -53,7 +53,6 @@ class FrontendTokenMiddleware
     {
         // 1、先检查 access_token 是否存在
         $tokenName = CommonConstant::FRONTEND_TOKEN_COOKIE_NAME;
-        // 根据 access_token 检查用户权限
         $accessToken = $this->request->input($tokenName);
         // 请求参数中没有 access_token，尝试从 cookie 中获取 access_token
         if (empty($accessToken)) $accessToken = $this->request->cookie($tokenName);

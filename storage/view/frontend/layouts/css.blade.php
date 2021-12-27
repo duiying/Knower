@@ -42,4 +42,7 @@
 
     .swal2-success-ring{width: 30px;font-size: 1rem;}
     .swal2-title{font-size: 1rem;}
+
+    .swal2-styled.swal2-confirm{font-size: 0.8rem;}
+    .swal2-styled.swal2-cancel{font-size: 0.8rem;}
 </style>

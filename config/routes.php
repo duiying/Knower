@@ -154,7 +154,8 @@ Router::get('/oauth/github/callback', 'App\Module\Account\Action\OAuthAction@git
 Router::get('/account/get_info_by_token', Route::decoration('Account\Action\GetAccountInfoByTokenAction'));
 // 创建评论接口
 Router::post('/comment/create', Route::decoration('Comment\Action\CreateAction'),  ['middleware' => [PreventRepeatMiddleware::class, FrontendTokenMiddleware::class]]);
-// 评论列表
-Router::get('/comments', Route::decoration('Comment\Action\CommentsAction'));
-
+// 评论列表接口
+Router::get('/comments', Route::decoration('Comment\Action\CommentsAction'), ['middleware' => [FrontendMiddleware::class]]);
+// 删除评论接口
+Router::post('/comment/delete', Route::decoration('Comment\Action\DeleteCommentAction'), ['middleware' => [PreventRepeatMiddleware::class, FrontendTokenMiddleware::class]]);
 /********************************************************* 前台路由 end *************************************************/
