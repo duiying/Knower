@@ -12,16 +12,14 @@ use App\Module\Article\Constant\ArticleConstant;
 use App\Module\Comment\Constant\CommentConstant;
 use App\Module\Comment\Logic\CommentLogic;
 use App\Module\Img\Logic\ImgLogic;
+use App\Module\Tag\Constant\TagConstant;
+use App\Module\Tag\Logic\TagLogic;
 use App\Util\AppException;
-use App\Util\HttpUtil;
 use App\Util\Log;
 use App\Util\Redis;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use App\Module\Article\Service\ArticleService;
-use Hyperf\Task\Task;
-use Hyperf\Task\TaskExecutor;
-use Hyperf\Utils\ApplicationContext;
 
 class ArticleLogic
 {
@@ -36,18 +34,6 @@ class ArticleLogic
      * @var ImgLogic
      */
     private $imgLogic;
-
-    /**
-     * @Inject()
-     * @var CommentLogic
-     */
-    private $commentLogic;
-
-    /**
-     * @Inject()
-     * @var ActionLogLogic
-     */
-    private $actionLogLogic;
 
     private $sort = ['sort' => 'asc', 'ctime' => 'desc'];
 
@@ -90,7 +76,15 @@ class ArticleLogic
             $this->imgLogic->checkImgExist($requestData['cover_img_id']);
         }
 
-        $id = $this->service->create($requestData);
+        $createParams = [
+            'title'     => $requestData['title'],
+            'desc'      => $requestData['desc'],
+            'content'   => $requestData['content'],
+        ];
+        if (isset($requestData['sort'])) $createParams['sort'] = $requestData['sort'];
+        if (isset($requestData['cover_img_id'])) $createParams['cover_img_id'] = $requestData['cover_img_id'];
+
+        $id = $this->service->create($createParams);
 
         // 写入 ElasticSearch
         try {
@@ -102,7 +96,26 @@ class ArticleLogic
         // 下载图片到本地
         $this->downloadImg4Content($requestData['content']);
 
+        // 更新文章的标签
+        $tagIdList = [];
+        if (isset($requestData['tag_ids']) && !empty($requestData['tag_ids'])) {
+            $tagIdList = explode(',', $requestData['tag_ids']);
+        }
+        $this->updateArticleTag($id, $tagIdList);
+
         return $id;
+    }
+
+    /**
+     * 更新文章的标签
+     *
+     * @param $id
+     * @param array $tagIdList
+     */
+    public function updateArticleTag($id, $tagIdList = [])
+    {
+        $tagLogic = make(TagLogic::class);
+        $tagLogic->createOrUpdateRelation($id, TagConstant::TAG_TYPE_ARTICLE, $tagIdList);
     }
 
     /**
@@ -116,6 +129,14 @@ class ArticleLogic
         $id = $requestData['id'];
         unset($requestData['id']);
 
+        $updateParams = [
+            'title'     => $requestData['title'],
+            'desc'      => $requestData['desc'],
+            'content'   => $requestData['content'],
+        ];
+        if (isset($requestData['sort'])) $updateParams['sort'] = $requestData['sort'];
+        if (isset($requestData['cover_img_id'])) $updateParams['cover_img_id'] = $requestData['cover_img_id'];
+
         // 1、先检查文章是否存在
         $this->checkArticleExist($id);
 
@@ -125,7 +146,7 @@ class ArticleLogic
         }
 
         // 3、更新 MySQL
-        $updateRes = $this->service->update(['id' => $id], $requestData);
+        $updateRes = $this->service->update(['id' => $id], $updateParams);
 
         // 4、更新 ElasticSearch
         try {
@@ -136,6 +157,13 @@ class ArticleLogic
 
         // 5、下载图片到本地
         $this->downloadImg4Content($requestData['content']);
+
+        // 6、更新文章的标签
+        $tagIdList = [];
+        if (isset($requestData['tag_ids']) && !empty($requestData['tag_ids'])) {
+            $tagIdList = explode(',', $requestData['tag_ids']);
+        }
+        $this->updateArticleTag($id, $tagIdList);
 
         return $updateRes;
     }
@@ -335,7 +363,8 @@ class ArticleLogic
         $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList($coverImgIdList);
 
         // 评论数
-        $commentCountMap = $this->commentLogic->getCommentCountMap($idList, CommentConstant::THIRD_TYPE_ARTICLE);
+        $commentLogic = make(CommentLogic::class);
+        $commentCountMap = $commentLogic->getCommentCountMap($idList, CommentConstant::THIRD_TYPE_ARTICLE);
 
         foreach ($list as $k => $v) {
             $list[$k]['status_text']        = ArticleConstant::ARTICLE_STATUS_TEXT_MAP[$v['status']];
@@ -369,6 +398,11 @@ class ArticleLogic
         $article['cover_img_url'] = $coverImgId && isset($imgInfoMap[$coverImgId]) ? $imgInfoMap[$coverImgId] : '';
         $article['filename'] = empty($article['cover_img_url']) ? '' : basename($article['cover_img_url']);
 
+        // 查出文章的标签信息
+        $tagLogic = make(TagLogic::class);
+        $tagMap = $tagLogic->getTagList([$id], TagConstant::TAG_TYPE_ARTICLE);
+        $article['tag_list'] = isset($tagMap[$id]) ? $tagMap[$id] : [];
+
         if ($fromFrontend) {
             $article['cached_content'] = '';
             if (CommonConstant::MARKDOWN_IMG_CACHE) {
@@ -379,7 +413,8 @@ class ArticleLogic
             $this->service->incrReadCount($id);
 
             // 记录操作日志
-            $this->actionLogLogic->create($requestData['account_id'], $id, ActionLogConstant::TYPE_ARTICLE_DETAIL, $article['title'], $requestData['client_real_ip']);
+            $actionLogLogic = make(ActionLogLogic::class);
+            $actionLogLogic->create($requestData['account_id'], $id, ActionLogConstant::TYPE_ARTICLE_DETAIL, $article['title'], $requestData['client_real_ip']);
         }
 
         return $article;

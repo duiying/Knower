@@ -30,6 +30,7 @@ class CreateAction
         'content'       => 'required|string',
         'sort'          => 'integer|min:1|max:999',
         'cover_img_id'  => 'integer',
+        'tag_ids'       => 'string',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response, \League\Flysystem\Filesystem $filesystem)

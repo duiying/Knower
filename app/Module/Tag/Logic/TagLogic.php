@@ -4,6 +4,8 @@ namespace App\Module\Tag\Logic;
 
 use App\Constant\AppErrorCode;
 use App\Module\Tag\Constant\TagConstant;
+use App\Module\Tag\Constant\TagRelationConstant;
+use App\Module\Tag\Service\TagRelationService;
 use App\Util\AppException;
 use App\Util\Log;
 use App\Util\Util;
@@ -17,6 +19,12 @@ class TagLogic
      * @var TagService
      */
     private $service;
+
+    /**
+     * @Inject()
+     * @var TagRelationService
+     */
+    private $tagRelationService;
 
     private $sort = ['sort' => 'asc', 'ctime' => 'desc'];
 
@@ -83,12 +91,10 @@ class TagLogic
      */
     public function search($requestData, $p, $size)
     {
-        $requestData['status'] = TagConstant::TAG_STATUS_NORMAL;
         $list  = $this->service->search($requestData, $p, $size,
             ['id', 'name', 'type', 'mtime', 'ctime', 'sort'],
             ['sort' => 'asc', 'ctime' => 'desc']
         );
-
         $total = $this->service->count($requestData);
         return Util::formatSearchRes($p, $size, $total, $list);
     }
@@ -120,5 +126,60 @@ class TagLogic
         $tag = $this->service->getLineByWhere(['id' => $id, 'status' => TagConstant::TAG_STATUS_NORMAL]);
         if (empty($tag)) throw new AppException(AppErrorCode::TAG_NOT_EXIST_ERROR);
         return $tag;
+    }
+
+    /**
+     * 创建或更新标签关联记录
+     *
+     * @param $thirdId
+     * @param $type
+     * @param array $tagIdList
+     */
+    public function createOrUpdateRelation($thirdId, $type, $tagIdList = [])
+    {
+        $tagIdList = array_unique($tagIdList);
+        foreach ($tagIdList as $k => $v) {
+            $tagIdList[$k] = intval($v);
+        }
+
+        // 先把以前拥有的标签置成删除状态
+        $this->tagRelationService->update([
+            'third_id'  => $thirdId,
+            'type'      => $type,
+        ], [
+            'status'    => TagRelationConstant::TAG_RELATION_STATUS_DELETE
+        ]);
+
+        // 如果没有记录，会创建一条记录；如果有记录，会改成正常状态；
+        foreach ($tagIdList as $k => $v) {
+            $tagRelation = $this->tagRelationService->getLineByWhere([
+                'third_id'  => $thirdId,
+                'type'      => $type,
+                'tag_id'    => $v
+            ]);
+            if (empty($tagRelation)) {
+                $this->tagRelationService->create([
+                    'third_id'  => $thirdId,
+                    'type'      => $type,
+                    'tag_id'    => $v
+                ]);
+            } else {
+                $id = $tagRelation['id'];
+                $this->tagRelationService->update(['id' => $id], ['status' => TagRelationConstant::TAG_RELATION_STATUS_NORMAL]);
+            }
+        }
+    }
+
+    public function getTagList($thirdIdList, $type)
+    {
+        $tagInfoList = $this->tagRelationService->getTagList($thirdIdList, $type);
+        $map = [];
+        foreach ($tagInfoList as $k => $v) {
+            $map[$v['third_id']][] = [
+                'id' => $v['tag_id'],
+                'name' => $v['name'],
+            ];
+        }
+        return $map;
     }
 }

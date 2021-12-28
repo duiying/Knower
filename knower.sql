@@ -214,6 +214,20 @@ CREATE TABLE `t_content_tag` (
                                  KEY `idx_type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='标签表';
 
+DROP TABLE IF EXISTS `t_content_tag_relation`;
+CREATE TABLE `t_content_tag_relation` (
+                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                 `tag_id` int(10) NOT NULL DEFAULT '0' COMMENT '标签ID',
+                                 `third_id` int(10) NOT NULL DEFAULT '0' COMMENT '第三方ID',
+                                 `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '类型 {1：文章；}',
+                                 `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态 {-1：删除；1：正常；}',
+                                 `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                 `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 PRIMARY KEY (`id`),
+                                 KEY `idx_tag_id` (`tag_id`),
+                                 KEY `idx_third_id` (`third_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='标签关系表';
+
 DROP TABLE IF EXISTS `t_content_comment`;
 CREATE TABLE `t_content_comment` (
                                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',

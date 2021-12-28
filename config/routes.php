@@ -108,6 +108,7 @@ Router::addGroup('/v1/',function () {
     Router::post('tag/update', Route::decoration('Tag\Action\UpdateAction'));
     Router::get('tag/find', Route::decoration('Tag\Action\FindAction'));
     Router::post('tag/update_field', Route::decoration('Tag\Action\UpdateFieldAction'));
+    Router::get('tag/select', Route::decoration('Tag\Action\SelectAction'));
 
     // 评论相关
     Router::get('comment/search', Route::decoration('Comment\Action\SearchAction'));

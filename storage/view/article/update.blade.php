@@ -60,6 +60,14 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">标签</label>
+                            <div class="col-sm-10">
+                                <!-- 标签 begin -->
+                                @include('article.tag_select')
+                                <!-- 标签 end -->
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">排序（升序）</label>
                             <div class="col-sm-10">
                                 <input type="text" name="sort" class="form-control" placeholder="排序" value="99">
@@ -99,6 +107,13 @@
                 $('#cover-img').removeClass('display-none');
                 $('#cover-img-url').attr('src', data.cover_img_url);
                 $('.custom-file-label').html(data.filename);
+            }
+
+            // 渲染标签「已选」
+            if (data.tag_list.length > 0) {
+                for (var i = 0; i < data.tag_list.length; i++) {
+                    $('#tag-' + data.tag_list[i].id).attr('checked', true);
+                }
             }
         }
 

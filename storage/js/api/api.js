@@ -156,6 +156,10 @@ function searchTag(data = {}) {
     return request.get('v1/tag/search', data);
 }
 
+function selectTag(data = {}) {
+    return request.get('v1/tag/select', data);
+}
+
 function listTag(data = {}, checkToken = true) {
     return request.get('tags', data, checkToken);
 }

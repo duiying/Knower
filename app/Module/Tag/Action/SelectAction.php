@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Module\Article\Action;
+namespace App\Module\Tag\Action;
 
+use App\Module\Tag\Constant\TagConstant;
 use App\Util\HttpUtil;
 use App\Util\Util;
-use App\Module\Article\Logic\ArticleLogic;
+use App\Module\Tag\Logic\TagLogic;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
-class UpdateAction
+class SelectAction
 {
     /**
      * @Inject()
-     * @var ArticleLogic
+     * @var TagLogic
      */
     private $logic;
 
@@ -25,13 +26,7 @@ class UpdateAction
     public $validationFactory;
 
     private $rules = [
-        'id'            => 'required|integer',
-        'title'         => 'required|string|max:255',
-        'desc'          => 'required|string|max:255',
-        'content'       => 'required|string',
-        'sort'          => 'integer|min:1|max:999',
-        'cover_img_id'  => 'integer',
-        'tag_ids'       => 'string',
+        'name'          => 'string',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)
@@ -41,9 +36,12 @@ class UpdateAction
         $this->validationFactory->make($requestData, $this->rules)->validate();
         $requestData = Util::sanitize($requestData, $this->rules);
 
-        $requestData['mtime'] = date('Y-m-d H:i:s');
+        // 标签类型先写死为「文章」
+        $requestData['type'] = TagConstant::TAG_TYPE_ARTICLE;
+        // 标签状态为「正常」
+        $requestData['status'] = TagConstant::TAG_STATUS_NORMAL;
 
-        $res = $this->logic->update($requestData);
+        $res = $this->logic->search($requestData, 0, 0);
         return HttpUtil::success($response, $res);
     }
 }

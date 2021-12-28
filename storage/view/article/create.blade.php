@@ -64,6 +64,14 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">标签</label>
+                            <div class="col-sm-10">
+                                <!-- 标签 begin -->
+                                @include('article.tag_select')
+                                <!-- 标签 end -->
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label">排序（升序）</label>
                             <div class="col-sm-10">
                                 <input type="text" name="sort" class="form-control" placeholder="排序" value="99">

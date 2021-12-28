@@ -9,13 +9,24 @@ function assembleArticleFormParam(fromUpdate = false)
     var desc            = $('input[name=desc]').val();
     var sort            = $('input[name=sort]').val();
     var cover_img_id    = $('#cover_img_id').val();
+    var tag_ids         = '';
+    $('input[name="tag"]').each(function () {
+        if ($(this).is(':checked')) {
+            tag_ids += $(this).attr('value') + ',';
+        }
+    });
+    if (tag_ids !== '') {
+        tag_ids = tag_ids.slice(0, -1);
+    }
+    console.log(tag_ids)
 
     var retFormParam = {
         title           : title,
         desc            : desc,
         sort            : sort,
         cover_img_id    : cover_img_id,
-        content         : simplemde.value()
+        content         : simplemde.value(),
+        tag_ids         : tag_ids
     }
 
     if (fromUpdate) {
