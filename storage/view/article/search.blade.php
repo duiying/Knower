@@ -34,6 +34,7 @@
                     <th style="width: 200px">封面图</th>
                     <th style="width: 200px">描述</th>
                     <th style="width: 200px">内容</th>
+                    <th style="width: 100px">标签</th>
                     <th style="width: 100px">浏览数</th>
                     <th style="width: 100px">状态</th>
                     <th style="width: 150px">创建时间</th>
@@ -95,6 +96,13 @@
                     } else {
                         listHtml += '<td><p>' + cutString(list[i].highlight_content, 500) + '</p></td>';
                     }
+                    listHtml += '<td>';
+                    if (list[i].tag_list.length > 0) {
+                        for (var j = 0; j < list[i].tag_list.length; j++) {
+                            listHtml += '<span class="label label-primary mr-1">' + list[i].tag_list[j].name + '</span>';
+                        }
+                    }
+                    listHtml += '</td>';
                     listHtml += '<td>' + list[i].read_count + '</td>';
                     listHtml += '<td>';
                     if (list[i].status === 1) {

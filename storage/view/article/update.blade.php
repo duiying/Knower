@@ -101,7 +101,7 @@
                 simplemde.value(data.content);
             }
             if (data.cover_img_id !== 0) {
-                $('#cover_img_id').attr('value', data.id);
+                $('#cover_img_id').attr('value', data.cover_img_id);
             }
             if (data.cover_img_url !== '') {
                 $('#cover-img').removeClass('display-none');

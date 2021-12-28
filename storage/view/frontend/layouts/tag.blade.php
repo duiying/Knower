@@ -24,7 +24,7 @@
             var listHtml = '';
             var list = data.list;
             for (var i = 0; i < list.length; i++) {
-                listHtml += '<a href=""><span class="badge badge-secondary">';
+                listHtml += '<a href="" class="mr-1"><span class="badge badge-secondary">';
                 listHtml +=  list[i].name;
                 listHtml += '</span></a>';
             }

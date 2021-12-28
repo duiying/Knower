@@ -366,10 +366,16 @@ class ArticleLogic
         $commentLogic = make(CommentLogic::class);
         $commentCountMap = $commentLogic->getCommentCountMap($idList, CommentConstant::THIRD_TYPE_ARTICLE);
 
+        // 标签
+        $tagLogic = make(TagLogic::class);
+        $tagMap = $tagLogic->getTagList($idList, TagConstant::TAG_TYPE_ARTICLE);
+
         foreach ($list as $k => $v) {
+            $id = $v['id'];
             $list[$k]['status_text']        = ArticleConstant::ARTICLE_STATUS_TEXT_MAP[$v['status']];
             $list[$k]['cover_img_url']      = isset($imgInfoMap[$v['cover_img_id']]) ? $imgInfoMap[$v['cover_img_id']] : '';
-            $list[$k]['comment_count']      = isset($commentCountMap[$v['id']]) ? $commentCountMap[$v['id']] : 0;
+            $list[$k]['comment_count']      = isset($commentCountMap[$id]) ? $commentCountMap[$id] : 0;
+            $list[$k]['tag_list']           = isset($tagMap[$id]) ? $tagMap[$id] : [];
             unset($list[$k]['cover_img_id']);
         }
     }
