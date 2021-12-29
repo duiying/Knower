@@ -34,7 +34,7 @@ class Util
      * @param $list
      * @return array
      */
-    public static function formatSearchRes($p, $size, $total, $list)
+    public static function formatSearchRes($p, $size, $total = 0, $list = [])
     {
         return [
             'p'         => $p,

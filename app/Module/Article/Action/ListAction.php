@@ -30,7 +30,8 @@ class ListAction
         'size'          => 'integer|min:1',
         'id'            => 'integer',
         'keywords'      => 'string',
-        'status'        => 'integer'
+        'status'        => 'integer',
+        'tag_id'        => 'integer|min:1',
     ];
 
     public function handle(RequestInterface $request, ResponseInterface $response)

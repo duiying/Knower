@@ -170,6 +170,13 @@ class TagLogic
         }
     }
 
+    /**
+     * 获取拥有的标签列表
+     *
+     * @param $thirdIdList
+     * @param $type
+     * @return array
+     */
     public function getTagList($thirdIdList, $type)
     {
         $tagInfoList = $this->tagRelationService->getTagList($thirdIdList, $type);
@@ -181,5 +188,21 @@ class TagLogic
             ];
         }
         return $map;
+    }
+
+    /**
+     * 根据标签 ID 获取关联的第三方 ID
+     *
+     * @param $tagId
+     * @return array
+     */
+    public function getThirdIdListByTagId($tagId)
+    {
+        $list = $this->tagRelationService->getThirdIdListByTagId($tagId);
+        $thirdIdList = empty($list) ? [] : array_column($list, 'third_id');
+        foreach ($thirdIdList as $k => $v) {
+            $thirdIdList[$k] = intval($v);
+        }
+        return $thirdIdList;
     }
 }

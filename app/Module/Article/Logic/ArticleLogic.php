@@ -224,6 +224,18 @@ class ArticleLogic
      */
     public function search($requestData, $p, $size, $fromFrontend = false)
     {
+        // 根据标签搜索，查出该标签关联的文章 id
+        if (isset($requestData['tag_id'])) {
+            $tagId = $requestData['tag_id'];
+            unset($requestData['tag_id']);
+            $tagLogic = make(TagLogic::class);
+            $idList = $tagLogic->getThirdIdListByTagId($tagId);
+            if (empty($idList)) {
+                return Util::formatSearchRes($p, $size);
+            }
+            $requestData['id'] = $idList;
+        }
+
         if ($fromFrontend) {
             // 前台只展示正常状态的文章
             $requestData['status'] = ArticleConstant::ARTICLE_STATUS_NORMAL;
@@ -313,7 +325,11 @@ class ArticleLogic
         }
 
         if (isset($requestData['id'])) {
-            $params['body']['query']['bool']['filter'][] = ['term' => ['id' => $requestData['id']]];
+            if (is_int($requestData['id'])) {
+                $params['body']['query']['bool']['filter'][] = ['term' => ['id' => $requestData['id']]];
+            } else {
+                $params['body']['query']['bool']['must'][] = ['terms' => ['id' => $requestData['id']]];
+            }
         }
 
         $elasticSearchRes = $this->service->searchByEs($params);

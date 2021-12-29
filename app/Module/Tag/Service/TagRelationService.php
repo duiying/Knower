@@ -100,6 +100,8 @@ class TagRelationService
     }
 
     /**
+     * 获取拥有的标签列表
+     *
      * @param $thirdIdList
      * @param $type
      * @return array
@@ -107,5 +109,16 @@ class TagRelationService
     public function getTagList($thirdIdList, $type)
     {
         return $this->dao->getTagList($thirdIdList, $type);
+    }
+
+    /**
+     * 根据标签 ID 获取关联的第三方 ID
+     *
+     * @param $tagId
+     * @return array
+     */
+    public function getThirdIdListByTagId($tagId)
+    {
+        return $this->dao->getThirdIdListByTagId($tagId);
     }
 }
