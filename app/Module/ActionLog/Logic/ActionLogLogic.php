@@ -10,6 +10,7 @@ use App\Util\AppException;
 use App\Util\Log;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Utils\Coroutine;
 
 class ActionLogLogic
 {
@@ -25,16 +26,27 @@ class ActionLogLogic
      */
     private $accountLogic;
 
+    /**
+     * 创建一条用户行为日志记录
+     *
+     * @param $accountId
+     * @param $thirdId
+     * @param $type
+     * @param $snapshot
+     * @param $ip
+     */
     public function create($accountId, $thirdId, $type, $snapshot, $ip)
     {
-        $createParams = [
-            'account_id'    => $accountId,
-            'third_id'      => $thirdId,
-            'type'          => $type,
-            'snapshot'      => $snapshot,
-            'ip'            => $ip
-        ];
-        return $this->service->create($createParams);
+        Coroutine::create(function () use($accountId, $thirdId, $type, $snapshot, $ip) {
+            $createParams = [
+                'account_id'    => $accountId,
+                'third_id'      => $thirdId,
+                'type'          => $type,
+                'snapshot'      => $snapshot,
+                'ip'            => $ip
+            ];
+            $this->service->create($createParams);
+        });
     }
 
     /**

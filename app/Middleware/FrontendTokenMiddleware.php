@@ -73,6 +73,8 @@ class FrontendTokenMiddleware
 
         // 在控制器中可以通过 $request->getAttribute('account_id') 获取当前登录的用户 ID
         $request = $request->withAttribute('account_id', $accountId);
+        // 更新用户最近活跃时间
+        $this->accountLogic->refreshLastActiveTime($accountId);
 
         // 封装客户端真实 IP 信息
         $clientRealIp = HttpUtil::getClientRealIp($this->request);

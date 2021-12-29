@@ -15,6 +15,7 @@ use App\Util\Log;
 use App\Util\Redis;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Utils\Coroutine;
 
 class AccountLogic
 {
@@ -382,5 +383,27 @@ class AccountLogic
         if (isset($requestData['status'])) $this->checkStatus($requestData['status']);
 
         return $this->accountService->update(['id' => $id], $requestData);
+    }
+
+    /**
+     * 用户总数量
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->accountService->count(['status' => AccountConstant::ACCOUNT_STATUS_NORMAL]);
+    }
+
+    /**
+     * 更新用户最近活跃时间
+     *
+     * @param $accountId
+     */
+    public function refreshLastActiveTime($accountId)
+    {
+        Coroutine::create(function () use($accountId) {
+            $this->accountService->update(['id' => $accountId], ['last_active_time' => Util::now()]);
+        });
     }
 }

@@ -123,6 +123,9 @@ Router::addGroup('/v1/',function () {
 
     // 图片上传
     Router::post('img/upload', Route::decoration('Img\Action\UploadAction'));
+
+    // 数据统计
+    Router::get('data/stat', Route::decoration('Stat\Action\StatAction'));
 }, ['middleware' => [CorsMiddleware::class, PassportMiddleware::class, ValidationMiddleware::class]]);
 
 // 退出登录

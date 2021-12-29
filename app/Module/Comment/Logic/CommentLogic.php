@@ -24,12 +24,6 @@ class CommentLogic
 
     /**
      * @Inject()
-     * @var AccountLogic
-     */
-    private $accountLogic;
-
-    /**
-     * @Inject()
      * @var ActionLogLogic
      */
     private $actionLogLogic;
@@ -138,8 +132,9 @@ class CommentLogic
 
         if (!empty($list)) {
             // 获取用户基础信息
-            $accountIdList = array_column($list, 'account_id');
-            $accountInfoMap = $this->accountLogic->getAccountInfoMapByIdList($accountIdList);
+            $accountLogic   = make(AccountLogic::class);
+            $accountIdList  = array_column($list, 'account_id');
+            $accountInfoMap = $accountLogic->getAccountInfoMapByIdList($accountIdList);
 
             // 评论列表组装信息
             foreach ($list as $k => $v) {
@@ -170,8 +165,9 @@ class CommentLogic
             ['ctime' => 'desc']
         );
 
+        $accountLogic = make(AccountLogic::class);
         $accountIdList = empty($list) ? [] : array_column($list, 'account_id');
-        $accountInfoMap = $this->accountLogic->getAccountInfoMapByIdList($accountIdList);
+        $accountInfoMap = $accountLogic->getAccountInfoMapByIdList($accountIdList);
 
         foreach ($list as $k => $v) {
             $accountId = $v['account_id'];
@@ -249,5 +245,15 @@ class CommentLogic
         $this->actionLogLogic->create($accountId, $id, ActionLogConstant::TYPE_DELETE_COMMENT, $comment['content'], $requestData['client_real_ip']);
 
         return $res;
+    }
+
+    /**
+     * 评论总数量
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->service->count(['status' => CommentConstant::COMMENT_STATUS_NORMAL]);
     }
 }

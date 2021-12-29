@@ -528,4 +528,14 @@ class ArticleLogic
 
         Log::info('异步下载内容中的图片结束');
     }
+
+    /**
+     * 文章总数量
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->service->count(['status' => ArticleConstant::ARTICLE_STATUS_NORMAL]);
+    }
 }
