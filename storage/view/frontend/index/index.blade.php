@@ -72,7 +72,7 @@
                 listHtml += list[i].mtime;
                 listHtml += ' &nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;';
                 listHtml += list[i].read_count;
-                listHtml += ' &nbsp;&nbsp; <i class="fa fa-comments-o"></i>&nbsp;';
+                listHtml += ' &nbsp;&nbsp; <i class="fa fa-comment"></i>&nbsp;';
                 listHtml += list[i].comment_count;
                 listHtml += '</div></div>';
                 if (list[i].cover_img_url !== '') {

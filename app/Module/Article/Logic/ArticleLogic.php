@@ -312,6 +312,10 @@ class ArticleLogic
             $params['body']['query']['bool']['filter'][] = ['term' => ['status' => $requestData['status']]];
         }
 
+        if (isset($requestData['id'])) {
+            $params['body']['query']['bool']['filter'][] = ['term' => ['id' => $requestData['id']]];
+        }
+
         $elasticSearchRes = $this->service->searchByEs($params);
 
         $total  = isset($elasticSearchRes['hits']['total']['value']) ? $elasticSearchRes['hits']['total']['value'] : 0;

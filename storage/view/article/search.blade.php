@@ -10,9 +10,11 @@
         <div class="card-header">
             <form id="article-search" onsubmit="return false;">
                 <div class="row">
-
                     <div class="input-group-append mr-1">
                         <a href="/view/article/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fas fa-plus"></i></button></a>
+                    </div>
+                    <div class="col-2">
+                        <input type="text" name="id" class="form-control" placeholder="ID">
                     </div>
                     <div class="col-3">
                         <input type="text" name="keywords" class="form-control" placeholder="搜索内容">

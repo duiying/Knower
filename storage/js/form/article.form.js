@@ -39,12 +39,14 @@ function assembleArticleFormParam(fromUpdate = false)
 function assembleArticleSearchParam(p)
 {
     var keywords = $('input[name=keywords]').val();
+    var id = $('input[name=id]').val();
 
     var searchParam = {
         p       : DEFAULT_P,
         size    : DEFAULT_SIZE,
     };
     if (p !== 0) searchParam.p = p;
+    if (id !== '') searchParam.id = id;
 
     if (keywords !== '') searchParam.keywords = keywords;
 

@@ -2,7 +2,6 @@
 
 namespace App\Module\Article\Action;
 
-use App\Module\Article\Constant\ArticleConstant;
 use App\Util\HttpUtil;
 use App\Util\Util;
 use App\Constant\CommonConstant;
