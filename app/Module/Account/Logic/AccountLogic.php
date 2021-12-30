@@ -3,6 +3,7 @@
 namespace App\Module\Account\Logic;
 
 use App\Constant\AppErrorCode;
+use App\Constant\CommonConstant;
 use App\Constant\RedisKeyConst;
 use App\Module\Account\Constant\AccountConstant;
 use App\Module\Account\Constant\OAuthConstant;
@@ -208,11 +209,12 @@ class AccountLogic
         $accessToken = Util::generateToken();
         $accountId = $oAuthInfo['account_id'];
         $updateAccountData = [
-            'access_token'  => $accessToken,
-            'avatar_img_id' => $avatarImgId,
-            'nickname'      => $nickname,
-            'email'         => $email,
-            'mobile'        => $mobile
+            'access_token'          => $accessToken,
+            'access_token_expire'   => date('Y-m-d H:i:s', time() + CommonConstant::FRONTEND_TOKEN_SECONDS),
+            'avatar_img_id'         => $avatarImgId,
+            'nickname'              => $nickname,
+            'email'                 => $email,
+            'mobile'                => $mobile
         ];
         $this->accountService->update(['id' => $accountId], $updateAccountData);
 
@@ -249,7 +251,8 @@ class AccountLogic
             'avatar_img_id'         => $avatarImgId,
             'password'              => '',
             'access_token'          => $accessToken,
-            'last_active_time'      => Util::now()
+            'last_active_time'      => Util::now(),
+            'access_token_expire'   => date('Y-m-d H:i:s', time() + CommonConstant::FRONTEND_TOKEN_SECONDS),
         ];
         $accountInsertId = $this->accountService->create($createAccountParams);
 
@@ -301,7 +304,15 @@ class AccountLogic
     public function getAccountInfoByToken($accessToken = '')
     {
         if (empty($accessToken)) return [];
-        $accountInfo = $this->accountService->getLineByWhere(['access_token' => $accessToken], ['id', 'nickname', 'avatar_img_id', 'last_active_time', 'status']);
+
+        $accountInfo = $this->accountService->getLineByWhere([
+            'access_token' => $accessToken,
+        ], [
+            'id', 'nickname', 'avatar_img_id', 'last_active_time', 'status', 'access_token_expire'
+        ]);
+
+        if (empty($accountInfo)) return [];
+
         $avatarImgId = $accountInfo['avatar_img_id'];
         $imgInfoMap = $this->imgLogic->getImgUrlMapByIdList([$avatarImgId]);
         $accountInfo['avatar'] = isset($imgInfoMap[$avatarImgId]) ? $imgInfoMap[$avatarImgId] : '';
@@ -348,7 +359,7 @@ class AccountLogic
     public function search($requestData, $p, $size)
     {
         $list  = $this->accountService->search($requestData, $p, $size,
-            ['id', 'nickname', 'email', 'mobile', 'avatar_img_id', 'status', 'last_active_time', 'ctime'],
+            ['id', 'nickname', 'email', 'mobile', 'avatar_img_id', 'mark', 'status', 'last_active_time', 'ctime'],
             ['ctime' => 'desc']
         );
 

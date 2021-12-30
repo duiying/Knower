@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="/storage/AdminLTE/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 <!-- markdown -->
 <link rel="stylesheet" href="/storage/simplemde-markdown-editor/dist/simplemde.min.css">
+<link href="/storage/sweetalert2/sweetalert2.min.css" rel="stylesheet">
 <style>
     /* 修复 select 多选框高度问题 */
     .select2-container .select2-selection--single {height: 38px;}

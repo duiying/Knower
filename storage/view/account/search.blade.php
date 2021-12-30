@@ -38,6 +38,7 @@
                     <th style="width: 150px">昵称</th>
                     <th style="width: 150px">邮箱</th>
                     <th style="width: 150px">手机号</th>
+                    <th style="width: 150px">备注</th>
                     <th style="width: 150px">状态</th>
                     <th style="width: 150px">最近活跃时间</th>
                     <th style="width: 150px">注册时间</th>
@@ -81,6 +82,7 @@
                     listHtml += '<td>' + list[i].nickname + '</td>';
                     listHtml += '<td>' + list[i].email + '</td>';
                     listHtml += '<td>' + list[i].mobile + '</td>';
+                    listHtml += '<td><span id="mark-' + list[i].id + '">' + list[i].mark + '</span><a href="javascript:;" class="ml-1" onclick="editMark(' + list[i].id + ')"><i class="fas fa-edit"></i></a></td>';
                     listHtml += '<td>';
                     if (list[i].status === 1) {
                         listHtml += '<span class="label label-success">' + list[i].status_text + '</span>';
@@ -133,6 +135,17 @@
             if (data !== false) {
                 renderAccountList();
             }
+        }
+
+        function editMark(id)
+        {
+            alertTextarea(function (text) {
+                var param   = {id : id, mark : text}
+                var data    = updateAccountMarkField(param)
+                if (data !== false) {
+                    $('#mark-' + id).html(text);
+                }
+            });
         }
     </script>
 @endsection

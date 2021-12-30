@@ -200,6 +200,10 @@ function updateAccountField(data = {}) {
     return request.post('v1/account/update_field', data);
 }
 
+function updateAccountMarkField(data = {}) {
+    return request.post('v1/account/update_mark_field', data);
+}
+
 /******************** 用户 API end *************************************************************************************/
 
 /******************** 评论 API begin ***********************************************************************************/

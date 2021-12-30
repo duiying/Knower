@@ -117,6 +117,7 @@ Router::addGroup('/v1/',function () {
     // 用户相关
     Router::get('account/search', Route::decoration('Account\Action\SearchAction'));
     Router::post('account/update_field', Route::decoration('Account\Action\UpdateFieldAction'));
+    Router::post('account/update_mark_field', Route::decoration('Account\Action\UpdateMarkFieldAction'));
 
     // 行为日志
     Router::get('action_log/search', Route::decoration('ActionLog\Action\SearchAction'));

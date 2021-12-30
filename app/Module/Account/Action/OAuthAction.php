@@ -54,7 +54,7 @@ class OAuthAction
         }
 
         $accessToken = $this->logic->githubCallback($requestData['code'], $requestData['state']);
-        $expire = time() + 86400 * 365;
+        $expire = time() + CommonConstant::FRONTEND_TOKEN_SECONDS;
         $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, $expire);
         return $response->withCookie($cookie)->redirect('/');
     }

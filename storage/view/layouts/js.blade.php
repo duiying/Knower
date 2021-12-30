@@ -25,4 +25,5 @@
 <script src="/storage/js/base/request.js?r=<?php echo mt_rand(1, 100000000) ?>"></script>
 <script src="/storage/js/base/common.js?r=<?php echo mt_rand(1, 100000000) ?>"></script>
 <script src="/storage/js/api/api.js?r=<?php echo mt_rand(1, 100000000) ?>"></script>
+<script src="/storage/sweetalert2/sweetalert2.min.js"></script>
 

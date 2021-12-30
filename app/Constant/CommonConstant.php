@@ -20,11 +20,13 @@ class CommonConstant
     const METHOD_GET                        = 'GET';                        // GET 请求
     const METHOD_POST                       = 'POST';                       // POST 请求
 
-    // 管理员 token 有效时长（8 小时）
-    const TOKEN_EXPIRE_SECONDS = 3600 * 8;
+    // 管理员 token 有效时长（3 天）
+    const TOKEN_EXPIRE_SECONDS = 86400 * 3;
 
     // 前台登录 token
     const FRONTEND_TOKEN_COOKIE_NAME = 'knower_access_token';
+    // 前台登录 token 有效时长（360 天）
+    const FRONTEND_TOKEN_SECONDS = 86400 * 360;
 
     // Markdown 中的图片是否缓存到本地
     const MARKDOWN_IMG_CACHE = TRUE;

@@ -91,6 +91,9 @@ class FrontendMiddleware
         if ($accountInfo['status'] === AccountConstant::ACCOUNT_STATUS_FORBIDDEN) {
             return HttpUtil::error($this->response, 403, '账号已被停用！');
         }
+        if (strtotime($accountInfo['access_token_expire']) < time()) {
+            return HttpUtil::error($this->response, 403, '请重新登录！');
+        }
 
         $accountId = $accountInfo['id'];
 
