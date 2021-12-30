@@ -76,4 +76,28 @@ class ActionLogLogic
         $total = $this->service->count($requestData);
         return Util::formatSearchRes($p, $size, $total, $list);
     }
+
+    /**
+     * 获取活跃游客数
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @return int
+     */
+    public function getTouristCount($beginTime, $endTime)
+    {
+        return $this->service->getTouristCount($beginTime, $endTime);
+    }
+
+    /**
+     * 获取活跃登录用户数
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @return int
+     */
+    public function getActiveAccountCount($beginTime, $endTime)
+    {
+        return $this->service->getActiveAccountCount($beginTime, $endTime);
+    }
 }

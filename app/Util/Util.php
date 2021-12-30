@@ -78,6 +78,93 @@ class Util
     }
 
     /**
+     * 获取当天开始时间
+     *
+     * @return string
+     */
+    public static function todayBeginTime()
+    {
+        return date('Y-m-d 00:00:00');
+    }
+
+    /**
+     * 获取当天结束时间
+     *
+     * @return string
+     */
+    public static function todayEndTime()
+    {
+        return date('Y-m-d 23:59:59');
+    }
+
+    /**
+     * 获取本周开始时间
+     *
+     * @return string
+     */
+    public static function getWeekBeginTime()
+    {
+        $date = date('Y-m-d');
+        $w = date('w', strtotime($date));
+        return date('Y-m-d 00:00:00', strtotime("$date -" . ($w ? $w - 1 : 6) . ' days'));
+    }
+
+    /**
+     * 获取本周结束时间
+     *
+     * @return string
+     */
+    public static function getWeekEndTime()
+    {
+        $date = date('Y-m-d');
+        $w = date('w', strtotime($date));
+        $weekStart = date('Y-m-d', strtotime("$date -" . ($w ? $w - 1 : 6) . ' days'));
+        return date('Y-m-d 23:59:59', strtotime("$weekStart +6 days"));
+    }
+
+    /**
+     * 获取当月开始时间
+     *
+     * @return string
+     */
+    public static function getMonthBeginTime()
+    {
+        return date('Y-m-d H:i:s', strtotime("first day of this month 00:00:00"));
+    }
+
+    /**
+     * 获取当月结束时间
+     *
+     * @return string
+     */
+    public static function getMonthEndTime()
+    {
+        return date('Y-m-d H:i:s', strtotime("last day of this month 23:59:59"));
+    }
+
+    /**
+     * 获取当年开始时间
+     *
+     * @return string
+     */
+    public static function getYearBeginTime()
+    {
+        return date('Y-01-01 00:00:00');
+    }
+
+    /**
+     * 获取当年结束时间
+     *
+     * @return string
+     */
+    public static function getYearEndTime()
+    {
+        $year = date('Y');
+        $nextYear = $year + 1;
+        return date('Y-m-d H:i:s', strtotime("$nextYear-01-01 00:00:00") - 1);
+    }
+
+    /**
      * 获取 traceId
      *
      * @return string

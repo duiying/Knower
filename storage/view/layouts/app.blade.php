@@ -27,7 +27,6 @@
                 <div class="row">
                     <div>
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="/admin">首页</a></li>
                             @yield('header')
                         </ol>
                     </div><!-- /.col -->

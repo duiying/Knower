@@ -273,7 +273,8 @@ CREATE TABLE `t_user_account` (
                                   KEY `idx_nickname` (`nickname`),
                                   KEY `idx_email` (`email`),
                                   KEY `idx_mobile` (`mobile`),
-                                  KEY `idx_access_token` (`access_token`)
+                                  KEY `idx_access_token` (`access_token`),
+                                  KEY `idx_last_active_time` (`last_active_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 DROP TABLE IF EXISTS `t_user_oauth`;

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('header')
+    <li class="breadcrumb-item"><a href="/admin">首页</a></li>
     <li class="breadcrumb-item"><a href="/view/user/search">管理员</a></li>
     <li class="breadcrumb-item active">编辑</li>
 @endsection

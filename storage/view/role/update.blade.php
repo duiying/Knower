@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('header')
+    <li class="breadcrumb-item"><a href="/admin">首页</a></li>
     <li class="breadcrumb-item"><a href="/view/role/search">角色</a></li>
-    <li class="breadcrumb-item active">更新</li>
+    <li class="breadcrumb-item active">编辑</li>
 @endsection
 @section('content')
     <script src="/storage/js/validate/role.validate.js"></script>

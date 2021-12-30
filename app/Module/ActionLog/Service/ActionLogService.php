@@ -98,4 +98,28 @@ class ActionLogService
     {
         return $this->dao->count($where);
     }
+
+    /**
+     * 获取活跃游客数
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @return int
+     */
+    public function getTouristCount($beginTime, $endTime)
+    {
+        return $this->dao->getTouristCount($beginTime, $endTime);
+    }
+
+    /**
+     * 获取活跃登录用户数
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @return int
+     */
+    public function getActiveAccountCount($beginTime, $endTime)
+    {
+        return $this->dao->getActiveAccountCount($beginTime, $endTime);
+    }
 }
