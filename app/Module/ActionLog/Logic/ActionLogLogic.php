@@ -82,11 +82,12 @@ class ActionLogLogic
      *
      * @param $beginTime
      * @param $endTime
+     * @param int $type
      * @return int
      */
-    public function getTouristCount($beginTime, $endTime)
+    public function getTouristCount($beginTime, $endTime, $type = 0)
     {
-        return $this->service->getTouristCount($beginTime, $endTime);
+        return $this->service->getTouristCount($beginTime, $endTime, $type);
     }
 
     /**
@@ -94,10 +95,37 @@ class ActionLogLogic
      *
      * @param $beginTime
      * @param $endTime
+     * @param int $type
      * @return int
      */
-    public function getActiveAccountCount($beginTime, $endTime)
+    public function getActiveAccountCount($beginTime, $endTime, $type = 0)
     {
-        return $this->service->getActiveAccountCount($beginTime, $endTime);
+        return $this->service->getActiveAccountCount($beginTime, $endTime, $type);
+    }
+
+    /**
+     * 获取登录用户浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getAccountActionLogCount($beginTime, $endTime, $type = 0)
+    {
+        return $this->service->getAccountActionLogCount($beginTime, $endTime, $type);
+    }
+
+    /**
+     * 获取游客浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getTouristActionLogCount($beginTime, $endTime, $type)
+    {
+        return $this->service->getTouristActionLogCount($beginTime, $endTime, $type);
     }
 }

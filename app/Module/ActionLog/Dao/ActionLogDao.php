@@ -41,4 +41,42 @@ class ActionLogDao extends MySQLDao
         $res = Util::objArr2Arr($res);
         return isset($res[0]['count']) ? intval($res[0]['count']) : 0;
     }
+
+    /**
+     * 获取登录用户浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getAccountActionLogCount($beginTime, $endTime, $type = 0)
+    {
+        $sql = "select count(*) as count from {$this->table} where account_id > 0 and ctime >= '{$beginTime}' and ctime < '{$endTime}'";
+        if ($type > 0) {
+            $sql .= " and type = {$type}";
+        }
+        $res = Db::connection($this->connection)->select($sql);
+        $res = Util::objArr2Arr($res);
+        return isset($res[0]['count']) ? intval($res[0]['count']) : 0;
+    }
+
+    /**
+     * 获取游客浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getTouristActionLogCount($beginTime, $endTime, $type = 0)
+    {
+        $sql = "select count(*) as count from {$this->table} where account_id = 0 and ctime >= '{$beginTime}' and ctime < '{$endTime}'";
+        if ($type > 0) {
+            $sql .= " and type = {$type}";
+        }
+        $res = Db::connection($this->connection)->select($sql);
+        $res = Util::objArr2Arr($res);
+        return isset($res[0]['count']) ? intval($res[0]['count']) : 0;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Module\Stat\Logic;
 
 use App\Module\Account\Logic\AccountLogic;
+use App\Module\ActionLog\Constant\ActionLogConstant;
 use App\Module\ActionLog\Logic\ActionLogLogic;
 use App\Module\Article\Logic\ArticleLogic;
 use App\Module\Comment\Logic\CommentLogic;
@@ -26,18 +27,34 @@ class StatLogic
         $todayTouristCount = 0;
         // 当天活跃登录用户数
         $todayAccountCount = 0;
+        // 当天游客首页访问量
+        $todayTouristIndexCount = 0;
+        // 当天登录用户首页访问量
+        $todayAccountIndexCount = 0;
         // 本周活跃游客数
         $weekTouristCount = 0;
         // 本周活跃登录用户数
         $weekAccountCount = 0;
+        // 本周游客首页访问量
+        $weekTouristIndexCount = 0;
+        // 本周登录用户首页访问量
+        $weekAccountIndexCount = 0;
         // 本月活跃游客数
         $monthTouristCount = 0;
         // 本月活跃登录用户数
         $monthAccountCount = 0;
+        // 本月游客首页访问量
+        $monthTouristIndexCount = 0;
+        // 本月登录用户首页访问量
+        $monthAccountIndexCount = 0;
         // 本年活跃游客数
         $yearTouristCount = 0;
         // 本年活跃登录用户数
         $yearAccountCount = 0;
+        // 本年游客首页访问量
+        $yearTouristIndexCount = 0;
+        // 本年登录用户首页访问量
+        $yearAccountIndexCount = 0;
 
         $dayBeginTime   = Util::todayBeginTime();
         $dayEndTime     = Util::todayEndTime();
@@ -49,7 +66,7 @@ class StatLogic
         $yearEndTime    = Util::getYearEndTime();
 
         $wg = new WaitGroup();
-        $wg->add(11);
+        $wg->add(19);
 
         Coroutine::create(function () use($wg, &$articleCount) {
             $articleCount = $this->getArticleCount();
@@ -63,6 +80,7 @@ class StatLogic
             $accountCount = $this->getAccountCount();
             $wg->done();
         });
+
         Coroutine::create(function () use($wg, &$todayTouristCount, $dayBeginTime, $dayEndTime) {
             $todayTouristCount = $this->getTouristCount($dayBeginTime, $dayEndTime);
             $wg->done();
@@ -79,6 +97,7 @@ class StatLogic
             $yearTouristCount = $this->getTouristCount($yearBeginTime, $yearEndTime);
             $wg->done();
         });
+
         Coroutine::create(function () use($wg, &$todayAccountCount, $dayBeginTime, $dayEndTime) {
             $todayAccountCount = $this->getActiveAccountCount($dayBeginTime, $dayEndTime);
             $wg->done();
@@ -96,6 +115,40 @@ class StatLogic
             $wg->done();
         });
 
+        Coroutine::create(function () use($wg, &$todayTouristIndexCount, $dayBeginTime, $dayEndTime) {
+            $todayTouristIndexCount = $this->getTouristActionLogCount($dayBeginTime, $dayEndTime, ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+        Coroutine::create(function () use($wg, &$weekTouristIndexCount, $weekBeginTime, $weekEndTime) {
+            $weekTouristIndexCount = $this->getTouristActionLogCount($weekBeginTime, $weekEndTime, ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+        Coroutine::create(function () use($wg, &$monthTouristIndexCount, $monthBeginTime, $monthEndTime) {
+            $monthTouristIndexCount = $this->getTouristActionLogCount($monthBeginTime, $monthEndTime, ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+        Coroutine::create(function () use($wg, &$yearTouristIndexCount, $yearBeginTime, $yearEndTime) {
+            $yearTouristIndexCount = $this->getTouristActionLogCount($yearBeginTime, $yearEndTime,  ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+
+        Coroutine::create(function () use($wg, &$todayAccountIndexCount, $dayBeginTime, $dayEndTime) {
+            $todayAccountIndexCount = $this->getAccountActionLogCount($dayBeginTime, $dayEndTime, ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+        Coroutine::create(function () use($wg, &$weekAccountIndexCount, $weekBeginTime, $weekEndTime) {
+            $weekAccountIndexCount = $this->getAccountActionLogCount($weekBeginTime, $weekEndTime, ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+        Coroutine::create(function () use($wg, &$monthAccountIndexCount, $monthBeginTime, $monthEndTime) {
+            $monthAccountIndexCount = $this->getAccountActionLogCount($monthBeginTime, $monthEndTime, ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+        Coroutine::create(function () use($wg, &$yearAccountIndexCount, $yearBeginTime, $yearEndTime) {
+            $yearAccountIndexCount = $this->getAccountActionLogCount($yearBeginTime, $yearEndTime,  ActionLogConstant::TYPE_INDEX);
+            $wg->done();
+        });
+
         $wg->wait();
 
         return [
@@ -110,6 +163,14 @@ class StatLogic
             'week_account_count'        => $weekAccountCount,
             'month_account_count'       => $monthAccountCount,
             'year_account_count'        => $yearAccountCount,
+            'today_tourist_index_count' => $todayTouristIndexCount,
+            'week_tourist_index_count'  => $weekTouristIndexCount,
+            'month_tourist_index_count' => $monthTouristIndexCount,
+            'year_tourist_index_count'  => $yearTouristIndexCount,
+            'today_account_index_count' => $todayAccountIndexCount,
+            'week_account_index_count'  => $weekAccountIndexCount,
+            'month_account_index_count' => $monthAccountIndexCount,
+            'year_account_index_count'  => $yearAccountIndexCount,
         ];
     }
 
@@ -170,5 +231,33 @@ class StatLogic
     {
         $actionLogLogic = make(ActionLogLogic::class);
         return $actionLogLogic->getActiveAccountCount($beginTime, $endTime);
+    }
+
+    /**
+     * 获取游客浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getTouristActionLogCount($beginTime, $endTime, $type = 0)
+    {
+        $actionLogLogic = make(ActionLogLogic::class);
+        return $actionLogLogic->getTouristActionLogCount($beginTime, $endTime, $type);
+    }
+
+    /**
+     * 获取登录用户浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getAccountActionLogCount($beginTime, $endTime, $type = 0)
+    {
+        $actionLogLogic = make(ActionLogLogic::class);
+        return $actionLogLogic->getAccountActionLogCount($beginTime, $endTime, $type);
     }
 }

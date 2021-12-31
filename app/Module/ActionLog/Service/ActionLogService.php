@@ -122,4 +122,30 @@ class ActionLogService
     {
         return $this->dao->getActiveAccountCount($beginTime, $endTime);
     }
+
+    /**
+     * 获取登录用户浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getAccountActionLogCount($beginTime, $endTime, $type = 0)
+    {
+        return $this->dao->getAccountActionLogCount($beginTime, $endTime, $type);
+    }
+
+    /**
+     * 获取游客浏览量
+     *
+     * @param $beginTime
+     * @param $endTime
+     * @param int $type
+     * @return int
+     */
+    public function getTouristActionLogCount($beginTime, $endTime, $type)
+    {
+        return $this->dao->getTouristActionLogCount($beginTime, $endTime, $type);
+    }
 }

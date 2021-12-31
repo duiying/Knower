@@ -86,6 +86,24 @@
                                         <td id="month-tourist">0</td>
                                         <td id="year-tourist">0</td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            登录用户首页浏览数
+                                        </td>
+                                        <td id="today-index-account">0</td>
+                                        <td id="week-index-account">0</td>
+                                        <td id="month-index-account">0</td>
+                                        <td id="year-index-account">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            游客首页浏览数
+                                        </td>
+                                        <td id="today-index-tourist">0</td>
+                                        <td id="week-index-tourist">0</td>
+                                        <td id="month-index-tourist">0</td>
+                                        <td id="year-index-tourist">0</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -115,6 +133,16 @@
             $('#week-tourist').html(data.week_tourist_count);
             $('#month-tourist').html(data.month_tourist_count);
             $('#year-tourist').html(data.year_tourist_count);
+
+            $('#today-index-tourist').html(data.today_tourist_index_count);
+            $('#week-index-tourist').html(data.week_tourist_index_count);
+            $('#month-index-tourist').html(data.month_tourist_index_count);
+            $('#year-index-tourist').html(data.year_tourist_index_count);
+
+            $('#today-index-account').html(data.today_account_index_count);
+            $('#week-index-account').html(data.week_account_index_count);
+            $('#month-index-account').html(data.month_account_index_count);
+            $('#year-index-account').html(data.year_account_index_count);
         }
     </script>
 @endsection
