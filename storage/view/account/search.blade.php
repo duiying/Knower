@@ -122,7 +122,7 @@
         function handleIllegal(id)
         {
             var param   = {id : id, status : -1}
-            var data    = updateAccountField(param)
+            var data    = updateAccountStatus(param)
             if (data !== false) {
                 renderAccountList();
             }
@@ -131,7 +131,7 @@
         function handleNormal(id)
         {
             var param   = {id : id, status : 1}
-            var data    = updateAccountField(param)
+            var data    = updateAccountStatus(param)
             if (data !== false) {
                 renderAccountList();
             }

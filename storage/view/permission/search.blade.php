@@ -89,7 +89,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updatePermissionField(param)
+                var data    = deletePermission(param)
                 if (data !== false) {
                     renderPermissionList();
                 }

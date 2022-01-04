@@ -100,7 +100,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updateRoleField(param)
+                var data    = deleteRole(param)
                 if (data !== false) {
                     renderRoleList();
                 }

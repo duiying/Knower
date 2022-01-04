@@ -123,7 +123,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updateUserField(param)
+                var data    = deleteUser(param)
                 if (data !== false) {
                     renderUserList();
                 }

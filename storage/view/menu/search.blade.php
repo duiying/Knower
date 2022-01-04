@@ -105,7 +105,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updateMenuField(param)
+                var data    = deleteMenu(param)
                 if (data !== false) {
                     renderMenuList();
                 }

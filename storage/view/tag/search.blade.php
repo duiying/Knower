@@ -104,7 +104,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updateTagField(param)
+                var data    = deleteTag(param)
                 if (data !== false) {
                     renderTagList();
                 }

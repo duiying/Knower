@@ -84,6 +84,33 @@ class AccountLogic
     }
 
     /**
+     * 微信 state 写入缓存
+     *
+     * @param $state
+     */
+    public function setWeChatStateCache($state)
+    {
+        $redis = Redis::instance();
+        $redis->set(RedisKeyConst::WECHAT_STATE . $state, 1, ['nx', 'ex' => 30 * 60]);
+    }
+
+    /**
+     * 检查微信 state
+     *
+     * @param $state
+     * @return bool
+     */
+    public function checkWechatStateCache($state)
+    {
+        if (empty($state)) {
+            return false;
+        }
+        $redis = Redis::instance();
+        $val = $redis->get(RedisKeyConst::WECHAT_STATE . $state);
+        return intval($val) === 1;
+    }
+
+    /**
      * GitHub 登录回调
      *
      * @param $code

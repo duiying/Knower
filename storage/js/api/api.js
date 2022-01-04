@@ -24,8 +24,8 @@ function updateUser(data = {}) {
     return request.post('v1/user/update', data);
 }
 
-function updateUserField(data = {}) {
-    return request.post('v1/user/update_field', data);
+function deleteUser(data = {}) {
+    return request.post('v1/user/delete', data);
 }
 
 function userLogin(data = {}) {
@@ -60,8 +60,8 @@ function findMenu(data = {}) {
     return request.get('v1/menu/find', data);
 }
 
-function updateMenuField(data = {}) {
-    return request.post('v1/menu/update_field', data);
+function deleteMenu(data = {}) {
+    return request.post('v1/menu/delete', data);
 }
 
 /******************** 菜单 API end *************************************************************************************/
@@ -88,8 +88,8 @@ function findPermission(data = {}) {
     return request.get('v1/permission/find', data);
 }
 
-function updatePermissionField(data = {}) {
-    return request.post('v1/permission/update_field', data);
+function deletePermission(data = {}) {
+    return request.post('v1/permission/delete', data);
 }
 
 /******************** 权限 API end *************************************************************************************/
@@ -116,8 +116,8 @@ function findRole(data = {}) {
     return request.get('v1/role/find', data);
 }
 
-function updateRoleField(data = {}) {
-    return request.post('v1/role/update_field', data);
+function deleteRole(data = {}) {
+    return request.post('v1/role/delete', data);
 }
 
 /******************** 角色 API end *************************************************************************************/
@@ -144,8 +144,8 @@ function detailArticle(data = {}) {
     return request.get('article/info', data, false);
 }
 
-function updateArticleField(data = {}) {
-    return request.post('v1/article/update_field', data);
+function deleteArticle(data = {}) {
+    return request.post('v1/article/delete', data);
 }
 
 /******************** 文章 API end *************************************************************************************/
@@ -180,8 +180,8 @@ function findTag(data = {}) {
     return request.get('v1/tag/find', data);
 }
 
-function updateTagField(data = {}) {
-    return request.post('v1/tag/update_field', data);
+function deleteTag(data = {}) {
+    return request.post('v1/tag/delete', data);
 }
 
 /******************** 标签 API end *************************************************************************************/
@@ -196,8 +196,8 @@ function searchAccount(data = {}) {
     return request.get('v1/account/search', data);
 }
 
-function updateAccountField(data = {}) {
-    return request.post('v1/account/update_field', data);
+function updateAccountStatus(data = {}) {
+    return request.post('v1/account/update_status', data);
 }
 
 function updateAccountMarkField(data = {}) {
@@ -224,8 +224,8 @@ function searchComment(data = {}) {
     return request.get('v1/comment/search', data);
 }
 
-function updateCommentField(data = {}) {
-    return request.post('v1/comment/update_field', data);
+function updateCommentStatus(data = {}) {
+    return request.post('v1/comment/update_status', data);
 }
 
 /******************** 评论 API end *************************************************************************************/

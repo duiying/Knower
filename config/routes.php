@@ -64,42 +64,46 @@ Router::addGroup('/view/',function () {
 
 // 后台接口相关路由（统一由 /v1 开头）
 Router::addGroup('/v1/',function () {
-    Router::get('user/search', Route::decoration('AdminPassport\User\Action\SearchAction'));                          // 管理员列表
-    Router::get('user/find', Route::decoration('AdminPassport\User\Action\FindAction'));                              // 管理员详情
-    Router::post('user/create', Route::decoration('AdminPassport\User\Action\CreateAction'));                         // 管理员创建
-    Router::post('user/update', Route::decoration('AdminPassport\User\Action\UpdateAction'));                         // 管理员更新
-    Router::post('user/login', Route::decoration('AdminPassport\User\Action\LoginAction'));                           // 管理员登录
-    Router::post('user/update_field', Route::decoration('AdminPassport\User\Action\UpdateFieldAction'));              // 管理员更新字段
-    Router::get('user/menu', Route::decoration('AdminPassport\User\Action\MenuAction'));                              // 管理员菜单
-    Router::get('user/get_info', Route::decoration('AdminPassport\User\Action\GetUserInfoAction'));                   // 管理员基础信息
+    // 管理员相关
+    Router::get('user/search', Route::decoration('AdminPassport\User\Action\SearchAction'));
+    Router::get('user/find', Route::decoration('AdminPassport\User\Action\FindAction'));
+    Router::post('user/create', Route::decoration('AdminPassport\User\Action\CreateAction'));
+    Router::post('user/update', Route::decoration('AdminPassport\User\Action\UpdateAction'));
+    Router::post('user/login', Route::decoration('AdminPassport\User\Action\LoginAction'));
+    Router::post('user/delete', Route::decoration('AdminPassport\User\Action\UpdateFieldAction'));
+    Router::get('user/menu', Route::decoration('AdminPassport\User\Action\MenuAction'));
+    Router::get('user/get_info', Route::decoration('AdminPassport\User\Action\GetUserInfoAction'));
 
-    Router::get('menu/search', Route::decoration('AdminPassport\Menu\Action\SearchAction'));                          // 菜单列表
-    Router::get('menu/select', Route::decoration('AdminPassport\Menu\Action\SearchAction'));                          // 菜单选择（创建、更新角色时用）
-    Router::post('menu/create', Route::decoration('AdminPassport\Menu\Action\CreateAction'));                         // 菜单创建
-    Router::post('menu/update', Route::decoration('AdminPassport\Menu\Action\UpdateAction'));                         // 菜单更新
-    Router::get('menu/find', Route::decoration('AdminPassport\Menu\Action\FindAction'));                              // 菜单详情
-    Router::post('menu/update_field', Route::decoration('AdminPassport\Menu\Action\UpdateFieldAction'));              // 菜单更新字段
+    // 菜单相关
+    Router::get('menu/search', Route::decoration('AdminPassport\Menu\Action\SearchAction'));
+    Router::get('menu/select', Route::decoration('AdminPassport\Menu\Action\SearchAction'));
+    Router::post('menu/create', Route::decoration('AdminPassport\Menu\Action\CreateAction'));
+    Router::post('menu/update', Route::decoration('AdminPassport\Menu\Action\UpdateAction'));
+    Router::get('menu/find', Route::decoration('AdminPassport\Menu\Action\FindAction'));
+    Router::post('menu/delete', Route::decoration('AdminPassport\Menu\Action\UpdateFieldAction'));
 
-    Router::get('permission/search', Route::decoration('AdminPassport\Permission\Action\SearchAction'));              // 权限列表
-    Router::get('permission/select', Route::decoration('AdminPassport\Permission\Action\SearchAction'));              // 权限选择（创建、更新角色时用）
-    Router::post('permission/create', Route::decoration('AdminPassport\Permission\Action\CreateAction'));             // 权限创建
-    Router::post('permission/update', Route::decoration('AdminPassport\Permission\Action\UpdateAction'));             // 权限更新
-    Router::get('permission/find', Route::decoration('AdminPassport\Permission\Action\FindAction'));                  // 权限详情
-    Router::post('permission/update_field', Route::decoration('AdminPassport\Permission\Action\UpdateFieldAction'));  // 权限更新字段
+    // 权限相关
+    Router::get('permission/search', Route::decoration('AdminPassport\Permission\Action\SearchAction'));
+    Router::get('permission/select', Route::decoration('AdminPassport\Permission\Action\SearchAction'));
+    Router::post('permission/create', Route::decoration('AdminPassport\Permission\Action\CreateAction'));
+    Router::post('permission/update', Route::decoration('AdminPassport\Permission\Action\UpdateAction'));
+    Router::get('permission/find', Route::decoration('AdminPassport\Permission\Action\FindAction'));
+    Router::post('permission/delete', Route::decoration('AdminPassport\Permission\Action\UpdateFieldAction'));
 
-    Router::get('role/search', Route::decoration('AdminPassport\Role\Action\SearchAction'));                          // 角色列表
-    Router::get('role/select', Route::decoration('AdminPassport\Role\Action\SearchAction'));                          // 角色选择（创建、更新用户时用）
-    Router::post('role/create', Route::decoration('AdminPassport\Role\Action\CreateAction'));                         // 角色创建
-    Router::post('role/update', Route::decoration('AdminPassport\Role\Action\UpdateAction'));                         // 角色更新
-    Router::get('role/find', Route::decoration('AdminPassport\Role\Action\FindAction'));                              // 角色详情
-    Router::post('role/update_field', Route::decoration('AdminPassport\Role\Action\UpdateFieldAction'));              // 角色更新字段
+    // 角色相关
+    Router::get('role/search', Route::decoration('AdminPassport\Role\Action\SearchAction'));
+    Router::get('role/select', Route::decoration('AdminPassport\Role\Action\SearchAction'));
+    Router::post('role/create', Route::decoration('AdminPassport\Role\Action\CreateAction'));
+    Router::post('role/update', Route::decoration('AdminPassport\Role\Action\UpdateAction'));
+    Router::get('role/find', Route::decoration('AdminPassport\Role\Action\FindAction'));
+    Router::post('role/delete', Route::decoration('AdminPassport\Role\Action\UpdateFieldAction'));
 
     // 文章相关
     Router::get('article/search', Route::decoration('Article\Action\SearchAction'));
     Router::post('article/create', Route::decoration('Article\Action\CreateAction'));
     Router::post('article/update', Route::decoration('Article\Action\UpdateAction'));
     Router::get('article/find', Route::decoration('Article\Action\FindAction'));
-    Router::post('article/update_field', Route::decoration('Article\Action\UpdateFieldAction'));
+    Router::post('article/delete', Route::decoration('Article\Action\UpdateFieldAction'));
     Router::get('article/async_es', Route::decoration('Article\Action\AsyncEsAction'));
 
     // 标签相关
@@ -112,11 +116,11 @@ Router::addGroup('/v1/',function () {
 
     // 评论相关
     Router::get('comment/search', Route::decoration('Comment\Action\SearchAction'));
-    Router::post('comment/update_field', Route::decoration('Comment\Action\UpdateFieldAction'));
+    Router::post('comment/update_status', Route::decoration('Comment\Action\UpdateFieldAction'));
 
     // 用户相关
     Router::get('account/search', Route::decoration('Account\Action\SearchAction'));
-    Router::post('account/update_field', Route::decoration('Account\Action\UpdateFieldAction'));
+    Router::post('account/update_status', Route::decoration('Account\Action\UpdateFieldAction'));
     Router::post('account/update_mark_field', Route::decoration('Account\Action\UpdateMarkFieldAction'));
 
     // 行为日志
@@ -155,6 +159,8 @@ Router::get('/articles', Route::decoration('Article\Action\ListAction'));
 // 第三方登录相关
 Router::get('/oauth/github', 'App\Module\Account\Action\OAuthAction@github');
 Router::get('/oauth/github/callback', 'App\Module\Account\Action\OAuthAction@githubCallback');
+Router::get('/oauth/wechat', 'App\Module\Account\Action\OAuthAction@wechat');
+Router::get('/oauth/wechat/callback', 'App\Module\Account\Action\OAuthAction@wechatCallback');
 // 根据前台 token 获取用户登录信息接口
 Router::get('/account/get_info_by_token', Route::decoration('Account\Action\GetAccountInfoByTokenAction'));
 // 创建评论接口

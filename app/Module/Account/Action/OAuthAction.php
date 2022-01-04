@@ -58,4 +58,23 @@ class OAuthAction
         $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, $expire);
         return $response->withCookie($cookie)->redirect('/');
     }
+
+    /**
+     * 组装微信登录 URL 信息，并重定向到该 URL
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function wechat(RequestInterface $request, ResponseInterface $response)
+    {
+        $state = Util::generateToken();
+
+        $this->logic->setWeChatStateCache($state);
+
+        $appId = env('WECHAT_APP_ID');
+        $redirectUri = env('WECHAT_REDIRECT_HOST') . '/oauth/wechat/callback';
+        $redirectStr = sprintf('https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_login&state=%s#wechat_redirect', $appId, $redirectUri, $state);
+        return $response->redirect($redirectStr);
+    }
 }

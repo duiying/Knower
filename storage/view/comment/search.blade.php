@@ -145,7 +145,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updateCommentField(param)
+                var data    = updateCommentStatus(param)
                 if (data !== false) {
                     renderCommentList();
                 }
@@ -155,7 +155,7 @@
         function handlePass(id)
         {
             var param   = {id : id, audit : 1}
-            var data    = updateCommentField(param)
+            var data    = updateCommentStatus(param)
             if (data !== false) {
                 renderCommentList();
             }
@@ -164,7 +164,7 @@
         function handleIllegal(id)
         {
             var param   = {id : id, audit : -1}
-            var data    = updateCommentField(param)
+            var data    = updateCommentStatus(param)
             if (data !== false) {
                 renderCommentList();
             }

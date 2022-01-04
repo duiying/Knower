@@ -146,7 +146,7 @@
         {
             handleDeleteCallback(function () {
                 var param   = {id : id, status : -1}
-                var data    = updateArticleField(param)
+                var data    = deleteArticle(param)
                 if (data !== false) {
                     renderArticleList();
                 }
