@@ -1,8 +1,0 @@
-<?php
-
-namespace App\Module\%s\Constant;
-
-class %sConstant
-{
-
-}
