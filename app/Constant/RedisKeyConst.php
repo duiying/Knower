@@ -34,7 +34,7 @@ class RedisKeyConst
     const USER_TOKEN = 's:ps:token_user_id:';
 
     const GITHUB_STATE = 's:us:github:state:';
-    const WECHAT_STATE = 's:us:wechat:state:';
+    const QQ_STATE = 's:us:wechat:state:';
 
     // 全量同步 ES 限速
     const ASYNC_ES = 's:cs:async:es:limit';

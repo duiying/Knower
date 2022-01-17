@@ -41,6 +41,8 @@ class OAuthAction
     }
 
     /**
+     * GitHub 回调
+     *
      * @param RequestInterface $request
      * @param ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
@@ -60,21 +62,46 @@ class OAuthAction
     }
 
     /**
-     * 组装微信登录 URL 信息，并重定向到该 URL
+     * 组装 QQ 登录 URL 信息，并重定向到该 URL
      *
      * @param RequestInterface $request
      * @param ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function wechat(RequestInterface $request, ResponseInterface $response)
+    public function qq(RequestInterface $request, ResponseInterface $response)
     {
         $state = Util::generateToken();
 
-        $this->logic->setWeChatStateCache($state);
+        $this->logic->setQQStateCache($state);
 
-        $appId = env('WECHAT_APP_ID');
-        $redirectUri = env('WECHAT_REDIRECT_HOST') . '/oauth/wechat/callback';
-        $redirectStr = sprintf('https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_login&state=%s#wechat_redirect', $appId, $redirectUri, $state);
+        $appId = env('QQ_APP_ID');
+        $redirectUri = env('QQ_REDIRECT_HOST') . '/oauth/qq/callback';
+        $redirectStr = sprintf('https://graph.qq.com/oauth2.0/authorize?response_type=code&scope=get_user_info&client_id=%s&redirect_uri=%s&state=%s', $appId, urlencode($redirectUri), $state);
         return $response->redirect($redirectStr);
+    }
+
+    /**
+     * QQ 回调
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function qqCallback(RequestInterface $request, ResponseInterface $response)
+    {
+        $requestData = $request->all();
+        Log::info('QQ 回调信息', $requestData);
+        if (!isset($requestData['code']) && !isset($requestData['state'])) {
+            return HttpUtil::error($response);
+        }
+
+        // TEST
+        $this->logic->qqCallback($requestData['code'], $requestData['state']);
+        return $response->redirect('/');
+
+        $accessToken = $this->logic->qqCallback($requestData['code'], $requestData['state']);
+        $expire = time() + CommonConstant::FRONTEND_TOKEN_SECONDS;
+        $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, $expire);
+        return $response->withCookie($cookie)->redirect('/');
     }
 }

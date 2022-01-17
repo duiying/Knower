@@ -159,8 +159,8 @@ Router::get('/articles', Route::decoration('Article\Action\ListAction'));
 // 第三方登录相关
 Router::get('/oauth/github', 'App\Module\Account\Action\OAuthAction@github');
 Router::get('/oauth/github/callback', 'App\Module\Account\Action\OAuthAction@githubCallback');
-Router::get('/oauth/wechat', 'App\Module\Account\Action\OAuthAction@wechat');
-Router::get('/oauth/wechat/callback', 'App\Module\Account\Action\OAuthAction@wechatCallback');
+Router::get('/oauth/qq', 'App\Module\Account\Action\OAuthAction@qq');
+Router::get('/oauth/qq/callback', 'App\Module\Account\Action\OAuthAction@qqCallback');
 // 根据前台 token 获取用户登录信息接口
 Router::get('/account/get_info_by_token', Route::decoration('Account\Action\GetAccountInfoByTokenAction'));
 // 创建评论接口

@@ -68,30 +68,35 @@ class AccountLogic
     }
 
     /**
-     * 检查 GitHub state
+     * 检查第三方登录 state
      *
      * @param $state
+     * @param $type
      * @return bool
      */
-    public function checkGitHubStateCache($state)
+    public function checkStateCache($state, $type)
     {
         if (empty($state)) {
             return false;
         }
+        $map = [
+            'github'    => RedisKeyConst::GITHUB_STATE,
+            'qq'        => RedisKeyConst::QQ_STATE,
+        ];
         $redis = Redis::instance();
-        $val = $redis->get(RedisKeyConst::GITHUB_STATE . $state);
+        $val = $redis->get($map[$type] . $state);
         return intval($val) === 1;
     }
 
     /**
-     * 微信 state 写入缓存
+     * QQ state 写入缓存
      *
      * @param $state
      */
-    public function setWeChatStateCache($state)
+    public function setQQStateCache($state)
     {
         $redis = Redis::instance();
-        $redis->set(RedisKeyConst::WECHAT_STATE . $state, 1, ['nx', 'ex' => 30 * 60]);
+        $redis->set(RedisKeyConst::QQ_STATE . $state, 1, ['nx', 'ex' => 30 * 60]);
     }
 
     /**
@@ -119,7 +124,7 @@ class AccountLogic
      */
     public function githubCallback($code, $state)
     {
-        if (!$this->checkGitHubStateCache($state)) {
+        if (!$this->checkStateCache($state, 'github')) {
             throw new AppException(AppErrorCode::PARAMS_INVALID, 'state 参数错误！');
         }
 
@@ -202,6 +207,23 @@ class AccountLogic
         }
 
         return $accountToken;
+    }
+
+    public function qqCallback($code, $state)
+    {
+        if (!$this->checkStateCache($state, 'qq')) {
+            throw new AppException(AppErrorCode::PARAMS_INVALID, 'state 参数错误！');
+        }
+
+        // 1、根据 QQ 回调信息中的 code 信息去获取 QQ 的 access_token
+        $appId              = env('QQ_APP_ID');
+        $redirectUri        = env('QQ_REDIRECT_HOST') . '/oauth/qq/callback';
+        $secret             = env('QQ_APP_KEY');
+        $getAccessTokenUrl  = sprintf('https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=%s&redirect_uri=%s&client_secret=%s&code=%s', $appId, urldecode($redirectUri), $secret, $code);
+
+        $response = file_get_contents($getAccessTokenUrl);
+
+        Log::info('QQ 登录返回信息', ['response' => $response]);
     }
 
     /**
