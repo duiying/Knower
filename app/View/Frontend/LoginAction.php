@@ -5,15 +5,15 @@ namespace App\View\Frontend;
 use Hyperf\View\RenderInterface;
 
 /**
- * 首页相关视图渲染
+ * 登录视图渲染
  *
  * @author duiying <wangyaxiandev@gmail.com>
  * @package App\View\Frontend
  */
-class IndexAction
+class LoginAction
 {
-    public function index(RenderInterface $render)
+    public function handle(RenderInterface $render)
     {
-        return $render->render('frontend/index/index');
+        return $render->render('frontend/login/login');
     }
 }

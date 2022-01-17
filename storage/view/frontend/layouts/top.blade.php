@@ -15,7 +15,7 @@
             </ul>
             <ul class="navbar-nav ml-auto" id="account-login">
                 <!-- Authentication Links -->
-                <li><a class="nav-link" href="/oauth/github">登录</a></li>
+                <li><a class="nav-link" href="/login">登录</a></li>
             </ul>
             <ul class="navbar-nav ml-auto" id="account-logout" style="display: none;">
                 <li class="nav-item dropdown">

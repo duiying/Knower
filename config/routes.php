@@ -148,6 +148,8 @@ Router::addGroup('',function () {
     Router::get('/','App\View\Frontend\IndexAction@index');
     // 文章详情页
     Router::get('/article/detail','App\View\Frontend\ArticleDetailAction@handle');
+    // 登录页
+    Router::get('/login','App\View\Frontend\LoginAction@handle');
 }, ['middleware' => [FrontendMiddleware::class, FrontendPjaxMiddleware::class]]);
 
 // 文章详情接口
