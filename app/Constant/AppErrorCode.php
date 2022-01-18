@@ -179,6 +179,21 @@ class AppErrorCode extends AbstractConstants
      */
     const USER_REGISTER_INFO_NOT_EXIST = 3000506;
 
+    /**
+     * @Message("获取 QQ access_token 异常！")
+     */
+    const QQ_ACCESS_TOKEN_FAIL = 3000507;
+
+    /**
+     * @Message("获取 QQ open id 信息失败！")
+     */
+    const QQ_GET_OPEN_ID_FAIL = 3000508;
+
+    /**
+     * @Message("获取 QQ 用户信息失败！")
+     */
+    const QQ_GET_USER_INFO_FAIL = 3000509;
+
     /******************** 用户模块错误码 end *****************************************************************************/
 
     /******************** 文章模块错误码 begin 3000601 ~ 3000700 *********************************************************/

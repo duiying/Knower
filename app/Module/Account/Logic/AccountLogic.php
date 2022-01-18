@@ -220,10 +220,48 @@ class AccountLogic
         $redirectUri        = env('QQ_REDIRECT_HOST') . '/oauth/qq/callback';
         $secret             = env('QQ_APP_KEY');
         $getAccessTokenUrl  = sprintf('https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=%s&redirect_uri=%s&client_secret=%s&code=%s', $appId, urldecode($redirectUri), $secret, $code);
-
         $response = file_get_contents($getAccessTokenUrl);
-
         Log::info('QQ 登录返回信息', ['response' => $response]);
+        if (!$response) throw new AppException(AppErrorCode::QQ_ACCESS_TOKEN_FAIL);
+
+        $accessToken = (explode('=', (explode('&', $response))[0]))[1];
+
+        // 2、根据 QQ 返回的 access_token 获取用户 openid
+        $getOpenIdUrl   = sprintf('https://graph.qq.com/oauth2.0/me?access_token=%s', $accessToken);
+        $response       = file_get_contents($getOpenIdUrl);
+        if (!$response || strpos($response, 'callback') === false) {
+            throw new AppException(AppErrorCode::QQ_GET_OPEN_ID_FAIL);
+        }
+        $lPos = strpos($response, '(');
+        $rPos = strrpos($response, ')');
+        $response = trim(substr($response, $lPos + 1, $rPos - $lPos -1));
+        $responseArr = json_decode($response, true);
+        if (empty($responseArr) || !isset($responseArr['openid']) || empty($responseArr['openid'])) {
+            throw new AppException(AppErrorCode::QQ_GET_OPEN_ID_FAIL);
+        }
+
+        $openId = $responseArr['openid'];
+
+        // 3、根据 QQ 返回的 openid 获取用户信息
+        $getUserInfoUrl = sprintf('https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s&format=json', $accessToken, $appId, $openId);
+        $userInfo       = file_get_contents($getUserInfoUrl);
+        $userInfoArr    = json_decode($userInfo, true);
+        if (empty($userInfoArr) || !isset($userInfoArr['nickname'])) {
+            throw new AppException(AppErrorCode::QQ_GET_USER_INFO_FAIL);
+        }
+        $qqAvatar       = $userInfoArr['figureurl_qq'];
+        $qqNickname     = $userInfoArr['nickname'];
+
+        // 检查是否已经注册
+        $oAuthId = $this->checkIfRegisterByOAuth(OAuthConstant::OAUTH_TYPE_QQ, $openId);
+        if ($oAuthId === 0) {
+            $accountToken = $this->register(OAuthConstant::OAUTH_TYPE_QQ, $openId, $accessToken, $qqAvatar, $qqNickname);
+        } else {
+            $accountToken = $this->refreshLoginInfo($oAuthId, $accessToken, $qqAvatar, $qqNickname);
+        }
+
+        return $accountToken;
+
     }
 
     /**
@@ -341,6 +379,7 @@ class AccountLogic
             'oauth_type' => $oAuthType,
             'oauth_id' => $oAuthId
         ], ['id']);
+
         return isset($oAuthInfo['id']) ? intval($oAuthInfo['id']) : 0;
     }
 
