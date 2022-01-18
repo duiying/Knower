@@ -95,10 +95,6 @@ class OAuthAction
             return HttpUtil::error($response);
         }
 
-        // TEST
-        $this->logic->qqCallback($requestData['code'], $requestData['state']);
-        return $response->redirect('/');
-
         $accessToken = $this->logic->qqCallback($requestData['code'], $requestData['state']);
         $expire = time() + CommonConstant::FRONTEND_TOKEN_SECONDS;
         $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, $expire);
