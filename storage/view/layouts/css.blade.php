@@ -1,7 +1,7 @@
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="/storage/AdminLTE/app/css/google-fonts.css">
 <!-- Font Awesome Icons -->
-<link rel="stylesheet" href="/storage/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="/storage/css/font-awesome-4.7.0/css/font-awesome.min.css">
 <!-- IonIcons -->
 <link rel="stylesheet" href="/storage/AdminLTE/app/css/ionicons.min.css">
 <!-- Theme style -->
