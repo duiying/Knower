@@ -3,11 +3,13 @@
 namespace App\Module\ActionLog\Logic;
 
 use App\Constant\AppErrorCode;
+use App\Constant\RedisKeyConst;
 use App\Module\Account\Logic\AccountLogic;
 use App\Module\ActionLog\Constant\ActionLogConstant;
 use App\Module\ActionLog\Service\ActionLogService;
 use App\Util\AppException;
 use App\Util\Log;
+use App\Util\Redis;
 use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Coroutine;
@@ -32,12 +34,14 @@ class ActionLogLogic
     public function create($accountId, $thirdId, $type, $snapshot, $ip)
     {
         Coroutine::create(function () use($accountId, $thirdId, $type, $snapshot, $ip) {
+            $addr = $this->ip2region($ip);
             $createParams = [
                 'account_id'    => $accountId,
                 'third_id'      => $thirdId,
                 'type'          => $type,
                 'snapshot'      => $snapshot,
-                'ip'            => $ip
+                'ip'            => $ip,
+                'addr'          => $addr
             ];
             $this->service->create($createParams);
         });
@@ -122,5 +126,59 @@ class ActionLogLogic
     public function getTouristActionLogCount($beginTime, $endTime, $type)
     {
         return $this->service->getTouristActionLogCount($beginTime, $endTime, $type);
+    }
+
+    /**
+     * IP 转化为地址
+     *
+     * @param string $ip
+     * @return string
+     */
+    public function ip2region($ip = '')
+    {
+        if (empty($ip)) return '';
+
+        $redis          = Redis::instance();
+        $redisKey       = RedisKeyConst::IP_REGION . $ip;
+        $redisExpire    = 86400 * 2;
+
+        // 1、我先查一下缓存有没有该 IP 的信息
+        $formatAddr = $redis->get($redisKey);
+        if ($formatAddr) {
+            return $formatAddr;
+        }
+
+        // 2、我再查一下数据表里有没有该 IP 的信息，查到了就写缓存，减少 MySQL 的 IO 次数
+        $actionLogInfo = $this->service->getLineByWhere(['ip' => $ip, 'addr' => ['!=', '']], ['id', 'ip', 'addr'], ['id' => 'desc']);
+        if (!empty($actionLogInfo)) {
+            $formatAddr = $actionLogInfo['addr'];
+            $redis->set($redisKey, $formatAddr, ['nx', 'ex' => $redisExpire]);
+            return $formatAddr;
+        }
+
+        // 3、缓存里没有，数据表里也没有，那我只能去调用接口查了
+        $iQiYiApi = sprintf('http://ip.geo.iqiyi.com/cityjson?format=json&ip=%s', $ip);
+        $iQiYiRes = file_get_contents($iQiYiApi);
+
+        if (empty($iQiYiRes)) {
+            Log::error('爱奇艺接口返回信息为空', ['ip' => $ip]);
+            return '';
+        }
+        $iQiYiArr = json_decode($iQiYiRes, true);
+        if (empty($iQiYiArr) || !isset($iQiYiArr['data']['country'])) {
+            Log::error('爱奇艺接口返回信息出错', ['ip' => $ip, 'res' => $iQiYiRes]);
+            return '';
+        }
+
+        $country    = $iQiYiArr['data']['country'];
+        $province   = $iQiYiArr['data']['province'];
+        $city       = $iQiYiArr['data']['city'];
+
+        $formatAddr = sprintf('%s %s %s', $country, $province, $city);
+
+        // 写缓存
+        $redis->set($redisKey, $formatAddr, ['nx', 'ex' => $redisExpire]);
+
+        return $formatAddr;
     }
 }

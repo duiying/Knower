@@ -306,6 +306,7 @@ CREATE TABLE `t_user_action_log` (
                                      `type` int(10) NOT NULL DEFAULT '0' COMMENT '行为类型',
                                      `snapshot` varchar(2000) NOT NULL DEFAULT '' COMMENT '快照内容',
                                      `ip` varchar(50) NOT NULL DEFAULT '' COMMENT '客户端IP地址',
+                                     `addr` varchar(500) NOT NULL DEFAULT '' COMMENT '客户端IP对应的地址',
                                      `mtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                                      `ctime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                      PRIMARY KEY (`id`),
@@ -313,5 +314,6 @@ CREATE TABLE `t_user_action_log` (
                                      KEY `idx_third_id` (`third_id`),
                                      KEY `idx_type` (`type`),
                                      KEY `idx_ip` (`ip`),
+                                     KEY `idx_addr` (`addr`),
                                      KEY `idx_ctime` (`ctime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户行为日志表';
