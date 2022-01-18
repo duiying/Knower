@@ -12,7 +12,7 @@
             <form id="article-search" onsubmit="return false;">
                 <div class="row">
                     <div class="input-group-append mr-1">
-                        <a href="/view/article/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fas fa-plus"></i></button></a>
+                        <a href="/view/article/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fa fa-plus"></i></button></a>
                     </div>
                     <div class="col-2">
                         <input type="text" name="id" class="form-control" placeholder="ID">
@@ -21,7 +21,7 @@
                         <input type="text" name="keywords" class="form-control" placeholder="搜索内容">
                     </div>
                     <div class="input-group-append ml-1">
-                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i></button>
+                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </form>
@@ -118,8 +118,8 @@
                     listHtml += '<td>' + list[i].mtime + '</td>';
                     listHtml += '<td>';
                     if (list[i].status === 1) {
-                        listHtml += '<a href="/view/article/update?id=' + list[i].id + '"><i class="fas fa-edit"></i></a>';
-                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
+                        listHtml += '<a href="/view/article/update?id=' + list[i].id + '"><i class="fa fa-edit"></i></a>';
+                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fa fa-trash"></i></a>';
                     }
                     listHtml += '</td>';
                     listHtml += '</tr>';

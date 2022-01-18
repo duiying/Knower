@@ -24,7 +24,7 @@
                     <input type="text" class="form-control" name="email" placeholder="邮箱">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                            <span class="fa fa-envelope"></span>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <input type="password" class="form-control" name="password" placeholder="密码">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
+                            <span class="fa fa-lock"></span>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <div class="social-auth-links text-center mb-3">
                 <p>- OR -</p>
                 <a href="#" class="btn btn-block btn-primary">
-                    <i class="fab fa-github mr-2"></i> Sign in using GitHub
+                    <i class="fa fa-github mr-2"></i> Sign in using GitHub
                 </a>
             </div>
             <!-- /.social-auth-links -->

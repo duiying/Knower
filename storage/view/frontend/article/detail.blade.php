@@ -106,7 +106,7 @@
                     listHtml += '<p style="margin: 0px;">' + list[i].account_info.nickname + '<span style="color:#ddd;font-size:0.8rem;margin-left:10px;">' + list[i].format_ctime + '<span></p>';
                     listHtml += '</div>';
                     if (list[i].show_delete === 1) {
-                        listHtml += '<div class="col-md-1 float-right"><a href="javascript:;" style="color:#007bff;" onclick="delComment(' + list[i].id + ')"><i class="fas fa-trash"></i></a></div>';
+                        listHtml += '<div class="col-md-1 float-right"><a href="javascript:;" style="color:#007bff;" onclick="delComment(' + list[i].id + ')"><i class="fa fa-trash"></i></a></div>';
                     }
                     listHtml += '</div>';
                     listHtml += '<hr style="margin-top:3px;">';

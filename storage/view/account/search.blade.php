@@ -23,7 +23,7 @@
                         <input type="text" name="mobile" class="form-control" placeholder="手机号">
                     </div>
                     <div class="input-group-append ml-1">
-                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i></button>
+                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </form>
@@ -82,7 +82,7 @@
                     listHtml += '<td>' + list[i].nickname + '</td>';
                     listHtml += '<td>' + list[i].email + '</td>';
                     listHtml += '<td>' + list[i].mobile + '</td>';
-                    listHtml += '<td><span id="mark-' + list[i].id + '">' + list[i].mark + '</span><a href="javascript:;" class="ml-1" onclick="editMark(' + list[i].id + ')"><i class="fas fa-edit"></i></a></td>';
+                    listHtml += '<td><span id="mark-' + list[i].id + '">' + list[i].mark + '</span><a href="javascript:;" class="ml-1" onclick="editMark(' + list[i].id + ')"><i class="fa fa-edit"></i></a></td>';
                     listHtml += '<td>';
                     if (list[i].status === 1) {
                         listHtml += '<span class="label label-success">' + list[i].status_text + '</span>';

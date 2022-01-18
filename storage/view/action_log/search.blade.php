@@ -14,7 +14,7 @@
                         <input type="text" name="account_id" class="form-control" placeholder="用户 ID">
                     </div>
                     <div class="input-group-append ml-1">
-                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i></button>
+                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </form>

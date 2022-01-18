@@ -36,7 +36,7 @@
             menuListHtml += '<p class="col-2">';
             menuListHtml += '<i class="' + menuList[i].icon + '"></i>';
             menuListHtml += '<p>' + menuList[i].name;
-            if (menuList[i].sub_menu_list.length > 0) menuListHtml += '<i class="right fas fa-angle-left"></i>';
+            if (menuList[i].sub_menu_list.length > 0) menuListHtml += '<i class="right fa fa-angle-left"></i>';
             menuListHtml += '</p>';
             menuListHtml += '</p>';
             menuListHtml += '</a>';

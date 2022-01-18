@@ -35,7 +35,7 @@
                         <input type="text" name="account_id" class="form-control" placeholder="用户 ID">
                     </div>
                     <div class="input-group-append ml-1">
-                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i></button>
+                        <button type="submit" onclick="handleSearch();" class="btn btn-block btn-outline-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </form>
@@ -114,7 +114,7 @@
                     listHtml += '<td>' + list[i].ctime + '</td>';
                     listHtml += '<td>';
                     if (list[i].status === 1) {
-                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
+                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleDelete(' + list[i].id + ')"><i class="fa fa-trash"></i></a>';
                     }
                     if (list[i].audit === 0) {
                         listHtml += '<a href="javascript:;" class="ml-2" style="color:#5cb85c;" onclick="handlePass(' + list[i].id + ')">通过</a>';

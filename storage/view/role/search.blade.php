@@ -14,7 +14,7 @@
             <form id="user-search" onsubmit="return false;">
                 <div class="row">
                     <div class="input-group-append mr-1">
-                        <a href="/view/role/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fas fa-plus"></i></button></a>
+                        <a href="/view/role/create"><button type="button" class="btn btn-block btn-outline-primary"><i class="fa fa-plus"></i></button></a>
                     </div>
                 </div>
             </form>
@@ -83,8 +83,8 @@
                     listHtml += '</td>';
                     listHtml += '<td>';
                     if (list[i].admin != 1) {
-                        listHtml += '<a href="/view/role/update?id=' + list[i].id + '"><i class="fas fa-edit"></i></a>';
-                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleRoleDelete(' + list[i].id + ')"><i class="fas fa-trash"></i></a>';
+                        listHtml += '<a href="/view/role/update?id=' + list[i].id + '"><i class="fa fa-edit"></i></a>';
+                        listHtml += '<a href="javascript:;" class="ml-2" onclick="handleRoleDelete(' + list[i].id + ')"><i class="fa fa-trash"></i></a>';
                     }
                     listHtml += '</td>';
                     listHtml += '</tr>';
