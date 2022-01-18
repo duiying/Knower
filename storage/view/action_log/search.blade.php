@@ -27,6 +27,7 @@
                     <th style="width: 50px">ID</th>
                     <th style="width: 200px">用户</th>
                     <th style="width: 100px">IP</th>
+                    <th style="width: 200px">地址</th>
                     <th style="width: 200px">行为</th>
                     <th style="width: 100px">关联 ID</th>
                     <th style="width: 300px">关联内容</th>
@@ -78,6 +79,7 @@
                         listHtml += '<td>游客</td>'
                     }
                     listHtml += '<td>' + list[i].ip + '</td>';
+                    listHtml += '<td>' + list[i].addr + '</td>';
                     listHtml += '<td>' + list[i].type_text + '</td>';
                     listHtml += '<td>' + list[i].third_id + '</td>';
                     listHtml += '<td>' + list[i].snapshot + '</td>';
