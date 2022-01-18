@@ -9,6 +9,8 @@ use App\Module\Account\Constant\AccountConstant;
 use App\Module\Account\Constant\OAuthConstant;
 use App\Module\Account\Service\AccountService;
 use App\Module\Account\Service\OAuthService;
+use App\Module\ActionLog\Constant\ActionLogConstant;
+use App\Module\ActionLog\Logic\ActionLogLogic;
 use App\Module\Img\Logic\ImgLogic;
 use App\Util\AppException;
 use App\Util\HTTPClient;
@@ -289,12 +291,13 @@ class AccountLogic
         $this->oAuthService->update(['id' => $id], $updateOAuthData);
 
         // 2、再更新用户表
-        $oAuthInfo = $this->oAuthService->getLineByWhere(['id' => $id], ['id', 'account_id']);
+        $oAuthInfo = $this->oAuthService->getLineByWhere(['id' => $id], ['id', 'account_id', 'oauth_type']);
         if (empty($oAuthInfo)) {
             throw new AppException(AppErrorCode::USER_REGISTER_INFO_NOT_EXIST);
         }
-        $accessToken = Util::generateToken();
-        $accountId = $oAuthInfo['account_id'];
+        $accessToken    = Util::generateToken();
+        $accountId      = $oAuthInfo['account_id'];
+        $oAuthType      = $oAuthInfo['oauth_type'];
         $updateAccountData = [
             'access_token'          => $accessToken,
             'access_token_expire'   => date('Y-m-d H:i:s', time() + CommonConstant::FRONTEND_TOKEN_SECONDS),
@@ -304,6 +307,14 @@ class AccountLogic
             'mobile'                => $mobile
         ];
         $this->accountService->update(['id' => $accountId], $updateAccountData);
+
+        // 记录操作日志
+        $actionLogMap = [
+            OAuthConstant::OAUTH_TYPE_GITHUB    => ActionLogConstant::TYPE_GITHUB_LOGIN,
+            OAuthConstant::OAUTH_TYPE_QQ        => ActionLogConstant::TYPE_QQ_LOGIN,
+        ];
+        $actionLogLogic = make(ActionLogLogic::class);
+        $actionLogLogic->create($accountId, 0, $actionLogMap[$oAuthType], '', '');
 
         return $accessToken;
     }
@@ -360,6 +371,14 @@ class AccountLogic
         }
 
         $this->accountService->commit();
+
+        // 记录操作日志
+        $actionLogMap = [
+            OAuthConstant::OAUTH_TYPE_GITHUB    => ActionLogConstant::TYPE_GITHUB_REGISTER,
+            OAuthConstant::OAUTH_TYPE_QQ        => ActionLogConstant::TYPE_QQ_REGISTER,
+        ];
+        $actionLogLogic = make(ActionLogLogic::class);
+        $actionLogLogic->create($accountInsertId, 0, $actionLogMap[$oAuthType], '', '');
 
         return $accessToken;
     }

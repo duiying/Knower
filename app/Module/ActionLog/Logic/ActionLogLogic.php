@@ -21,12 +21,6 @@ class ActionLogLogic
     private $service;
 
     /**
-     * @Inject()
-     * @var AccountLogic
-     */
-    private $accountLogic;
-
-    /**
      * 创建一条用户行为日志记录
      *
      * @param $accountId
@@ -65,7 +59,8 @@ class ActionLogLogic
         );
 
         $accountIdList = empty($list) ? [] : array_column($list, 'account_id');
-        $accountInfoMap = $this->accountLogic->getAccountInfoMapByIdList($accountIdList);
+        $accountLogic = make(AccountLogic::class);
+        $accountInfoMap = $accountLogic->getAccountInfoMapByIdList($accountIdList);
 
         foreach ($list as $k => $v) {
             $accountId = $v['account_id'];

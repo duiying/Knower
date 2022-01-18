@@ -285,7 +285,7 @@ DROP TABLE IF EXISTS `t_user_oauth`;
 CREATE TABLE `t_user_oauth` (
                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
                                 `account_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户ID',
-                                `oauth_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '第三方登录类型 {1：GitHub；2：微信扫码登录；}',
+                                `oauth_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '第三方登录类型 {1：GitHub；2：QQ 登录；}',
                                 `oauth_id` varchar(255) NOT NULL DEFAULT '' COMMENT '第三方登录ID',
                                 `token` varchar(255) NOT NULL DEFAULT '' COMMENT '密码凭证',
                                 `avatar_img_id`int(10) NOT NULL DEFAULT '0' COMMENT '头像图片ID',
