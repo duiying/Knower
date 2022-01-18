@@ -158,13 +158,15 @@ Router::get('/article/info', Route::decoration('Article\Action\InfoAction'), ['m
 Router::get('/tags', Route::decoration('Tag\Action\ListAction'));
 // 首页文章列表接口
 Router::get('/articles', Route::decoration('Article\Action\ListAction'));
-// 第三方登录相关
+// 登录相关接口
 Router::get('/oauth/github', 'App\Module\Account\Action\OAuthAction@github');
 Router::get('/oauth/github/callback', 'App\Module\Account\Action\OAuthAction@githubCallback');
 Router::get('/oauth/qq', 'App\Module\Account\Action\OAuthAction@qq');
 Router::get('/oauth/qq/callback', 'App\Module\Account\Action\OAuthAction@qqCallback');
 // 根据前台 token 获取用户登录信息接口
 Router::get('/account/get_info_by_token', Route::decoration('Account\Action\GetAccountInfoByTokenAction'));
+// 退出登录
+Router::get('/account/logout', Route::decoration('Account\Action\LogoutAction'));
 // 创建评论接口
 Router::post('/comment/create', Route::decoration('Comment\Action\CreateAction'),  ['middleware' => [PreventRepeatMiddleware::class, FrontendTokenMiddleware::class]]);
 // 评论列表接口

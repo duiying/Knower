@@ -23,7 +23,7 @@
                         <img style="height:25px;border-radius: 50%;" src="" id="user-avatar"> <span id="user-nickname">duiying123</span> <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/">
+                        <a class="dropdown-item" href="/account/logout">
                             退出登录
                         </a>
                     </div>

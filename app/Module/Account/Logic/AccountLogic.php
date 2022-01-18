@@ -505,4 +505,15 @@ class AccountLogic
             $this->accountService->update(['id' => $accountId], ['last_active_time' => Util::now()]);
         });
     }
+
+    /**
+     * 退出登录
+     *
+     * @param $accessToken
+     */
+    public function logout($accessToken)
+    {
+        if (empty($accessToken)) return;
+        $this->accountService->update(['access_token' => $accessToken], ['access_token' => '']);
+    }
 }
