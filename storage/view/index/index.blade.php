@@ -15,7 +15,7 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="/view/account/search" class="small-box-footer">更多 <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="/view/account/search" class="small-box-footer">更多 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -29,7 +29,7 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="/view/article/search" class="small-box-footer">更多 <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="/view/article/search" class="small-box-footer">更多 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -43,7 +43,7 @@
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="/view/comment/search" class="small-box-footer">更多 <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="/view/comment/search" class="small-box-footer">更多 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
