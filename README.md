@@ -2,7 +2,7 @@
     Knower
 </h1>
 
-### 简介
+### 1、简介
 
 **Knower（知者）**：一个实用的的开源知识库管理平台。  
 
@@ -11,7 +11,7 @@
 **前台线上地址：** http://duiying.vip  
 **运营后台线上地址：** http://duiying.vip/admin 邮箱：`demo@gmail.com` 密码：`123456`
 
-### 技术栈
+### 2、技术栈
 
 只使用了必需的技术：  
 
@@ -31,7 +31,7 @@ b33b0e3cb5d2        registry.cn-beijing.aliyuncs.com/duiying/hyperf-php8:1.0    
 321366347e2e        registry.cn-beijing.aliyuncs.com/duiying/elasticsearch-ik:1.0   "/tini -- /usr/loc..."   6 weeks ago         Up 6 weeks          0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp   knower-elasticsearch
 ```
 
-### 如何安装？
+### 3、如何安装？
 
 请先确保你的 PHP 环境已经安装了 `Swoole`、`Redis` 扩展。  
 
