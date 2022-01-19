@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keyword" content="">
-    <meta name="description" content="">
-
+    <title>Knower 知者开源项目</title>
+    <meta name="keyword" content="Knower,PHP,Hyperf,对影,duiying,博客,内容管理,开源,Redis,前后端分离,RBAC,ElasticSearch,权限管理">
+    <meta name="description" content="Knower 知者开源项目">
+    <link rel="shortcut icon" href="/storage/img/shortcut.png" />
     <title></title>
 
     @include('frontend.layouts.css')

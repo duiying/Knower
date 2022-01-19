@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3</title>
-
+    <title>Knower Admin</title>
+    <link rel="shortcut icon" href="/storage/img/shortcut.png" />
     @include('layouts.css')
     @include('layouts.js')
 </head>
