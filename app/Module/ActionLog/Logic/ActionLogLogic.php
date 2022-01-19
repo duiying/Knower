@@ -173,8 +173,11 @@ class ActionLogLogic
         $country    = $iQiYiArr['data']['country'];
         $province   = $iQiYiArr['data']['province'];
         $city       = $iQiYiArr['data']['city'];
+        $isp        = $iQiYiArr['data']['isp'];
 
-        $formatAddr = sprintf('%s %s %s', $country, $province, $city);
+        $formatAddr = trim(sprintf('%s %s %s %s', $country, $province, $city, $isp));
+
+        if (empty($formatAddr)) return '';
 
         // 写缓存
         $redis->set($redisKey, $formatAddr, ['nx', 'ex' => $redisExpire]);
