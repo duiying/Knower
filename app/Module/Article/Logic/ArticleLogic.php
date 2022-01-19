@@ -459,7 +459,7 @@ class ArticleLogic
         }
 
         // 1、匹配原生 HTML img 标签语法；2、匹配 markdown img 语法；
-        $pregHtmlImg        = "/<img.*?src=[\"|\']?(.*?)[\"|\']?\s.*?>/i";
+        $pregHtmlImg        = '/<img.+src=\"?(.+\.(jpg|gif|bmp|bnp|png))\"?.+>/i';
         $pregMarkdownImg    = '/!\\[.*\\]\\((.+)\\)/';
 
         preg_match_all($pregHtmlImg, $content, $pregHtmlImgInfoList);
