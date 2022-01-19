@@ -1,6 +1,4 @@
-<h1 align="center">
-    Knower
-</h1>
+<div align=center><img src="https://raw.githubusercontent.com/duiying/Knower/master/storage/img/logo.png"></div>
 
 ### 1、简介
 
