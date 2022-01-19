@@ -11,10 +11,12 @@
                                 <a class="btn btn-outline-secondary" href="/oauth/qq">
                                     <img src="/storage/frontend/img/qq_logo.png" style="width:14px;margin-bottom:3px;">&nbsp;QQ 登录
                                 </a>
+                                <!--
                                 <br>
                                 <a class="btn btn-outline-secondary" href="/oauth/github" style="margin-top:5px;">
                                     <img src="/storage/frontend/img/github_logo.png" style="width:14px;margin-bottom:3px;">&nbsp;GitHub 登录
                                 </a>
+                                -->
                             </div>
                         </div>
                     </div>
