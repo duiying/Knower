@@ -77,6 +77,16 @@ CREATE TABLE `t_passport_role_permission` (
                                               KEY `idx_permission_id` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色权限表';
 
+INSERT INTO `t_passport_role_permission` VALUES (1, 2, 1, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_permission` VALUES (2, 2, 5, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_permission` VALUES (3, 2, 11, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_permission` VALUES (4, 2, 16, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_permission` VALUES (5, 2, 21, 1, '2022-01-19 11:30:10', '2022-01-19 11:30:10');
+INSERT INTO `t_passport_role_permission` VALUES (6, 2, 26, 1, '2022-01-19 11:30:10', '2022-01-19 11:30:10');
+INSERT INTO `t_passport_role_permission` VALUES (7, 2, 31, 1, '2022-01-19 11:30:10', '2022-01-19 11:30:10');
+INSERT INTO `t_passport_role_permission` VALUES (8, 2, 34, 1, '2022-01-19 11:30:10', '2022-01-19 11:30:10');
+INSERT INTO `t_passport_role_permission` VALUES (9, 2, 38, 1, '2022-01-19 11:30:10', '2022-01-19 11:30:10');
+
 DROP TABLE IF EXISTS `t_passport_role_menu`;
 CREATE TABLE `t_passport_role_menu` (
                                         `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -89,6 +99,16 @@ CREATE TABLE `t_passport_role_menu` (
                                         KEY `idx_role_id` (`role_id`),
                                         KEY `idx_menu_id` (`menu_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色菜单表';
+
+INSERT INTO `t_passport_role_menu` VALUES (1, 2, 2, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (2, 2, 3, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (3, 2, 4, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (4, 2, 5, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (5, 2, 7, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (6, 2, 8, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (7, 2, 9, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (8, 2, 11, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
+INSERT INTO `t_passport_role_menu` VALUES (9, 2, 12, 1, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
 
 DROP TABLE IF EXISTS `t_passport_user_role`;
 CREATE TABLE `t_passport_user_role` (
@@ -119,6 +139,7 @@ INSERT INTO `t_passport_menu` VALUES (12, 10, '行为日志', 'fa fa-camera', '/
 
 -- 角色基础数据
 INSERT INTO `t_passport_role` VALUES (1, '超级管理员', 1, 1, 1, '2020-09-04 14:26:32', '2020-09-02 19:45:21');
+INSERT INTO `t_passport_role` VALUES (2, '游客', 0, 1, 99, '2022-01-19 11:30:10', '2022-01-19 11:29:22');
 
 -- 权限基础数据
 INSERT INTO `t_passport_permission` VALUES (1, '管理员列表', '/view/user/search;/v1/user/search', 1, 3, '2020-09-11 14:32:25', '2020-09-08 19:38:52');
@@ -142,15 +163,30 @@ INSERT INTO `t_passport_permission` VALUES (18, '角色更新', '/view/role/upda
 INSERT INTO `t_passport_permission` VALUES (19, '角色删除', '/v1/role/delete', 1, 21, '2020-09-11 14:33:19', '2020-09-09 10:05:37');
 INSERT INTO `t_passport_permission` VALUES (20, '角色', '/view/role/search;/v1/role/search;/view/role/create;/v1/role/create;/view/role/update;/v1/role/update;/v1/role/find;/v1/role/delete;/v1/permission/select;/v1/menu/select', 1, 22, '2020-09-11 14:33:22', '2020-09-09 10:15:25');
 INSERT INTO `t_passport_permission` VALUES (21, '文章列表', '/view/article/search;/v1/article/search', 1, 23, '2020-12-09 10:36:16', '2020-12-09 10:36:16');
-INSERT INTO `t_passport_permission` VALUES (22, '文章创建', '/view/article/create;/v1/article/create', 1, 24, '2020-12-09 10:37:13', '2020-12-09 10:37:13');
-INSERT INTO `t_passport_permission` VALUES (23, '文章更新', '/view/article/update;/v1/article/update;/v1/article/find', 1, 25, '2020-12-09 10:38:34', '2020-12-09 10:38:34');
+INSERT INTO `t_passport_permission` VALUES (22, '文章创建', '/view/article/create;/v1/article/create;/v1/tag/select;/v1/img/upload', 1, 24, '2022-01-19 13:24:58', '2020-12-09 10:37:13');
+INSERT INTO `t_passport_permission` VALUES (23, '文章更新', '/view/article/update;/v1/article/update;/v1/article/find;/v1/tag/select;/v1/img/upload', 1, 25, '2022-01-19 05:25:18', '2020-12-09 10:38:34');
 INSERT INTO `t_passport_permission` VALUES (24, '文章删除', '/v1/article/delete', 1, 26, '2020-12-09 10:39:14', '2020-12-09 10:39:14');
-INSERT INTO `t_passport_permission` VALUES (25, '文章', '/view/article/search;/v1/article/search;/view/article/create;/v1/article/create;/view/article/update;/v1/article/update;/v1/article/find;/v1/article/delete', 1, 27, '2020-12-09 10:40:49', '2020-12-09 10:40:49');
+INSERT INTO `t_passport_permission` VALUES (25, '文章', '/view/article/search;/v1/article/search;/view/article/create;/v1/article/create;/view/article/update;/v1/article/update;/v1/article/find;/v1/article/delete;/v1/tag/select;/v1/img/upload', 1, 27, '2022-01-19 05:25:22', '2020-12-09 10:40:49');
+INSERT INTO `t_passport_permission` VALUES (26, '标签列表', '/view/tag/search;/v1/tag/search', 1, 28, '2022-01-19 10:24:42', '2022-01-19 10:24:42');
+INSERT INTO `t_passport_permission` VALUES (27, '标签创建', '/view/tag/create;/v1/tag/create', 1, 29, '2022-01-19 02:26:39', '2022-01-19 10:25:33');
+INSERT INTO `t_passport_permission` VALUES (28, '标签更新', '/view/tag/update;/v1/tag/update;/v1/tag/find', 1, 30, '2022-01-19 10:26:45', '2022-01-19 10:26:45');
+INSERT INTO `t_passport_permission` VALUES (29, '标签删除', '/v1/tag/delete', 1, 31, '2022-01-19 10:27:18', '2022-01-19 10:27:18');
+INSERT INTO `t_passport_permission` VALUES (30, '标签', '/view/tag/search;/v1/tag/search;/view/tag/create;/v1/tag/create;/view/tag/update;/v1/tag/update;/v1/tag/find;/v1/tag/delete', 1, 32, '2022-01-19 02:28:18', '2022-01-19 10:28:02');
+INSERT INTO `t_passport_permission` VALUES (31, '评论列表', '/view/comment/search;/v1/comment/search', 1, 33, '2022-01-19 02:38:20', '2022-01-19 10:30:01');
+INSERT INTO `t_passport_permission` VALUES (32, '评论审核通过、删除', '/v1/comment/update_status', 1, 34, '2022-01-19 02:38:22', '2022-01-19 10:38:04');
+INSERT INTO `t_passport_permission` VALUES (33, '评论', '/view/comment/search;/v1/comment/search;/v1/comment/update_status', 1, 35, '2022-01-19 02:41:46', '2022-01-19 10:41:35');
+INSERT INTO `t_passport_permission` VALUES (34, '用户列表', '/view/account/search;/v1/account/search', 1, 36, '2022-01-19 02:45:36', '2022-01-19 10:43:06');
+INSERT INTO `t_passport_permission` VALUES (35, '用户封禁、解封', '/v1/account/update_status', 1, 37, '2022-01-19 02:45:39', '2022-01-19 10:44:16');
+INSERT INTO `t_passport_permission` VALUES (36, '用户备注', '/v1/account/update_mark_field', 1, 38, '2022-01-19 02:45:42', '2022-01-19 10:44:55');
+INSERT INTO `t_passport_permission` VALUES (37, '用户', '/view/account/search;/v1/account/search;/v1/account/update_status;/v1/account/update_mark_field', 1, 39, '2022-01-19 02:45:45', '2022-01-19 10:45:26');
+INSERT INTO `t_passport_permission` VALUES (38, '行为日志列表', '/view/action_log/search;/v1/action_log/search', 1, 99, '2022-01-19 10:47:10', '2022-01-19 10:47:10');
 
 -- 管理员基础数据
 INSERT INTO `t_passport_user` VALUES (1, 'admin', 'admin@gmail.com', '18311413962', '技术负责人', '8e306fa6f8966e4cb9fd523868ec4698', 1, 1, 1, '2020-09-06 12:54:51', '2020-08-27 17:08:08');
+INSERT INTO `t_passport_user` VALUES (2, '游客', 'demo@gmail.com', '17788889999', '游客', '8e306fa6f8966e4cb9fd523868ec4698', 1, 0, 99, '2022-01-19 13:45:05', '2022-01-19 11:01:26');
 -- 用户角色基础数据
 INSERT INTO `t_passport_user_role` VALUES (1, 1, 1, 1, '2020-09-06 10:26:31', '2020-09-06 08:37:29');
+INSERT INTO `t_passport_user_role` VALUES (2, 2, 2, 1, '2022-01-19 13:45:05', '2022-01-19 13:45:05');
 
 # content 数据库
 
