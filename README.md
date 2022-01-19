@@ -31,8 +31,6 @@ b33b0e3cb5d2        registry.cn-beijing.aliyuncs.com/duiying/hyperf-php8:1.0    
 
 ### 3、如何安装？
 
-请先确保你的 PHP 环境已经安装了 `Swoole`、`Redis` 扩展。  
-
 1、下载  
 
 ```sh
@@ -42,14 +40,16 @@ git clone https://github.com/duiying/Knower.git
 2、安装  
 
 ```sh
+# 1、进入目录
 $ cd /home/work/Knower
 
-# 安装 Composer 包
+# 2、安装 Composer 包
+# 如果你没有装 Swoole、Redis 扩展，composer install 会报错，这怎么办呢？
+# 那就不要 composer install 了，我把 vendor 目录打包好了，直接解压 vendor.zip 吧
 $ composer install
 
+# 3、容器化部署
 $ cd /home/work/Knower/docker
-
-# 容器化部署
 $ docker-compose up -d
 ```
 
