@@ -52,7 +52,6 @@ class AppExceptionHandler extends ExceptionHandler
             return $response->withHeader('Content-Type', 'text/html; charset=utf-8')->withStatus(200)->withBody(new SwooleStream($data));
         }
 
-
         // 其它异常
         // 格式化输出
         $data = json_encode([

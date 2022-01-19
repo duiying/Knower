@@ -84,7 +84,7 @@ Router::addGroup('/v1/',function () {
 
     // 权限相关
     Router::get('permission/search', Route::decoration('AdminPassport\Permission\Action\SearchAction'));
-    Router::get('permission/select', Route::decoration('AdminPassport\Permission\Action\SearchAction'));
+    Router::get('permission/select', Route::decoration('AdminPassport\Permission\Action\SelectAction'));
     Router::post('permission/create', Route::decoration('AdminPassport\Permission\Action\CreateAction'));
     Router::post('permission/update', Route::decoration('AdminPassport\Permission\Action\UpdateAction'));
     Router::get('permission/find', Route::decoration('AdminPassport\Permission\Action\FindAction'));
@@ -111,7 +111,7 @@ Router::addGroup('/v1/',function () {
     Router::post('tag/create', Route::decoration('Tag\Action\CreateAction'));
     Router::post('tag/update', Route::decoration('Tag\Action\UpdateAction'));
     Router::get('tag/find', Route::decoration('Tag\Action\FindAction'));
-    Router::post('tag/update_field', Route::decoration('Tag\Action\UpdateFieldAction'));
+    Router::post('tag/delete', Route::decoration('Tag\Action\UpdateFieldAction'));
     Router::get('tag/select', Route::decoration('Tag\Action\SelectAction'));
 
     // 评论相关

@@ -402,6 +402,8 @@ class UserLogic
             '/',                            // 后台首页
             '/v1/user/menu',                // 左侧菜单接口
             '/v1/user/get_info',            // 用户基本信息
+            '/v1/img/upload',               // 图片上传
+            '/v1/data/stat',                // 后台首页数据统计
         ])) {
             return $userId;
         }

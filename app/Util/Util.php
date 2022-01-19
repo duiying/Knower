@@ -268,8 +268,13 @@ class Util
                 }
 
                 // 字段类型转换
-                if (self::contain($rules[$k], 'string')) $sanitizedData[$k] = (string)$v;
-                if (self::contain($rules[$k], 'integer')) $sanitizedData[$k] = (int)$v;
+                if (self::contain($rules[$k], 'string')) {
+                    $sanitizedData[$k] = (string)$v;
+                } else if (self::contain($rules[$k], 'integer')) {
+                    $sanitizedData[$k] = (int)$v;
+                } else {
+                    $sanitizedData[$k] = (string)$v;
+                }
             }
         }
 

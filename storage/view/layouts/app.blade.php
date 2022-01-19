@@ -49,7 +49,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p class="text-center"><i class="fas fa-exclamation-circle" style="color:#f8bb86;font-size: 2rem;"></i></p>
+                    <p class="text-center"><i class="fa fa-exclamation-circle" style="color:#f8bb86;font-size: 2rem;"></i></p>
                     <p class="text-center" style="font-size: 1rem;">确定要删除吗？</p>
                 </div>
                 <div class="modal-footer justify-content-between">

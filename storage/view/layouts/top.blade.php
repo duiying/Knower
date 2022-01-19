@@ -19,8 +19,7 @@
                 <a href="#" class="dropdown-item">
                     <!-- Message Start -->
                     <div class="media">
-                        <img src="/storage/AdminLTE/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                        <div class="media-body">
+                        <div class="media-body text-center">
                             <h3 class="dropdown-item-title mt-1">
                                 <span class="user-name"></span>
                             </h3>
