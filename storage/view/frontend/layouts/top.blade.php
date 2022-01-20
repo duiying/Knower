@@ -35,7 +35,12 @@
 <script type="text/javascript">
     function renderLogin()
     {
-        var data = getInfoByToken();
+        if ($.cookie('knower_access_token')) {
+            var data = getInfoByToken();
+        } else {
+            var data = false;
+        }
+
         // 已登录
         if (data !== false && data.id !== undefined) {
             $('#account-logout').css('display', 'inline-block');
