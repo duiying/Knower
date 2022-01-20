@@ -4,7 +4,9 @@
 
 **Knower（知者）**：一个实用的的开源知识库管理平台。  
 
-基于 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 实现，集成了权限管理、第三方登录（GitHub、QQ），亦可作为 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 的开发脚手架。不追求过多的技术栈，尽可能做到**实用、稳定**。
+基于 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 实现，集成了权限管理、第三方登录（GitHub、QQ），亦可作为 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 的开发脚手架。  
+
+不追求过多的技术栈，尽可能做到**实用、稳定**。  
 
 **前台线上地址：** http://duiying.vip  
 **运营后台线上地址：** http://duiying.vip/admin 邮箱：`demo@gmail.com` 密码：`123456`
@@ -18,7 +20,12 @@
 3. **Redis**：提供缓存、会话管理、接口防重放等功能
 4. **ElasticSearch**：提供知识搜索功能
 
-如果你像我一样，使用了 Docker 来作容器化部署，那么你会看到以下 4 个容器（`knower-php`、`knower-mysql`、`knower-redis`、`knower-elasticsearch`）：  
+如果你像我一样，使用了 Docker 来作容器化部署，那么你会看到以下 4 个容器：  
+
+- `knower-php`
+- `knower-mysql`
+- `knower-redis`
+- `knower-elasticsearch`
 
 ```sh
 [root@VM-24-17-centos ~]# docker ps
