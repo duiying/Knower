@@ -4,12 +4,14 @@
     <div class="row justify-content-center">
         <div class="col-md-12" style="margin-top:20px;">
             <form action="/" class="form-inline" id="article-search" onsubmit="return false;">
-                <input class="form-control col-md-4" type="text" id="keywords" placeholder="请输入搜索内容" value="">
-                <button class="btn btn-outline-secondary ml-2" type="submit" onclick="handleSearch();"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <input class="form-control col-md-4 mr-2" type="text" id="keywords" placeholder="请输入搜索内容" value="">
+                <!-- 下面两个换行是为了兼容移动端 -->
+                <br><br>
+                <button class="btn btn-outline-secondary" type="submit" onclick="handleSearch();"><i class="fa fa-search" aria-hidden="true"></i></button>
             </form>
         </div>
 
-        <div class="col-md-8 col-xs-6" style="padding-right: 0;">
+        <div class="col-md-8">
             <div class="card" style="margin-top:20px;">
                 <div class="card-body" id="frontend-articles">
 
@@ -22,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4" style="padding-left:20px;">
+        <div class="col-md-4">
             <!-- 作者 begin -->
             @include('frontend.layouts.author')
             <!-- 作者 end -->
