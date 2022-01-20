@@ -40,6 +40,11 @@ request = {
                     if (resp.code !== 0) {
                         if (resp.msg !== '') {
                             alertError(resp.msg);
+                            if (resp.code === 3000511) {
+                                setTimeout(function () {
+                                    location.href = '/login'
+                                }, 1000);
+                            }
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
                         }
