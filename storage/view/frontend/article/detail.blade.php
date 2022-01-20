@@ -195,9 +195,14 @@
         }
 
         $('#comment-submit').click(function () {
+            var commentContent = $('#comment-content').val();
+            if (commentContent.trim() === '') {
+                alertError('评论内容不能为空！');
+                return false;
+            }
             var createCommentParams = {
                 third_id : articleId,
-                content : $('#comment-content').val()
+                content : commentContent
             };
             var data = createComment(createCommentParams);
             if (data !== false) {
