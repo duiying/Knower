@@ -73,7 +73,7 @@ class StatLogic
             $wg->done();
         });
         Coroutine::create(function () use($wg, &$commentCount) {
-            $commentCount = $this->getArticleCount();
+            $commentCount = $this->getCommentCount();
             $wg->done();
         });
         Coroutine::create(function () use($wg, &$accountCount) {
