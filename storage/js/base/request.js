@@ -43,7 +43,9 @@ request = {
                         if (resp.msg !== '') {
                             alertError(resp.msg);
                             if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
-                                $.cookie('knower_access_token', '', {expires: -1});
+                                if ($.cookie('knower_access_token')) {
+                                    $.cookie('knower_access_token', '', {expires: -1});
+                                }
                                 setTimeout(function () {
                                     location.href = '/login'
                                 }, 1000);
@@ -51,7 +53,9 @@ request = {
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
                             if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
-                                $.cookie('knower_access_token', '', {expires: -1});
+                                if ($.cookie('knower_access_token')) {
+                                    $.cookie('knower_access_token', '', {expires: -1});
+                                }
                                 setTimeout(function () {
                                     location.href = '/login'
                                 }, 1000);
@@ -102,10 +106,11 @@ request = {
                 } else {
                     if (resp.code !== 0) {
                         if (resp.msg !== '') {
-
                             alertError(resp.msg);
                             if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
-                                $.cookie('knower_access_token', '', {expires: -1});
+                                if ($.cookie('knower_access_token')) {
+                                    $.cookie('knower_access_token', '', {expires: -1});
+                                }
                                 setTimeout(function () {
                                     location.href = '/login'
                                 }, 1000);
@@ -113,7 +118,9 @@ request = {
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
                             if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
-                                $.cookie('knower_access_token', '', {expires: -1});
+                                if ($.cookie('knower_access_token')) {
+                                    $.cookie('knower_access_token', '', {expires: -1});
+                                }
                                 setTimeout(function () {
                                     location.href = '/login'
                                 }, 1000);
