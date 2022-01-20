@@ -2,7 +2,9 @@
 
 namespace App\Util;
 
+use App\Constant\AppErrorCode;
 use App\Constant\CommonConstant;
+use Hyperf\HttpMessage\Cookie\Cookie;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 
@@ -34,6 +36,10 @@ class HttpUtil
     public static function error(ResponseInterface $response, $code = 500, $msg = '', $data = null): \Psr\Http\Message\ResponseInterface
     {
         $response->withHeader('Content-Type', 'text/html; charset=utf-8');
+        if (in_array($code, [AppErrorCode::TOKEN_INVALID, AppErrorCode::ACCOUNT_STATUS_FORBIDDEN, AppErrorCode::TOKEN_EXPIRED])) {
+            $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, '', time() - 3600);
+            $response->withCookie($cookie);
+        }
         return $response->json([CommonConstant::API_CODE => $code, CommonConstant::API_MESSAGE => $msg, CommonConstant::API_DATA => $data]);
     }
 
