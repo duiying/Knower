@@ -10,7 +10,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li><a class="nav-link active" href="">首页</a></li>
+                <li><a class="nav-link active" href="/">首页</a></li>
                 <!-- <li><a class="nav-link" href="">专栏</a></li> -->
             </ul>
             <ul class="navbar-nav ml-auto" id="account-login">

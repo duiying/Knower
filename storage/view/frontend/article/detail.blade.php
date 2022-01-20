@@ -205,8 +205,6 @@
                 setTimeout(function () {
                     location.href = '/article/detail?id=' + articleId + '&comment_id=' + data;
                 }, 1500);
-            } else {
-                alertError('评论失败！');
             }
         });
 
