@@ -1,5 +1,7 @@
 const BASE_API_URL = 'http://127.0.0.1:9501/';
 
+const REDIRECT_LOGIN_ERROR_CODE = [3000510, 3000511, 3000512, 3000513];
+
 request = {
     post : function (url, data = {}, fromBackend = true) {
         var res = false;
@@ -40,13 +42,20 @@ request = {
                     if (resp.code !== 0) {
                         if (resp.msg !== '') {
                             alertError(resp.msg);
-                            if (resp.code === 3000511) {
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                                $.cookie('knower_access_token', '', {expires: -1});
                                 setTimeout(function () {
                                     location.href = '/login'
                                 }, 1000);
                             }
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                                $.cookie('knower_access_token', '', {expires: -1});
+                                setTimeout(function () {
+                                    location.href = '/login'
+                                }, 1000);
+                            }
                         }
                     } else {
                         if (resp.msg !== '') {
@@ -93,9 +102,22 @@ request = {
                 } else {
                     if (resp.code !== 0) {
                         if (resp.msg !== '') {
+
                             alertError(resp.msg);
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                                $.cookie('knower_access_token', '', {expires: -1});
+                                setTimeout(function () {
+                                    location.href = '/login'
+                                }, 1000);
+                            }
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                                $.cookie('knower_access_token', '', {expires: -1});
+                                setTimeout(function () {
+                                    location.href = '/login'
+                                }, 1000);
+                            }
                         }
                     }
                 }
