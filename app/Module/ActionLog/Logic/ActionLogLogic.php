@@ -49,7 +49,7 @@ class ActionLogLogic
                 // 企业微信通知
                 $accountStr     = $accountId ? (string)$accountId : '游客';
                 $typeText       = ActionLogConstant::TYPE_TEXT_MAP[$type];
-                $notifyMsg      = sprintf("日志 ID：%d\n用户：%s\n地区：%s\n%s", $id, $accountStr, $addr, $typeText);
+                $notifyMsg      = sprintf("日志：%d\n用户：%s\n地区：%s\n行为：%s", $id, $accountStr, $addr, $typeText);
                 Util::QYWechatNotify($notifyMsg);
             }
         });
