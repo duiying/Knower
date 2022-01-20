@@ -9,7 +9,7 @@
             </form>
         </div>
 
-        <div class="col-md-8" style="padding-right: 0;">
+        <div class="col-md-8 col-xs-6" style="padding-right: 0;">
             <div class="card" style="margin-top:20px;">
                 <div class="card-body" id="frontend-articles">
 
