@@ -357,4 +357,76 @@ class Util
         }
         return $str;
     }
+
+    /**
+     * 企业微信通知
+     *
+     * @param string $msg
+     * @return bool
+     */
+    public static function QYWechatNotify($msg = '')
+    {
+        if (empty($msg)) {
+            return false;
+        }
+        if (intval(env('QY_WECHAT_SWITCH')) === 0) {
+            return false;
+        }
+
+        $corpId = env('QY_WECHAT_CORP_ID');
+        $secret = env('QY_WECHAT_SECRET');
+        $agentId = intval(env('QY_WECHAT_AGENT_ID'));
+
+        if (empty($corpId) || empty($secret) || empty($agentId)) {
+            return false;
+        }
+
+        // 1、先获取 access_token
+        $getTokenUrl = sprintf('https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s', $corpId, $secret);
+        $getTokenRes = file_get_contents($getTokenUrl);
+        if (empty($getTokenRes)) {
+            Log::error('获取企业微信 access_token 返回为空');
+            return false;
+        }
+        $getTokenArr = json_decode($getTokenRes, true);
+        if (empty($getTokenArr) || !isset($getTokenArr['access_token']) || empty($getTokenArr['access_token'])) {
+            Log::error('获取企业微信 access_token 返回异常', ['getTokenRes' => $getTokenRes]);
+            return false;
+        }
+        $accessToken = $getTokenArr['access_token'];
+
+        // 2、发送文本信息
+        $sendTextMsgParams = [
+            'touser'    => '@all',
+            // 文本格式
+            'msgtype'   => 'text',
+            'agentid'   => $agentId,
+            'text' => [
+                'content' => $msg
+            ]
+        ];
+
+        $sendMsgUrl = sprintf('https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s', $accessToken);
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $sendMsgUrl);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($sendTextMsgParams));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type:application/json', "Accept:application/json"]);
+        $sendMsgRes = curl_exec($curl);
+        curl_close($curl);
+        if (!is_string($sendMsgRes)) {
+            Log::error('发送企业微信通知失败', ['sendMsgRes' => $sendMsgRes, 'error' => curl_error($curl)]);
+            return false;
+        }
+        $sendMsgArr = json_decode($sendMsgRes, true);
+        if (empty($sendMsgArr)) {
+            Log::error('发送企业微信通知返回为空');
+            return false;
+        }
+        Log::info('发送企业微信通知成功', ['msg' => $msg, 'sendMsgArr' => $sendMsgArr]);
+        return true;
+    }
 }

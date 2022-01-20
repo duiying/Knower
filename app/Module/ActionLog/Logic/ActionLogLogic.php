@@ -43,7 +43,15 @@ class ActionLogLogic
                 'ip'            => $ip,
                 'addr'          => $addr
             ];
-            $this->service->create($createParams);
+            $id = $this->service->create($createParams);
+
+            if (intval(env('QY_WECHAT_SWITCH')) === 1) {
+                // 企业微信通知
+                $accountStr     = $accountId ? (string)$accountId : '游客';
+                $typeText       = ActionLogConstant::TYPE_TEXT_MAP[$type];
+                $notifyMsg      = sprintf('日志 ID：%d 用户：%s 地区：%s %s', $id, $accountStr, $addr, $typeText);
+                Util::QYWechatNotify($notifyMsg);
+            }
         });
     }
 
