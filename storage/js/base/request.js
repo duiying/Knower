@@ -42,7 +42,7 @@ request = {
                     if (resp.code !== 0) {
                         if (resp.msg !== '') {
                             alertError(resp.msg);
-                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code) !== -1) {
                                 if ($.cookie('knower_access_token')) {
                                     $.cookie('knower_access_token', '', {expires: -1});
                                 }
@@ -52,7 +52,7 @@ request = {
                             }
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
-                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code) !== -1) {
                                 if ($.cookie('knower_access_token')) {
                                     $.cookie('knower_access_token', '', {expires: -1});
                                 }
@@ -107,7 +107,7 @@ request = {
                     if (resp.code !== 0) {
                         if (resp.msg !== '') {
                             alertError(resp.msg);
-                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code) !== -1) {
                                 if ($.cookie('knower_access_token')) {
                                     $.cookie('knower_access_token', '', {expires: -1});
                                 }
@@ -117,7 +117,7 @@ request = {
                             }
                         } else {
                             alertError('操作失败，请稍后重试，如果失败多次请联系技术解决！');
-                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code)) {
+                            if (REDIRECT_LOGIN_ERROR_CODE.indexOf(resp.code) !== -1) {
                                 if ($.cookie('knower_access_token')) {
                                     $.cookie('knower_access_token', '', {expires: -1});
                                 }
