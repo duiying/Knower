@@ -194,6 +194,26 @@ class AppErrorCode extends AbstractConstants
      */
     const QQ_GET_USER_INFO_FAIL = 3000509;
 
+    /**
+     * @Message("请先登录！")
+     */
+    const PLEASE_LOGIN = 3000510;
+
+    /**
+     * @Message("Token 无效，请重新登录！")
+     */
+    const TOKEN_INVALID = 3000511;
+
+    /**
+     * @Message("账号已被停用！")
+     */
+    const ACCOUNT_STATUS_FORBIDDEN = 3000512;
+
+    /**
+     * @Message("Token 已过期，请重新登录！")
+     */
+    const TOKEN_EXPIRED = 3000513;
+
     /******************** 用户模块错误码 end *****************************************************************************/
 
     /******************** 文章模块错误码 begin 3000601 ~ 3000700 *********************************************************/

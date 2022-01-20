@@ -2,13 +2,17 @@
 
 namespace App\Middleware;
 
+use App\Constant\AppErrorCode;
 use App\Constant\CommonConstant;
 use App\Module\Account\Constant\AccountConstant;
 use App\Module\Account\Logic\AccountLogic;
 use App\Module\ActionLog\Constant\ActionLogConstant;
 use App\Module\ActionLog\Logic\ActionLogLogic;
 use App\Util\HttpUtil;
+use App\Util\Log;
+use App\Util\Util;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpMessage\Cookie\Cookie;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Psr\Container\ContainerInterface;
@@ -59,6 +63,13 @@ class FrontendMiddleware
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): \Psr\Http\Message\ResponseInterface
     {
+        // 是否为接口请求
+        $fromApi = false;
+        $contentType = $this->request->getHeaderLine('Content-Type');
+        if (Util::contain($contentType, 'application/x-www-form-urlencoded') || Util::contain($contentType, 'application/json')) {
+            $fromApi = true;
+        }
+
         // 路由
         $requestPath = $this->request->getUri()->getPath();
         $indexRequest = empty($requestPath) || $requestPath === '/';
@@ -86,13 +97,28 @@ class FrontendMiddleware
         // 再检查通过 access_token 是否能查到用户信息
         $accountInfo = $this->accountLogic->getAccountInfoByToken($accessToken);
         if (empty($accountInfo)) {
-            return HttpUtil::error($this->response, 403, 'Token 无效，请重新登录！');
+            if ($fromApi) {
+                return HttpUtil::error($this->response, AppErrorCode::TOKEN_INVALID, 'Token 无效，请重新登录！');
+            } else {
+                $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, time() - 3600);
+                return $this->response->withCookie($cookie)->redirect('/login');
+            }
         }
         if ($accountInfo['status'] === AccountConstant::ACCOUNT_STATUS_FORBIDDEN) {
-            return HttpUtil::error($this->response, 403, '账号已被停用！');
+            if ($fromApi) {
+                return HttpUtil::error($this->response, AppErrorCode::ACCOUNT_STATUS_FORBIDDEN, '账号已被停用！');
+            } else {
+                $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, time() - 3600);
+                return $this->response->withCookie($cookie)->redirect('/login');
+            }
         }
         if (strtotime($accountInfo['access_token_expire']) < time()) {
-            return HttpUtil::error($this->response, 403, '请重新登录！');
+            if ($fromApi) {
+                return HttpUtil::error($this->response, AppErrorCode::TOKEN_EXPIRED, 'Token 已过期，请重新登录！');
+            } else {
+                $cookie = new Cookie(CommonConstant::FRONTEND_TOKEN_COOKIE_NAME, $accessToken, time() - 3600);
+                return $this->response->withCookie($cookie)->redirect('/login');
+            }
         }
 
         $accountId = $accountInfo['id'];
