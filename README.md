@@ -4,7 +4,7 @@
 
 **Knower（知者）**：一个实用的的开源知识库管理平台。  
 
-基于 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 实现，集成了权限管理、第三方登录（GitHub、QQ），亦可作为 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 的开发脚手架。  
+基于 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 实现，集成了权限管理、第三方登录（GitHub、QQ）、企业微信自建应用通知等功能，亦可作为 <a href="https://github.com/hyperf/hyperf">Hyperf</a> 的开发脚手架。  
 
 不追求过多的技术栈，尽可能做到**实用、稳定**。  
 
