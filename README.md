@@ -62,10 +62,10 @@ $ docker-compose up -d
 
 容器启动之后，连接 MySQL 服务，导入 [SQL](https://github.com/duiying/Knower/blob/master/knower.sql) 文件：  
 
-- HOST：`127.0.0.1`
-- PORT：`3360`（注意是 3360 不是 3306）
-- 用户名：`root`
-- 密码：`wyx**WYX123` 
+- Host：`127.0.0.1`
+- Port：`3360`（注意是 3360 不是 3306）
+- User：`root`
+- Password：`wyx**WYX123` 
 
 最后，就可以访问了：  
 
