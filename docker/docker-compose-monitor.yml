@@ -12,12 +12,6 @@ services:
     ports:
       - '9090:9090'
 
-  node-exporter:
-    container_name: knower-node-exporter
-    image: prom/node-exporter
-    ports:
-      - '9100:9100'
-
   grafana:
     container_name: grafana
     image: grafana/grafana
@@ -29,3 +23,17 @@ services:
       - prometheus
     ports:
       - '3000:3000'
+
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    ports:
+      - '9104:9104'
+    environment:
+      - DATA_SOURCE_NAME=root:your_mysql_password@(your_mysql_ip:3306)/
+    restart: always
+
+  node-exporter:
+    container_name: knower-node-exporter
+    image: prom/node-exporter
+    ports:
+      - '9100:9100'

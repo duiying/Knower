@@ -10,3 +10,7 @@ scrape_configs:
     static_configs:
       - targets:
           - 'node-exporter:9100'
+  - job_name: 'mysql'
+      static_configs:
+        - targets:
+            - 'mysql-exporter:9104'
