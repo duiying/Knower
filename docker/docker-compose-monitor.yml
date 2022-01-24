@@ -32,6 +32,14 @@ services:
       - DATA_SOURCE_NAME=root:your_mysql_password@(your_mysql_ip:3306)/
     restart: always
 
+  redis-exporter:
+    image: oliver006/redis_exporter
+    ports:
+      - '9121:9121'
+    environment:
+      - REDIS_ADDR=your_redis_ip:6379
+      - REDIS_PASSWORD=your_redis_password
+
   node-exporter:
     container_name: knower-node-exporter
     image: prom/node-exporter
