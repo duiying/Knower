@@ -1,0 +1,81 @@
+version: "3"
+
+services:
+  knower-nginx:
+    container_name: knower-nginx
+    image: daocloud.io/library/nginx:1.13.1
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/log:/var/log/nginx
+    depends_on:
+      - knower-php
+    links:
+      - knower-php
+
+  knower-php:
+    container_name: "knower-php"
+    image: registry.cn-beijing.aliyuncs.com/duiying/hyperf:1.0
+    command: "php bin/hyperf.php start"
+    depends_on:
+      - knower-mysql
+      - knower-redis
+      - knower-elasticsearch
+    links:
+      - knower-mysql:knower-mysql
+      - knower-redis:knower-redis
+      - knower-elasticsearch:knower-elasticsearch
+    volumes:
+      - ../:/data/www
+    ports:
+      - "9501:9501"
+    tty: true
+
+  knower-redis:
+    container_name: knower-redis
+    image: daocloud.io/library/redis
+    restart: always
+    expose:
+      - "6379"
+    ports:
+      - "6397:6379"
+    volumes:
+      - ./redis:/data
+    command: redis-server --requirepass WYX**wyx123
+
+  knower-mysql:
+    container_name: knower-mysql
+    image: daocloud.io/library/mysql:5.6
+    restart: always
+    expose:
+      - "3306"
+    ports:
+      - "3360:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=wyx**WYX123
+
+  knower-elasticsearch:
+    container_name: knower-elasticsearch
+    image: registry.cn-beijing.aliyuncs.com/duiying/elasticsearch-ik:1.0
+    restart: always
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/logs:/usr/share/elasticsearch/logs
+    environment:
+      - node.name=es01
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.watcher.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
