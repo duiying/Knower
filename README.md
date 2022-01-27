@@ -9,7 +9,11 @@
 不追求过多的技术栈，尽可能做到**实用、稳定**。  
 
 **前台线上地址：** http://duiying.vip  
-**运营后台线上地址：** http://duiying.vip/admin 邮箱：`demo@gmail.com` 密码：`123456`
+**后台线上地址：** http://duiying.vip/admin 邮箱：`demo@gmail.com` 密码：`123456`  
+
+后台预览：  
+
+<div align=center><img src="https://raw.githubusercontent.com/duiying/Knower/master/storage/img/admin.png" width="800"></div>  
 
 ### 2、技术栈
 
