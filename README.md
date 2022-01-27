@@ -74,4 +74,10 @@ $ docker-compose up -d
 最后，就可以访问了：  
 
 - 前台：http://127.0.0.1:9501
-- 运营后台：http://127.0.0.1:9501/admin 邮箱：`admin@gmail.com` 密码：`123456`
+- 运营后台：http://127.0.0.1:9501/admin 邮箱：`admin@gmail.com` 密码：`123456`  
+
+**修改了代码如何生效？**    
+
+```sh
+$ docker restart knower-php
+```
