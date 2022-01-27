@@ -13,6 +13,7 @@
             for (var i = 0; i < list.length; i++) {
                 listHtml += '<input  type="checkbox" name="tag" id="tag-' + list[i].id + '" value="' + list[i].id + '">';
                 listHtml += '<span class="font-weight-bold mr-1 ml-1">' + list[i].name + '</span>';
+                listHtml += '<br>';
             }
             $('#tag-list').html(listHtml);
         }
